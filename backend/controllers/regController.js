@@ -1,57 +1,103 @@
+// const userModel = require("../models/UserModel");
+
+// const regController = async (req, res) => {
+//   try {
+//     const data = req.body;
+
+   
+//     if (
+//       !data.name || !data.email || !data.phone || !data.location || !data.password || !data.confirmpassword || !data.role
+//     ) {
+//       return res.status(400).json({
+//         message: "All fields are required"
+//       });
+//     }
+
+    
+//     if (data.password !== data.confirmpassword) {
+//       return res.status(400).json({
+//         message: "Password and confirm password must match"
+//       });
+//     }
+
+ 
+//     const existingUser = await userModel.findOne({ email: data.email });
+//     if (existingUser) {
+//       return res.status(409).json({
+//         message: "Email already exists"
+//       });
+//     }
+
+    
+//     await userModel.create({
+//       name: data.name,
+//       email: data.email,
+//       phone: data.phone,
+//       location: data.location,
+//       password: data.password,
+//       role: data.role
+//     });
+
+//     return res.status(201).json({
+//       message: "Registration successful"
+//     });
+
+//   } catch (err) {
+//     //console.error(err);
+//     return res.status(500).json({
+//       message: "Registration unsuccessful"
+//     });
+//   }
+// };
+
+// module.exports = regController;
+
 const userModel = require("../models/UserModel");
 
 const regController = async (req, res) => {
   try {
     const data = req.body;
 
-    // 1. Required fields
     if (
-      !data.name ||
+      !data.fullName ||
       !data.email ||
-      !data.number ||
+      !data.phone ||
+      !data.location ||
       !data.password ||
-      !data.confirmpassword ||
       !data.role
     ) {
       return res.status(400).json({
-        message: "All fields are required"
+        message: "All fields are required",
       });
     }
 
-    // 2. Password match check
-    if (data.password !== data.confirmpassword) {
-      return res.status(400).json({
-        message: "Password and confirm password must match"
-      });
-    }
-
-    // 3. Check existing email
     const existingUser = await userModel.findOne({ email: data.email });
     if (existingUser) {
       return res.status(409).json({
-        message: "Email already exists"
+        message: "Email already exists",
       });
     }
 
-    // 4. Create user (DO NOT save confirmpassword)
     await userModel.create({
-      name: data.name,
+      name: data.fullName, // mapping
       email: data.email,
-      number: data.number,
+      phone: data.phone,
+      location: data.location,
       password: data.password,
-      role: data.role
+      role: data.role,
+      services: data.services,
+      address: data.address,
     });
 
     return res.status(201).json({
-      message: "Registration successful"
+      message: "Registration successful",
     });
-
   } catch (err) {
-    console.error(err);
     return res.status(500).json({
-      message: "Registration unsuccessful"
+      message: "Registration unsuccessful",
     });
   }
 };
 
-module.exports = regController;
+
+ module.exports = regController;
