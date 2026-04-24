@@ -9,4 +9,4 @@ router.post("/register",regController);
 
 router.post("/login",loginController)
 
-module.exports=router
+module.exports=router;
