@@ -12,4 +12,4 @@ router.post("/register",regController);
   
 
 
-module.exports=router
+module.exports=router;
