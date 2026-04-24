@@ -22,6 +22,7 @@ const loginController = async (req,res)=>{
         let token = jwt.sign({id:result._id,role:result.role},process.env.JWT_SECRET,{expiresIn:"1d"})
         res.json({
             token:token,
+            role:result.role,
             message:"Successfull Login"
         })
     }
