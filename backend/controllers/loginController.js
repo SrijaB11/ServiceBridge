@@ -3,7 +3,7 @@ let jwt=require("jsonwebtoken")
 require("dotenv").config()
 
 const loginController = async (req,res)=>{
-    let data=req.body
+    let data=req.body;
     try{
         let result= await userModel.findOne({email:data.email})
 
