@@ -1,17 +1,39 @@
-import React from "react";
-import Register from "./Pages/Register";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./Pages/Login";
 import Home from "./Pages/Landing/Home";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard"
 
-function App() {
+import CustomerDashboard from "./Pages/CustomerDashboard";
+import WorkerDashboard from "./Pages/WorkerDashboard";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
+export default function App() {
   return (
-    <div>
-      <Register />
-      <Login />
-      {/* <Home /> */}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        Customer
+        <Route
+          path="/customer"
+          element={
+            <ProtectedRoute role="customer">
+              <CustomerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/worker"
+          element={
+            <ProtectedRoute role="worker">
+              <WorkerDashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

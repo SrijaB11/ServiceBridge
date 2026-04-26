@@ -1,9 +1,7 @@
 import { useState } from "react";
-// axios import - uncomment when connecting to backend
-// import axios from "axios";
 
-// ─── Icon Components (Lucide-style inline SVG replacements via CSS) ───────────
-// Using lucide-react icons
+import axios from "axios";
+
 import {
   Shield,
   Lock,
@@ -24,25 +22,24 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-// ─── API Service (axios-ready) ─────────────────────────────────────────────────
-const API_BASE = "https://your-api.com/api"; // replace with your base URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const authService = {
   register: async (payload) => {
+    console.log("API_BASE:", API_BASE);
     // Uncomment below to connect to backend:
-    // const { data } = await axios.post(`${API_BASE}/auth/register`, payload);
-    // return data;
-    console.log("Register payload:", payload);
-    return { success: true, message: "Account created!" };
+    const { data } = await axios.post(`${API_BASE}/register`, payload);
+    return data;
   },
   checkEmail: async (email) => {
-    // const { data } = await axios.post(`${API_BASE}/auth/check-email`, { email });
-    // return data;
+    const { data } = await axios.post(`${API_BASE}/auth/check-email`, {
+      email,
+    });
+    return data;
     return { available: true };
   },
 };
 
-// ─── Progress Stepper ─────────────────────────────────────────────────────────
 function Stepper({ currentStep }) {
   const steps = [
     { num: 1, label: "Basic Info" },
@@ -90,7 +87,6 @@ function Stepper({ currentStep }) {
   );
 }
 
-// ─── Left Panel ────────────────────────────────────────────────────────────────
 function LeftPanel({ page }) {
   const page1 = {
     tag: null,
@@ -169,7 +165,6 @@ function LeftPanel({ page }) {
   return (
     <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-50 to-blue-50 p-10 rounded-2xl min-h-full">
       <div>
-        {/* Logo */}
         <div className="flex items-center gap-2 mb-10">
           <img
             src="/logo-placeholder.png"
@@ -216,31 +211,19 @@ function LeftPanel({ page }) {
         </div>
       </div>
 
-      {/* Illustration placeholder */}
       <div className="mt-10">
-        <img src="/images/worker.png" className="w-[320px] mt-10" alt="image" />
-        <div
-          style={{ display: "none" }}
-          className="w-full h-48 rounded-2xl bg-gradient-to-br from-green-100 via-blue-50 to-purple-100 items-center justify-center"
-        >
-          <div className="text-center">
-            <div className="flex gap-4 justify-center mb-3">
-              <div className="w-16 h-16 rounded-full bg-green-200 flex items-center justify-center">
-                <HardHat size={28} className="text-green-600" />
-              </div>
-              <div className="w-16 h-16 rounded-full bg-yellow-200 flex items-center justify-center">
-                <User size={28} className="text-yellow-600" />
-              </div>
-            </div>
-            <p className="text-xs text-gray-400">Workers &amp; Customers</p>
-          </div>
+        <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-green-100 via-blue-50 to-purple-100 flex items-center justify-center">
+          <img
+            src="/images/worker.png"
+            className="h-50 object-contain"
+            alt="Worker"
+          />
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Input Field ───────────────────────────────────────────────────────────────
 function InputField({ label, icon, error, type = "text", ...props }) {
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
@@ -278,75 +261,6 @@ function InputField({ label, icon, error, type = "text", ...props }) {
   );
 }
 
-// ─── Social Auth Buttons ───────────────────────────────────────────────────────
-function SocialButtons() {
-  return (
-    <div>
-      <div className="relative my-5">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-200" />
-        </div>
-        <div className="relative flex justify-center text-xs text-gray-400 bg-white px-3">
-          or continue with
-        </div>
-      </div>
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          {
-            name: "Google",
-            icon: (
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-            ),
-          },
-          {
-            name: "Facebook",
-            icon: (
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#1877F2">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-            ),
-          },
-          {
-            name: "Apple",
-            icon: (
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-              </svg>
-            ),
-          },
-        ].map((s) => (
-          <button
-            key={s.name}
-            type="button"
-            className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm text-gray-600 font-medium"
-          >
-            {s.icon}
-            <span className="hidden sm:inline">{s.name}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── Page 1: Steps 1 & 2 ──────────────────────────────────────────────────────
 function Page1({ formData, setFormData, errors, setErrors, onNext }) {
   const validate = () => {
     const e = {};
@@ -431,7 +345,6 @@ function Page1({ formData, setFormData, errors, setErrors, onNext }) {
         error={errors.confirmPassword}
       />
 
-      {/* Role Selection */}
       <div className="mb-5">
         <label className="block text-sm font-medium text-gray-700 mb-3">
           Choose Your Role
@@ -495,8 +408,6 @@ function Page1({ formData, setFormData, errors, setErrors, onNext }) {
         Next Step <ChevronRight size={18} />
       </button>
 
-      <SocialButtons />
-
       <p className="text-center text-sm text-gray-500 mt-4">
         Already have an account?{" "}
         <a
@@ -510,7 +421,6 @@ function Page1({ formData, setFormData, errors, setErrors, onNext }) {
   );
 }
 
-// ─── Page 2: Step 3 ────────────────────────────────────────────────────────────
 function Page2({
   formData,
   setFormData,
@@ -567,7 +477,6 @@ function Page2({
 
       <Stepper currentStep={3} />
 
-      {/* Location + Phone row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -621,10 +530,9 @@ function Page2({
         </div>
       </div>
 
-      {/* Preferred Services */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Preferred Services{" "}
+          Services{" "}
           <span className="text-green-500 font-normal">(Optional)</span>
         </label>
         <div className="flex flex-wrap gap-2">
@@ -649,16 +557,9 @@ function Page2({
               </button>
             );
           })}
-          <button
-            type="button"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border border-dashed border-gray-300 text-gray-400 hover:border-gray-400 transition-all"
-          >
-            <Plus size={13} /> Add More
-          </button>
         </div>
       </div>
 
-      {/* Address */}
       <div className="mb-5">
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
           Address <span className="text-green-500 font-normal">(Optional)</span>
@@ -713,7 +614,6 @@ function Page2({
         )}
       </button>
 
-      {/* Trust badge */}
       <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-gray-400">
         <Shield size={13} className="text-green-400" />
         Your information is safe and secure with us.
@@ -731,8 +631,6 @@ function Page2({
     </form>
   );
 }
-
-// ─── Main Component ────────────────────────────────────────────────────────────
 export default function ServiceBridgeRegister({ onSuccess }) {
   const [page, setPage] = useState(1); // 1 = steps 1&2, 2 = step 3
   const [loading, setLoading] = useState(false);
@@ -805,9 +703,7 @@ export default function ServiceBridgeRegister({ onSuccess }) {
             <LeftPanel page={page} />
           </div>
 
-          {/* Right Form Panel */}
           <div className="lg:col-span-3 p-6 lg:p-10 border-l border-gray-100 flex flex-col justify-center">
-            {/* Back button on page 2 */}
             {page === 2 && (
               <button
                 type="button"
@@ -821,7 +717,6 @@ export default function ServiceBridgeRegister({ onSuccess }) {
               </button>
             )}
 
-            {/* API Error */}
             {apiError && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
                 {apiError}
