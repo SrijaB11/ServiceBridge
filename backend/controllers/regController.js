@@ -1,57 +1,3 @@
-// const userModel = require("../models/UserModel");
-
-// const regController = async (req, res) => {
-//   try {
-//     const data = req.body;
-
-   
-//     if (
-//       !data.name || !data.email || !data.phone || !data.location || !data.password || !data.confirmpassword || !data.role
-//     ) {
-//       return res.status(400).json({
-//         message: "All fields are required"
-//       });
-//     }
-
-    
-//     if (data.password !== data.confirmpassword) {
-//       return res.status(400).json({
-//         message: "Password and confirm password must match"
-//       });
-//     }
-
- 
-//     const existingUser = await userModel.findOne({ email: data.email });
-//     if (existingUser) {
-//       return res.status(409).json({
-//         message: "Email already exists"
-//       });
-//     }
-
-    
-//     await userModel.create({
-//       name: data.name,
-//       email: data.email,
-//       phone: data.phone,
-//       location: data.location,
-//       password: data.password,
-//       role: data.role
-//     });
-
-//     return res.status(201).json({
-//       message: "Registration successful"
-//     });
-
-//   } catch (err) {
-//     //console.error(err);
-//     return res.status(500).json({
-//       message: "Registration unsuccessful"
-//     });
-//   }
-// };
-
-// module.exports = regController;
-
 const userModel = require("../models/UserModel");
 
 const regController = async (req, res) => {
@@ -79,7 +25,7 @@ const regController = async (req, res) => {
     }
 
     await userModel.create({
-      name: data.fullName, // mapping
+      fullName: data.fullName,
       email: data.email,
       phone: data.phone,
       location: data.location,
@@ -99,5 +45,4 @@ const regController = async (req, res) => {
   }
 };
 
-
- module.exports = regController;
+module.exports = regController;

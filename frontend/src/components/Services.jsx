@@ -33,17 +33,17 @@ const services = [
   {
     title: "House Cleaning",
     desc: "Professional cleaning for a sparkling home.",
-    image: "/images/services/cleaning.png",
+    image: "/images/services/cleaning.jpg",
   },
   {
     title: "Plumbing",
     desc: "Expert plumbing services at your door.",
-    image: "/images/services/plumbing.png",
+    image: "/images/services/plumber.jpg",
   },
   {
     title: "Electrical",
     desc: "Safe and reliable electrical solutions.",
-    image: "/images/services/electrical.png",
+    image: "/images/services/electrician.jpg",
   },
   {
     title: "Painting",
@@ -53,12 +53,12 @@ const services = [
   {
     title: "Pest Control",
     desc: "Keep your home pest-free & safe.",
-    image: "/images/services/pest.png",
+    image: "/images/services/pests.jpg",
   },
   {
     title: "Appliance Repair",
     desc: "Fix and service all major appliances.",
-    image: "/images/services/appliance.png",
+    image: "/images/services/appliance.jpg",
   },
 ];
 

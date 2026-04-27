@@ -27,7 +27,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const authService = {
   register: async (payload) => {
     console.log("API_BASE:", API_BASE);
-    // Uncomment below to connect to backend:
+
     const { data } = await axios.post(`${API_BASE}/register`, payload);
     return data;
   },
@@ -562,7 +562,7 @@ function Page2({
 
       <div className="mb-5">
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Address <span className="text-green-500 font-normal">(Optional)</span>
+          Address <span className="text-green-500 font-normal"></span>
         </label>
         <div className="relative">
           <BookOpen
@@ -632,7 +632,7 @@ function Page2({
   );
 }
 export default function ServiceBridgeRegister({ onSuccess }) {
-  const [page, setPage] = useState(1); // 1 = steps 1&2, 2 = step 3
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
