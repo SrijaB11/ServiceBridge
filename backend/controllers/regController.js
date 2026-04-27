@@ -45,5 +45,4 @@ const regController = async (req, res) => {
   }
 };
 
-
- module.exports = regController;
+module.exports = regController;
