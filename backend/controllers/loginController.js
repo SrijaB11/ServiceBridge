@@ -2,10 +2,17 @@ const userModel = require("../models/UserModel");
 let jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+<<<<<<< HEAD
+const loginController = async (req,res)=>{
+    let data=req.body;
+    try{
+        let result= await userModel.findOne({email:data.email})
+=======
 const loginController = async (req, res) => {
   let data = req.body;
   try {
     let result = await userModel.findOne({ email: data.email });
+>>>>>>> 4175edaccfb49ec90591fc9fe4b733af5fbe3960
 
     if (!result) {
       return res.status(401).json({
