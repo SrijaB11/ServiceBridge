@@ -1,20 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+
 const userRoutes = require("./routes/userRoutes");
+const adminWorkerRoutes = require("./routes/adminWorkerRoutes");
 
-require("dotenv").config();
 const app = express();
-
 
 connectDB();
 
-app.use(cors());  
+app.use(cors());
 app.use(express.json());
-app.use("/",userRoutes);
 
-const PORT = process.env.PORT||5000;
+app.use(cors());
+app.use(express.json()); 
 
-app.listen(PORT, "0.0.0.0",() => {
-    console.log("Server running on port 5000")
+app.use("/", userRoutes);
+app.use("/admin", adminWorkerRoutes);
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
 });

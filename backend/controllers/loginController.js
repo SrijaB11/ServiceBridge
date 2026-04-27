@@ -18,18 +18,15 @@ const loginController = async (req, res) => {
         message: "Password wrong",
       });
     }
-    //token generation
-    let token = jwt.sign(
-      { id: result._id, role: result.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" },
-    );
-    res.json({
-      token: token,
-      role: result.role,
-      message: "Successfull Login",
-    });
-  } catch (err) {
+        //token generation
+        let token = jwt.sign({id:result._id,role:result.role},process.env.JWT_SECRET,{expiresIn:"1d"})
+        res.json({
+            token:token,
+            role:result.role,
+            message:"Successfull Login"
+        })
+    }
+    catch (err) {
     return res.status(500).json({
       message: "Error ",
     });
