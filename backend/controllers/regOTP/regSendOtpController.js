@@ -40,7 +40,7 @@ const regController = async (req, res) => {
       expiresAt: Date.now() + 5 * 60 * 1000,
     };
 
-    console.log("OTP:", otp); // testing
+    //console.log("OTP:", otp); 
 
     // Send email
     await sendEmail(data.email, otp);
@@ -49,7 +49,8 @@ const regController = async (req, res) => {
       message: "OTP sent to email",
     });
 
-  } catch (err) {
+  } 
+  catch (err) {
     console.log("ERROR:", err);   
     return res.status(500).json({
       message: "Registration unsuccessful",

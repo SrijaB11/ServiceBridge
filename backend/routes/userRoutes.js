@@ -8,11 +8,11 @@ const regVerifyOtpController = require("../controllers/regOTP/regVerifyOtpContro
 const router = express.Router();
 
 // register 
-//router.post("/register", regController);
+router.post("/register", regController);
 
 // register with otp
-router.post("/register", regSendOtpController);       // send OTP
-router.post("/verify-otp", regVerifyOtpController); 
+router.post("/registerotp", regSendOtpController);       
+router.post("/verifyotp", regVerifyOtpController); 
 
 router.post("/login", loginController);
 

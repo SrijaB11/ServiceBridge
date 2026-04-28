@@ -37,7 +37,9 @@ const verifyOtpController = async (req, res) => {
       message: "Registration successful",
     });
 
-  } catch (err) {
+  } 
+  
+  catch (err) {
     return res.status(500).json({
       message: "Verification failed",
     });
