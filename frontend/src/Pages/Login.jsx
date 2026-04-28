@@ -56,16 +56,25 @@ function Login() {
         email,
         password,
       });
-      console.log("LOGIN RESPONSE:", res.data);
+
       const { token, role } = res.data;
-      console.log("LOGIN RESPONSE:", res.data);
+
+      // token
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
 
-      if (role === "customer") navigate("/customer");
-      else if (role === "worker") navigate("/worker");
+      //  Navigate based on role
+      if (role === "customer") {
+        navigate("/customer");
+      } else if (role === "worker") {
+        navigate("/worker");
+      } else if (role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
-      setError(err?.response?.data?.message || "Login failed");
+      setError(err, "Login failed");
     } finally {
       setLoading(false);
     }
