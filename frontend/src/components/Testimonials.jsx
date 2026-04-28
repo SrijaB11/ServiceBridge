@@ -15,21 +15,21 @@ const testimonials = [
     location: "New Delhi",
     review:
       "Service Bridge made it so easy to find a trusted professional. The service was excellent and on time!",
-    img: "/user1.jpg",
+    img: "/images/ravi.jpg",
   },
   {
     name: "Priya Mehta",
     location: "Gurgaon",
     review:
       "Very professional and polite experts. Highly recommended for everyone looking for quality service.",
-    img: "/user2.jpg",
+    img: "/images/priya.jpg",
   },
   {
     name: "Ankit Verma",
     location: "Noida",
     review:
       "Amazing platform with great support. Will definitely use again for my household needs.",
-    img: "/user3.jpg",
+    img: "/images/ankit.jpg",
   },
 ];
 
@@ -75,7 +75,7 @@ const Testimonials = () => {
                 <CardContent>
                   {/* Stars */}
                   <Box mb={2}>
-                    <img src="/stars.png" alt="rating" width="100" />
+                    <img src="/images/rating.jpg" alt="rating" width="100" />
                   </Box>
 
                   {/* Review */}
@@ -84,17 +84,21 @@ const Testimonials = () => {
                   </Typography>
 
                   {/* User */}
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      width="40"
-                      height="40"
-                      style={{ borderRadius: "50%" }}
-                    />
 
+                  <Box sx={{ display: "flex", marginLeft: "10px" }}>
                     <Box>
-                      <Typography fontWeight="bold">{item.name}</Typography>
+                      <img
+                        src={item.img}
+                        alt={item.name}
+                        width="40"
+                        height="40"
+                        style={{ borderRadius: "50%" }}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography fontWeight="bold" marginLeft={2}>
+                        {item.name}
+                      </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {item.location}
                       </Typography>
