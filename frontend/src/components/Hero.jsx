@@ -30,7 +30,11 @@ export default function Hero() {
 
       {/* RIGHT IMAGE */}
       <div className="flex justify-center">
-        <img src="/images/worker.png" alt="worker" className="w-[350px]" />
+        <img
+          src="/images/service_bridge_illustration.png"
+          alt="worker"
+          className="w-[350px]"
+        />
       </div>
     </div>
   );

@@ -116,7 +116,7 @@ export default function LeftPanel({ page }) {
       <div className="mt-10">
         <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-green-100 via-blue-50 to-purple-100 flex items-center justify-center">
           <img
-            src="/images/worker.png"
+            src="/images/service_bridge_illustration.png"
             className="h-50 object-contain"
             alt="Worker"
           />

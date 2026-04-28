@@ -9,17 +9,17 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-export default function WhyChoose() {
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: (theme.vars ?? theme).palette.text.secondary,
-    ...theme.applyStyles("dark", {
-      backgroundColor: "#1A2027",
-    }),
-  }));
+function WhyChoose() {
+  // const Item = styled(Paper)(({ theme }) => ({
+  //   backgroundColor: "#fff",
+  //   ...theme.typography.body2,
+  //   padding: theme.spacing(2),
+  //   textAlign: "center",
+  //   color: (theme.vars ?? theme).palette.text.secondary,
+  //   ...theme.applyStyles("dark", {
+  //     backgroundColor: "#1A2027",
+  //   }),
+  // }));
   const features = [
     {
       title: "Trusted Professionals",
@@ -73,7 +73,6 @@ export default function WhyChoose() {
             service every single time.
           </Typography>
 
-          {/* Button */}
           <Button variant="contained">Learn More</Button>
         </CardContent>
       </CardActionArea>
@@ -112,3 +111,5 @@ export default function WhyChoose() {
     </Card>
   );
 }
+
+export default WhyChoose;

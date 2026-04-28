@@ -7,6 +7,7 @@ const regVerifyOtpController = require("../controllers/regOTP/regVerifyOtpContro
 
 const router = express.Router();
 
+
 // register 
 router.post("/register", regController);
 
