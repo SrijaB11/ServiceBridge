@@ -2,15 +2,19 @@ const express = require("express");
 const regController = require("../controllers/regController");
 const loginController = require("../controllers/loginController");
 
+const regSendOtpController = require("../controllers/regOTP/regSendOtpController");
+const regVerifyOtpController = require("../controllers/regOTP/regVerifyOtpController");
+
 const router = express.Router();
 
-// register //
+
+// register 
 router.post("/register", regController);
+
+// register with otp
+router.post("/registerotp", regSendOtpController);       
+router.post("/verifyotp", regVerifyOtpController); 
 
 router.post("/login", loginController);
 
-<<<<<<< HEAD
-module.exports = router;
-=======
 module.exports=router;
->>>>>>> f748ed3bf41e709206d035c80f73262767b51702
