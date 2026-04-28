@@ -1,22 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
-import Home from "./Pages/Landing/Home";
-import CustomerDashboard from "./Pages/Customer/CustomerDashboard"
+import Home from "./Pages/Home";
+import Register from "./Pages/Register/Register";
 
-import CustomerDashboard from "./Pages/CustomerDashboard";
 import WorkerDashboard from "./Pages/WorkerDashboard";
-
+import AdminDashboard from "./Pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CustomerDashboard from "./Pages/CustomerDashboard";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" reverseOrder={false} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        Customer
+
         <Route
           path="/customer"
           element={
@@ -25,11 +26,20 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/worker"
           element={
             <ProtectedRoute role="worker">
               <WorkerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />

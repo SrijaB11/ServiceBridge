@@ -4,7 +4,8 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between px-8 py-4 bg-white shadow-sm">
       <h1 className="text-xl font-bold">
-        Service<span className="text-green-500">Bridge</span>
+        <img src="/images/logo.png" alt="logo" className="w-18 h-14" />
+        {/* Service<span className="text-green-500">Bridge</span> */}
       </h1>
 
       <div className="hidden md:flex gap-6 text-sm text-gray-600">
