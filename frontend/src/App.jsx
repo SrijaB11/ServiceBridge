@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./Pages/Login";
-import Register from "./Pages/Register";
-import Home from "./Pages/Home";
+import Home from "./Pages/Landing/Home";
+import CustomerDashboard from "./Pages/Customer/CustomerDashboard"
 
 import CustomerDashboard from "./Pages/CustomerDashboard";
 import WorkerDashboard from "./Pages/WorkerDashboard";
