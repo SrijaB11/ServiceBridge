@@ -7,7 +7,8 @@ import Register from "./Pages/Register/Register";
 import WorkerDashboard from "./Pages/WorkerDashboard";
 import AdminDashboard from "./Pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CustomerDashboard from "./Pages/CustomerDashboard";
+import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
+import AdminHeader from "./Pages/AdminDashboard/Header";
 
 export default function App() {
   return (
@@ -39,7 +40,7 @@ export default function App() {
           path="/admin"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboard />
+              <AdminHeader />
             </ProtectedRoute>
           }
         />
