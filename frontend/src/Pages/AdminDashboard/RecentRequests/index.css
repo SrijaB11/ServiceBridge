@@ -1,0 +1,86 @@
+
+* {
+  font-family:"Roboto";
+  font-weight:bold;
+}
+
+.recent-requests-container {
+  padding:30px;
+  border-radius:10px;
+  box-shadow:0px 4px 16px 0px;
+}
+
+.recent-requests-header-container {
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.recent-requests-title {
+  font-size:16px;
+  color:black;
+}
+
+.recent-requests-details {
+  font-size:14px;
+  color:black;
+  cursor:pointer;
+}
+
+.horizantal-line {
+  width:2px solid navy;
+  margin-bottom:20px;
+}
+
+.recent-requests-details-container {
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:20px;
+  box-shadow:0px 4px 16px 0px;
+}
+
+.recent-requests-profile {
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.recent-requests-joid {
+  font-size:14px;
+  color:#000000;
+}
+
+.recent-requests-username {
+  font-size:14px;
+  color:#A0A0A0;
+}
+
+.recent-requests-worker {
+  font-size:14px;
+  color:#A0A0A0;
+}
+
+.recent-requests-service {
+  font-size:14px;
+  color:#A0A0A0;
+}
+
+.request-status-button {
+  all:unset;
+  height:60px;
+  width:120px;
+  font-size:12px;
+}
+
+.recent-requests-date {
+  font-size:16px;
+  color:#A0A0A0;
+}
