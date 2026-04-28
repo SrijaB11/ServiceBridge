@@ -5,17 +5,17 @@ const steps = [
   {
     title: "Choose a Service",
     desc: "Browse and select what you need.",
-    img: "/step1.png",
+    img: "/images/services/booking.jpg",
   },
   {
     title: "Book Schedule",
     desc: "Pick a time slot easily.",
-    img: "/step2.png",
+    img: "/images/services/confirm.jpg",
   },
   {
     title: "Get It Done",
     desc: "Professional completes the job.",
-    img: "/step3.png",
+    img: "/images/services/relax.jpg",
   },
 ];
 
@@ -45,33 +45,29 @@ const HowItWorks = () => {
           }}
         >
           {steps.map((step, index) => (
-            <Card
-              key={index}
-              sx={{
-                minWidth: 220, // smaller card width
-                maxWidth: 220,
-                flex: "0 0 auto",
-                textAlign: "center",
-                borderRadius: "12px",
-                boxShadow: "0 3px 12px rgba(0,0,0,0.05)",
-                py: 2,
-              }}
-            >
-              <CardContent>
+            <Card key={index}>
+              <CardContent sx={{ display: "flex" }}>
                 {/* Image */}
-                <Box mb={2}>
-                  <img src={step.img} alt={step.title} width="50" />
+                <Box mb={2} sx={{ height: "100px" }}>
+                  <img
+                    src={step.img}
+                    alt={step.title}
+                    width="100"
+                    sx={{ height: "100%" }}
+                  />
                 </Box>
 
                 {/* Title */}
-                <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-                  {step.title}
-                </Typography>
+                <Box>
+                  <Typography variant="subtitle1" fontWeight="bold" mb={1}>
+                    {step.title}
+                  </Typography>
 
-                {/* Description */}
-                <Typography variant="body2" color="text.secondary">
-                  {step.desc}
-                </Typography>
+                  {/* Description */}
+                  <Typography variant="body2" color="text.secondary">
+                    {step.desc}
+                  </Typography>
+                </Box>
               </CardContent>
             </Card>
           ))}

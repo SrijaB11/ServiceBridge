@@ -1,16 +1,33 @@
 import React from "react";
-import { Box, Container, Grid, Typography, Link, Button } from "@mui/material";
+import { Box, Container, Typography, Link } from "@mui/material";
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import MailIcon from "@mui/icons-material/Mail";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const Footer = () => {
   return (
     <Box sx={{ bgcolor: "#0B1C2C", color: "#fff", mt: 5 }}>
       {/* MAIN FOOTER */}
       <Container sx={{ py: 6 }}>
-        <Grid container spacing={4}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(5, 1fr)", // 5 columns here
+            },
+            gap: 4,
+          }}
+        >
           {/* BRAND */}
-          <Grid item xs={12} md={3}>
+          <Box>
             <Box display="flex" alignItems="center" mb={2}>
-              <img src="/logo.png" alt="ServiceBridge Logo" width="40" />
+              <img src="/images/logo.png" alt="ServiceBridge Logo" width="40" />
               <Typography variant="h6" ml={1}>
                 ServiceBridge
               </Typography>
@@ -21,17 +38,16 @@ const Footer = () => {
               home and business needs.
             </Typography>
 
-            {/* SOCIAL ICONS */}
             <Box display="flex" gap={2}>
-              <img src="/facebook.png" alt="fb" width="20" />
-              <img src="/twitter.png" alt="twitter" width="20" />
-              <img src="/instagram.png" alt="insta" width="20" />
-              <img src="/linkedin.png" alt="linkedin" width="20" />
+              <FacebookOutlinedIcon />
+              <TwitterIcon />
+              <InstagramIcon />
+              <LinkedInIcon />
             </Box>
-          </Grid>
+          </Box>
 
           {/* QUICK LINKS */}
-          <Grid item xs={6} md={2}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
@@ -49,10 +65,10 @@ const Footer = () => {
                 </Link>
               ),
             )}
-          </Grid>
+          </Box>
 
           {/* FOR CUSTOMERS */}
-          <Grid item xs={6} md={2}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               For Customers
             </Typography>
@@ -74,10 +90,10 @@ const Footer = () => {
                 {item}
               </Link>
             ))}
-          </Grid>
+          </Box>
 
           {/* FOR PROFESSIONALS */}
-          <Grid item xs={6} md={2}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               For Professionals
             </Typography>
@@ -98,25 +114,26 @@ const Footer = () => {
                 {item}
               </Link>
             ))}
-          </Grid>
+          </Box>
 
           {/* CONTACT */}
-          <Grid item xs={6} md={3}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               Contact Us
             </Typography>
 
             <Typography variant="body2" mb={1}>
-              📞 +91 12345 67890
+              <LocalPhoneIcon fontSize="small" /> +91 12345 67890
             </Typography>
             <Typography variant="body2" mb={1}>
-              📧 support@servicebridge.com
+              <MailIcon fontSize="small" /> support@servicebridge.com
             </Typography>
             <Typography variant="body2">
-              📍 123, Green Street, New Delhi, India – 110001
+              <LocationOnIcon fontSize="small" /> 123, Green Street, New Delhi,
+              India – 110001
             </Typography>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
 
       {/* BOTTOM BAR */}
@@ -128,7 +145,7 @@ const Footer = () => {
         }}
       >
         <Typography variant="body2">
-          © 2024 Service Bridge. All rights reserved.
+          © {new Date().getFullYear()} Service Bridge. All rights reserved.
         </Typography>
 
         <Box mt={1}>
