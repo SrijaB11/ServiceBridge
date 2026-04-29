@@ -6,34 +6,34 @@ import "./index.css"
 const AdminDetails = [
     {
         UniqueId:1,
-        ProfileIcon:"/assets/Images/total-users.png",
+        ProfileIcon:"/images/total-users.png",
         Title:"Total Users",
         Value:"1,256",
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"12.5% from last month"
     },
     {
         UniqueId:2,
-        ProfileIcon:"/assets/Images/workers-users.png",
+        ProfileIcon:"/images/workers-users.png",
         Title:"Total Workers",
         Value:"342",
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"8.3% from last month"
     },
     {
         UniqueId:3,
-        ProfileIcon:"/assets/Images/total-requests.png",
+        ProfileIcon:"/images/total-requests.png",
         Title:"Total Requests",
         Value:"1,782",
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"15.7% from last month"
     },
     {
         UniqueId:4,
-        ProfileIcon:"/assets/Images/total-revnue.png",
+        ProfileIcon:"/images/total-revnue.png",
         Title:"Total Revenue",
         Value:"2,45,678",
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"20.4% from last month"
     }
 ]

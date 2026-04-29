@@ -6,34 +6,34 @@ import "./index.css"
 const WorkersDetails = [
     {
         UniqueId:1,
-        ProfileIcon:"/assets/Images/total-jobs.png",
+        ProfileIcon:"/images/total-jobs.png",
         Title:"Total Jobs",
         Value:56,
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"14.3% from last month"
     },
     {
         UniqueId:2,
-        ProfileIcon:"/assets/Images/earnings.png",
+        ProfileIcon:"/images/earnings.png",
         Title:"Earnings",
         Value:"45,230",
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"18.6% from last month"
     },
     {
         UniqueId:3,
-        ProfileIcon:"/assets/Images/rating.png",
+        ProfileIcon:"/images/rating.png",
         Title:"Rating",
         Value:4.7,
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"2.1% from last month"
     },
     {
         UniqueId:4,
-        ProfileIcon:"/assets/Images/pending-requests.png",
+        ProfileIcon:"/images/pending-requests.png",
         Title:"Pending Requests",
         Value:8,
-        IncrementIcon:"/assets/Images/increment-arrow.png",
+        IncrementIcon:"/images/increment-arrow.png",
         Status:"5.0% from last month"
     }
 ]
@@ -51,7 +51,7 @@ const WorkersDashboard = () => {
                                     <h1 className="title">{detail.Title}</h1>
                                     {detail.Title === "Earnings" ? (
                                         <div className="rupee-container">
-                                            <img src="/assets/Images/rupee-symbol.png" alt="rupee" className="rupee-symbol"/>
+                                            <img src="/images/rupee-symbol.png" alt="rupee" className="rupee-symbol"/>
                                             <h1 className="value">{detail.Value}</h1>
                                         </div>
                                     ) : (
