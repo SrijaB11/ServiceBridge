@@ -4,11 +4,12 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
 
-import WorkerDashboard from "./Pages/WorkerDashboard";
-import AdminDashboard from "./Pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
-import AdminHeader from "./Pages/AdminDashboard/Header";
+
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
+import ServiceProviders from "./components/customer/ServiceProviders";
 
 export default function App() {
   return (
@@ -27,12 +28,20 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/service/:id"
+          element={
+            <ProtectedRoute role="customer">
+              <ServiceProviders />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/worker"
           element={
             <ProtectedRoute role="worker">
-              <WorkerDashboard />
+              <WorkersDashboard />
             </ProtectedRoute>
           }
         />
@@ -40,7 +49,7 @@ export default function App() {
           path="/admin"
           element={
             <ProtectedRoute role="admin">
-              <AdminHeader />
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />

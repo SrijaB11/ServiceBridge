@@ -39,8 +39,8 @@ const HowItWorks = () => {
             display: "flex",
             justifyContent: "center",
             gap: 3,
-            flexWrap: "nowrap", // keeps in one line
-            overflowX: "auto", // enables scroll on small screens
+            flexWrap: "nowrap", 
+            overflowX: "auto", 
             "&::-webkit-scrollbar": { display: "none" },
           }}
         >

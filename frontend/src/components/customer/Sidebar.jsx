@@ -11,7 +11,7 @@ function Sidebar({ setActiveTab }) {
           Dashboard
         </li>
         <li onClick={() => setActiveTab("services")} className="cursor-pointer">
-          Serviceses
+          Services
         </li>
         <li onClick={() => setActiveTab("bookings")} className="cursor-pointer">
           My Bookings
