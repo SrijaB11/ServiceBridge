@@ -3,10 +3,8 @@ import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
-<<<<<<< HEAD
 
-=======
->>>>>>> b4004d8702180320b1af92d2a07fb7c0138093c9
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 
@@ -15,19 +13,19 @@ import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
-import WorkerNavBar from "./components/WorkersDashboard/Navbar";
-import WorkerHeader from "./components/WorkersDashboard/Header";
-import WorkersDashboard from "./components/WorkersDashboard/Dashboard";
-import Requests from "./components/WorkersDashboard/Requests";
-import ActiveJobs from "./components/WorkersDashboard/ActiveJobs";
+import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
+import WorkerHeader from "./Pages/WorkersDashboard/Header";
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import Requests from "./Pages/WorkersDashboard/Requests";
+import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 
 // Admin Dashboard Components
-import AdminNavBar from "./components/AdminDashboard/Navbar";
-import AdminHeader from "./components/AdminDashboard/Header";
-import AdminDashboard from "./components/AdminDashboard/Dashboard";
-import Users from "./components/AdminDashboard/Users";
-import RecentRequests from "./components/AdminDashboard/RecentRequests";
-import RecentComplaints from "./components/AdminDashboard/RecentComplaints";
+import AdminNavBar from "./Pages/AdminDashboard/Navbar";
+import AdminHeader from "./Pages/AdminDashboard/Header";
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
+import Users from "./Pages/AdminDashboard/Users";
+import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
+import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 
 import "./App.css";
 
@@ -104,11 +102,9 @@ export default function App() {
           path="/worker/*"
           element={
             <ProtectedRoute role="worker">
-<<<<<<< HEAD
               <WorkersDashboard />
 =======
               <WorkerDashboardLayout />
->>>>>>> b4004d8702180320b1af92d2a07fb7c0138093c9
             </ProtectedRoute>
           }
         />
