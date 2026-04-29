@@ -3,10 +3,6 @@ import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
-<<<<<<< HEAD
-
-=======
->>>>>>> b4004d8702180320b1af92d2a07fb7c0138093c9
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 
@@ -104,11 +100,7 @@ export default function App() {
           path="/worker/*"
           element={
             <ProtectedRoute role="worker">
-<<<<<<< HEAD
-              <WorkersDashboard />
-=======
               <WorkerDashboardLayout />
->>>>>>> b4004d8702180320b1af92d2a07fb7c0138093c9
             </ProtectedRoute>
           }
         />
