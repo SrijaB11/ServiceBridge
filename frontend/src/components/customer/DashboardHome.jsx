@@ -1,7 +1,7 @@
 import Services from "../Services";
 
 function DashboardHome() {
-  return <Services />;
+  return <div>Dashboard</div>;
 }
 
 export default DashboardHome;
