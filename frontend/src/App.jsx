@@ -14,7 +14,7 @@ import ServiceProviders from "./components/customer/ServiceProviders";
 // Worker Dashboard Components
 import NavBar from "./Pages/WorkersDashboard/Navbar";
 import Header from "./Pages/WorkersDashboard/Header";
-import WorkersDetails from "./Pages/WorkersDashboard/Dashboard";
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
 import Requests from "./Pages/WorkersDashboard/Requests";
 import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 
