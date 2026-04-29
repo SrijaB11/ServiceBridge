@@ -59,4 +59,4 @@ const AdminNavBar = () => {
     )
 }
 
-export default NavBar
+export default AdminNavBar
