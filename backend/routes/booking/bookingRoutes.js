@@ -6,7 +6,6 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 
 const workerBookingController = require("../../controllers/booking/workerBookingController");
 const workerAvailabilityController = require("../../controllers/booking/workerAvailabilityController");
-const getWorkerAvailability = require("../../controllers/booking/workerAvailabilityController");
 const getWorkerRequest = require("../../controllers/booking/getWorkerRequestController");
 const updateBookingStatus = require("../../controllers/booking/updateBookingStatusController");
 
