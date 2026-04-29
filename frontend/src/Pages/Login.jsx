@@ -91,7 +91,7 @@ function Login() {
           </h2>
 
           <img
-            src="/images/worker.png"
+            src="/images/service_bridge_illustration.png"
             className="w-[320px] mt-2"
             alt="image"
           />
@@ -103,24 +103,6 @@ function Login() {
             <h1 className="text-3xl font-extrabold text-gray-900 mb-3">
               Good to See <span className="text-green-500">You</span> Again
             </h1>
-
-            <div className="mt-7 space-y-4">
-              <Feature
-                icon={<Shield size={17} />}
-                title="Secure"
-                desc="Safe login"
-              />
-              <Feature
-                icon={<User size={17} />}
-                title="Easy Access"
-                desc="Fast login"
-              />
-              <Feature
-                icon={<Clock size={17} />}
-                title="24/7"
-                desc="Always available"
-              />
-            </div>
           </div>
         </div>
 

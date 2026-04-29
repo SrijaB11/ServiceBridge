@@ -3,10 +3,9 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
-const workerRoutes = require("./routes/customer/workersListRoutes");
+const workerListRoutes = require("./routes/customer/workersListRoutes");
 const adminWorkerRoutes = require("./routes/adminWorkerRoutes");
-
-
+const bookingRoutes = require("./routes/booking/bookingRoutes");
 
 const app = express();
 
@@ -15,13 +14,10 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-
 app.use("/",userRoutes);
-app.use("/customer",workerRoutes);
+app.use("/customer",workerListRoutes);
 app.use("/admin", adminWorkerRoutes);
-
-
-
+app.use("/booking", bookingRoutes);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

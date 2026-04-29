@@ -4,9 +4,8 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-// Customer Dashboard
-import CustomerDashboard from "./Pages/CustomerDashboard";
+import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
+import AdminHeader from "./Pages/AdminDashboard/Header";
 
 // Worker Dashboard Components
 import WorkerNavBar from "./components/WorkersDashboard/Navbar";
@@ -100,7 +99,7 @@ export default function App() {
           path="/admin/*"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboardLayout />
+              <AdminHeader />
             </ProtectedRoute>
           }
         />
