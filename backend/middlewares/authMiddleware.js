@@ -24,8 +24,14 @@ const authMiddleware = async (req, res, next) => {
         message: "User not found"
       });
     }
+<<<<<<< Updated upstream
 
     req.user = user;
+=======
+     
+    req.userId = decoded.id;
+    req.role = user.role;
+>>>>>>> Stashed changes
 
     next();
   } catch (err) {
