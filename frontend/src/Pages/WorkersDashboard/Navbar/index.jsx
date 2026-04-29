@@ -14,43 +14,43 @@ const NavBar = () => {
             <ul className="navbar-list">
                 <li className="navbar-list-items">
                     <Link to="/" className="navbar-tabs-container">
-                        <img src="/assets/Images/dashboard.png" alt="dashboard" className="navbar-logo" />
+                        <img src="/images/dashboard.png" alt="dashboard" className="navbar-logo" />
                         <p className="tab-name">Dashboard</p>
                     </Link>
                 </li>
                 <li className="navbar-list-items">
                     <Link to="/requests" className="navbar-tabs-container">
-                        <img src="/assets/Images/requests.png" alt="requests" className="navbar-logo" />
+                        <img src="/images/requests.png" alt="requests" className="navbar-logo" />
                         <p className="tab-name">Requests</p>
                     </Link>
                 </li>
                 <li className="navbar-list-items">
                     <Link to="/active-jobs" className="navbar-tabs-container">
-                        <img src="/assets/Images/active jobs.png" alt="active jobs" className="navbar-logo" />
+                        <img src="/images/active jobs.png" alt="active jobs" className="navbar-logo" />
                         <p className="tab-name">Active Jobs</p>
                     </Link>
                 </li>
                 <li className="navbar-list-items">
                     <Link to="/earnings" className="navbar-tabs-container">
-                        <img src="/assets/Images/earnings-image.png" alt="earnings" className="navbar-logo" />
+                        <img src="/images/earnings-image.png" alt="earnings" className="navbar-logo" />
                         <p className="tab-name">Earnings</p>
                     </Link>
                 </li>
                 <li className="navbar-list-items">
                     <Link to="/reviews" className="navbar-tabs-container">
-                        <img src="/assets/Images/reviews.png" alt="reviews" className="navbar-logo" />
+                        <img src="/images/reviews.png" alt="reviews" className="navbar-logo" />
                         <p className="tab-name">Reviews</p>
                     </Link>
                 </li>
                 <li className="navbar-list-items">
                     <Link to="/profile" className="navbar-tabs-container">
-                        <img src="/assets/Images/profile-img.png" alt="profile" className="navbar-logo" />
+                        <img src="/images/profile-img.png" alt="profile" className="navbar-logo" />
                         <p className="tab-name">Profile</p>
                     </Link>
                 </li>
                 <li className="navbar-list-items"> 
                     <Link to="/logout" className="navbar-tabs-container">
-                        <img src="/assets/Images/logout.png" alt="logout" className="navbar-logo" />
+                        <img src="/images/logout.png" alt="logout" className="navbar-logo" />
                         <p className="tab-name">Logout</p>
                     </Link>
                 </li>

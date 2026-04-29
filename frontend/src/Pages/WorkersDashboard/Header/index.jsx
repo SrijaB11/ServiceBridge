@@ -4,7 +4,7 @@ import "./index.css"
 const Header = () => (
     <div className="header-container1">
         <div className="header-container2">
-            <img src="/assets/Images/worker.png" alt="worker logo" className="worker-logo"/>
+            <img src="/images/worker.png" alt="worker logo" className="worker-logo"/>
             <h1 className="worker-title">Workers Dashboard</h1>
         </div>
         <div className="header-container3">
@@ -22,12 +22,12 @@ const Header = () => (
             </div>
             <div className="workers-profile">
                 <div className="workers-details-container">
-                    <img src="/assets/Images/notifications.png" alt="notifications" className="notifications"/>
+                    <img src="/images/notifications.png" alt="notifications" className="notifications"/>
                     <button className="notification-button">3</button>
                 </div>
                 <div className="workers-profile-container">
                     <div className="profile">
-                        <img src="/assets/Images/profile picture.png" alt="profile picture" className="profile-picture"/>
+                        <img src="/images/profile picture.png" alt="profile picture" className="profile-picture"/>
                     </div>
                     <select id="options" name="">
                         <option value="name" className="option-value">Rakesh Kumar</option>

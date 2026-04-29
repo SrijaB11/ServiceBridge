@@ -1,34 +1,3 @@
-// const services = [
-//   "Cleaning",
-//   "Plumbing",
-//   "Electrical",
-//   "Painting",
-//   "Pest Control",
-// ];
-
-// export default function Services() {
-//   return (
-//     <div className="py-16 px-10">
-//       <h2 className="text-center text-2xl font-bold mb-10">
-//         Our Popular Services
-//       </h2>
-
-//       <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-//         {services.map((s) => (
-//           <div
-//             key={s}
-//             className="bg-white p-6 rounded-xl shadow hover:shadow-lg text-center"
-//           >
-//             <p className="font-semibold">{s}</p>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// ✅ WRITE HERE (top of file)
-
 const services = [
   {
     title: "House Cleaning",
