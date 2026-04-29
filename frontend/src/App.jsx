@@ -8,14 +8,13 @@ import Register from "./Pages/Register/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
-import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
+
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
-import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
-import WorkerHeader from "./Pages/WorkersDashboard/Header";
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import NavBar from "./Pages/WorkersDashboard/Navbar";
+import Header from "./Pages/WorkersDashboard/Header";
+import WorkersDetails from "./Pages/WorkersDashboard/Dashboard";
 import Requests from "./Pages/WorkersDashboard/Requests";
 import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 
@@ -33,7 +32,7 @@ import "./App.css";
 function WorkerDashboardLayout() {
   return (
     <>
-      <WorkerHeader />
+      <Header />
       <div className="app-layout">
         <WorkerNavBar />
         <div className="main-content">

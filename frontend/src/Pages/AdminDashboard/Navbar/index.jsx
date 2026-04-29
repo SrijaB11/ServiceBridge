@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import "./index.css"
 
-const NavBar = () => {
+const AdminNavBar = () => {
     return (
         <nav className="navbar-container1">
             <div className="navbar-container2">
