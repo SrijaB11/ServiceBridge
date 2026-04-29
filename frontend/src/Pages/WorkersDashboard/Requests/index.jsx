@@ -3,35 +3,35 @@ import "./index.css"
 const RequestsDetails = [
     {
         UniqueId:1,
-        ProfileImage:"/assets/Images/male-logo.png",
+        ProfileImage:"/images/male-logo.png",
         WorkerName:"Amit Sharma",
-        LocationIcon:"/assets/Images/location.png",
+        LocationIcon:"/images/location.png",
         WorkTitle:"Plumbing Service",
         Location:"Jaipur, Rajasthan",
         Date:"12 May 2024",
-        Rupee:"/assets/Images/rupee.png",
+        Rupee:"/images/rupee.png",
         Cost:600
     },
     {
         UniqueId:2,
-        ProfileImage:"/assets/Images/female-logo.png",
+        ProfileImage:"/images/female-logo.png",
         WorkerName:"Neha Gupta",
-        LocationIcon:"/assets/Images/location.png",
+        LocationIcon:"/images/location.png",
         WorkTitle:"Electrical Work",
         Location:"Jaipur, Rajasthan",
         Date:"12 May 2024",
-        Rupee:"/assets/Images/rupee.png",
+        Rupee:"/images/rupee.png",
         Cost:750
     },
     {
         UniqueId:3,
-        ProfileImage:"/assets/Images/male-logo.png",
+        ProfileImage:"/images/male-logo.png",
         WorkerName:"Sunil Verma",
-        LocationIcon:"/assets/Images/location.png",
+        LocationIcon:"/images/location.png",
         WorkTitle:"Carperntary Work",
         Location:"Jaipur, Rajasthan",
         Date:"11 May 2024",
-        Rupee:"/assets/Images/rupee.png",
+        Rupee:"/images/rupee.png",
         Cost:900
     }
 ]
