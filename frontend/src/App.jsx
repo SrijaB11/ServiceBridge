@@ -3,9 +3,16 @@ import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
+<<<<<<< HEAD
+
+=======
+>>>>>>> b4004d8702180320b1af92d2a07fb7c0138093c9
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
-import AdminHeader from "./Pages/AdminDashboard/Header";
+
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
+import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
 import WorkerNavBar from "./components/WorkersDashboard/Navbar";
@@ -83,13 +90,25 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/service/:id"
+          element={
+            <ProtectedRoute role="customer">
+              <ServiceProviders />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Worker Dashboard with nested routes */}
         <Route
           path="/worker/*"
           element={
             <ProtectedRoute role="worker">
+<<<<<<< HEAD
+              <WorkersDashboard />
+=======
               <WorkerDashboardLayout />
+>>>>>>> b4004d8702180320b1af92d2a07fb7c0138093c9
             </ProtectedRoute>
           }
         />
@@ -99,7 +118,7 @@ export default function App() {
           path="/admin/*"
           element={
             <ProtectedRoute role="admin">
-              <AdminHeader />
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
