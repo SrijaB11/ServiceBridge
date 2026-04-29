@@ -12,7 +12,21 @@ const services = [
 
 function CustomerServices() {
   const navigate = useNavigate();
+  const [workers, setWorkers] = useState([]);
+  const [selectedService, setSelectedService] = useState("");
+  const handleBookService = async (service) => {
+    try {
+      setSelectedService(service);
 
+      const res = await axios.get(
+        `http://localhost:5000/api/workers/${service}`,
+      );
+
+      setWorkers(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4">
@@ -24,7 +38,8 @@ function CustomerServices() {
               <h3>{service.title}</h3>
 
               <button
-                onClick={() => navigate(`/service/${service.id}`)}
+                // onClick={() => navigate(`/service/${service.id}`)}
+                onClick={() => handleBookService("plumber")}
                 className="mt-3 bg-green-500 text-white px-3 py-1 rounded"
               >
                 Book Service
