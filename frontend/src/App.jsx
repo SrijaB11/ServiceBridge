@@ -14,6 +14,7 @@ import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 import NavBar from "./Pages/WorkersDashboard/Navbar";
 import Header from "./Pages/WorkersDashboard/Header";
 import Requests from "./Pages/WorkersDashboard/Requests";
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard"
 
 // Admin Dashboard Components
 import AdminNavBar from "./Pages/AdminDashboard/Navbar";
