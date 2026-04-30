@@ -62,6 +62,7 @@ function Login() {
       // token
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("name", user.fullName);
 
       //  Navigate based on role
       if (role === "customer") {

@@ -75,12 +75,35 @@ function ServiceProviders() {
   };
 
   // ✅ Handle booking click
-  const handleBook = (worker) => {
-    setSelectedWorker(worker);
-    alert(`Booking request sent to ${worker.fullName}`);
+  // const handleBook = (worker) => {
+  //   setSelectedWorker(worker);
+  //   alert(`Booking request sent to ${worker.fullName}`);
 
-    // 👉 Later we will connect booking API here
-  };
+  //   // 👉 Later we will connect booking API here
+  //   const handleBook = async (worker) => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+
+  //       const res = await axios.post(
+  //         "http://localhost:5000/booking/book",
+  //         {
+  //           workerId: worker._id,
+  //           date: selectedDate,
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         },
+  //       );
+
+  //       alert(res.data.message);
+  //     } catch (error) {
+  //       console.error(error);
+  //       alert(error.response?.data?.message || "Booking failed ❌");
+  //     }
+  //   };
+  // };
 
   return (
     <div className="p-6">
