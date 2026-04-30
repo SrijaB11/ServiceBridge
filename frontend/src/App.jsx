@@ -14,12 +14,11 @@ import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 import NavBar from "./Pages/WorkersDashboard/Navbar";
 import Header from "./Pages/WorkersDashboard/Header";
 import Requests from "./Pages/WorkersDashboard/Requests";
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard"
 
 // Admin Dashboard Components
 import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import AdminHeader from "./Pages/AdminDashboard/Header";
-import AdminDashboard from "./Pages/AdminDashboard/Dashboard"
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
