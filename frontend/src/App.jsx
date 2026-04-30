@@ -10,18 +10,18 @@ import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
 
-import ActiveJobs from "./pages/WorkersDashboard/ActiveJobs";
-import WorkerNavBar from "./pages/WorkersDashboard/Navbar";
-import WorkerHeader from "./pages/WorkersDashboard/Header";
-import Requests from "./pages/WorkersDashboard/Requests";
+import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
+import NavBar from "./Pages/WorkersDashboard/Navbar";
+import Header from "./Pages/WorkersDashboard/Header";
+import Requests from "./Pages/WorkersDashboard/Requests";
 
 // Admin Dashboard Components
-import AdminNavBar from "./pages/AdminDashboard/Navbar";
-import AdminHeader from "./pages/AdminDashboard/Header";
+import AdminNavBar from "./Pages/AdminDashboard/Navbar";
+import AdminHeader from "./Pages/AdminDashboard/Header";
 
-import Users from "./pages/AdminDashboard/Users";
-import RecentRequests from "./pages/AdminDashboard/RecentRequests";
-import RecentComplaints from "./pages/AdminDashboard/RecentComplaints";
+import Users from "./Pages/AdminDashboard/Users";
+import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
+import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 
 import "./App.css";
 
@@ -31,7 +31,7 @@ function WorkerDashboardLayout() {
     <>
       <Header />
       <div className="app-layout">
-        <WorkerNavBar />
+        <NavBar />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<WorkersDashboard />} />
@@ -95,21 +95,20 @@ export default function App() {
 
         {/* Worker Dashboard with nested routes */}
         <Route
-          path="/worker/*"
+          path="/"
           element={
             <ProtectedRoute role="worker">
-
-              <WorkerDashboardLayout />
+              <WorkersDashboard />
             </ProtectedRoute>
           }
         />
 
         {/* Admin Dashboard with nested routes */}
         <Route
-          path="/admin/*"
+          path="/"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboardLayout />
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
