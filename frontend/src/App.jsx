@@ -6,7 +6,6 @@ import Register from "./Pages/Register/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 
-
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
@@ -99,7 +98,7 @@ export default function App() {
           path="/worker/*"
           element={
             <ProtectedRoute role="worker">
-=======
+
               <WorkerDashboardLayout />
             </ProtectedRoute>
           }
@@ -110,7 +109,7 @@ export default function App() {
           path="/admin/*"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboard />
+              <AdminDashboardLayout />
             </ProtectedRoute>
           }
         />
