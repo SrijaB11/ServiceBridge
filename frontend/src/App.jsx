@@ -12,6 +12,7 @@ import ServiceProviders from "./components/customer/ServiceProviders";
 // Worker Dashboard Components
 
 import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
+<<<<<<< HEAD
 import NavBar from "./pages/WorkersDashboard/Navbar";
 import Header from "./Pages/WorkersDashboard/Header";
 import Requests from "./pages/WorkersDashboard/Requests";
@@ -23,6 +24,19 @@ import AdminHeader from "./pages/AdminDashboard/Header";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./pages/AdminDashboard/RecentComplaints";
+=======
+import NavBar from "./Pages/WorkersDashboard/Navbar";
+import Header from "./Pages/WorkersDashboard/Header";
+import Requests from "./Pages/WorkersDashboard/Requests";
+
+// Admin Dashboard Components
+import AdminNavBar from "./Pages/AdminDashboard/Navbar";
+import AdminHeader from "./Pages/AdminDashboard/Header";
+
+import Users from "./Pages/AdminDashboard/Users";
+import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
+import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
+>>>>>>> 9931d9f01e43ad5e0942116c687c08414a986af8
 
 import "./App.css";
 
@@ -32,7 +46,7 @@ function WorkerDashboardLayout() {
     <>
       <Header />
       <div className="app-layout">
-        <WorkerNavBar />
+        <NavBar />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<WorkersDashboard />} />
@@ -96,9 +110,10 @@ export default function App() {
 
         {/* Worker Dashboard with nested routes */}
         <Route
-          path="/worker/*"
+          path="/"
           element={
             <ProtectedRoute role="worker">
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -111,16 +126,19 @@ export default function App() {
 =======
 >>>>>>> b24a406fcbee95a34a68576770cf43588cd4b997
               <WorkerDashboardLayout />
+=======
+              <WorkersDashboard />
+>>>>>>> 9931d9f01e43ad5e0942116c687c08414a986af8
             </ProtectedRoute>
           }
         />
 
         {/* Admin Dashboard with nested routes */}
         <Route
-          path="/admin/*"
+          path="/"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboardLayout />
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
