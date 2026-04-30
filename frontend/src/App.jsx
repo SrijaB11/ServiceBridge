@@ -96,7 +96,7 @@ export default function App() {
 
         {/* Worker Dashboard with nested routes */}
         <Route
-          path="/"
+          path="/worker/*"
           element={
             <ProtectedRoute role="worker">
               <WorkersDashboard />
@@ -106,7 +106,7 @@ export default function App() {
 
         {/* Admin Dashboard with nested routes */}
         <Route
-          path="/"
+          path="/admin/*"
           element={
             <ProtectedRoute role="admin">
               <AdminDashboard />
