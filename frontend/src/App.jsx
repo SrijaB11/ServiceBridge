@@ -3,25 +3,22 @@ import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
-
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
-
 
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
+
+import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 import NavBar from "./Pages/WorkersDashboard/Navbar";
 import Header from "./Pages/WorkersDashboard/Header";
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
 import Requests from "./Pages/WorkersDashboard/Requests";
-import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 
 // Admin Dashboard Components
 import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import AdminHeader from "./Pages/AdminDashboard/Header";
-import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
+
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
@@ -34,7 +31,7 @@ function WorkerDashboardLayout() {
     <>
       <Header />
       <div className="app-layout">
-        <WorkerNavBar />
+        <NavBar />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<WorkersDashboard />} />
@@ -98,11 +95,10 @@ export default function App() {
 
         {/* Worker Dashboard with nested routes */}
         <Route
-          path="/worker/*"
+          path="/"
           element={
             <ProtectedRoute role="worker">
               <WorkersDashboard />
-              <WorkerDashboardLayout />
             </ProtectedRoute>
           }
         />
