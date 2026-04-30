@@ -6,23 +6,24 @@ import Register from "./Pages/Register/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
 
-import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
-import NavBar from "./Pages/WorkersDashboard/Navbar";
-import Header from "./Pages/WorkersDashboard/Header";
-import Requests from "./Pages/WorkersDashboard/Requests";
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import ActiveJobs from "./pages/WorkersDashboard/ActiveJobs";
+import WorkerNavBar from "./pages/WorkersDashboard/Navbar";
+import WorkerHeader from "./pages/WorkersDashboard/Header";
+import Requests from "./pages/WorkersDashboard/Requests";
 
 // Admin Dashboard Components
-import AdminNavBar from "./Pages/AdminDashboard/Navbar";
-import AdminHeader from "./Pages/AdminDashboard/Header";
-import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
-import Users from "./Pages/AdminDashboard/Users";
-import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
-import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
+import AdminNavBar from "./pages/AdminDashboard/Navbar";
+import AdminHeader from "./pages/AdminDashboard/Header";
+
+import Users from "./pages/AdminDashboard/Users";
+import RecentRequests from "./pages/AdminDashboard/RecentRequests";
+import RecentComplaints from "./pages/AdminDashboard/RecentComplaints";
 
 import "./App.css";
 
@@ -30,9 +31,9 @@ import "./App.css";
 function WorkerDashboardLayout() {
   return (
     <>
-      <Header />
+      <WorkerHeader />
       <div className="app-layout">
-        <NavBar />
+        <WorkerNavBar />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<WorkersDashboard />} />
@@ -99,7 +100,7 @@ export default function App() {
           path="/worker/*"
           element={
             <ProtectedRoute role="worker">
-              <WorkersDashboard />
+              <WorkerDashboardLayout />
             </ProtectedRoute>
           }
         />

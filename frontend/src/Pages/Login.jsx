@@ -62,7 +62,7 @@ function Login() {
       // token
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
-      localStorage.setItem("name", user.fullName);
+      localStorage.setItem("name", user?.fullName || email);
 
       //  Navigate based on role
       if (role === "customer") {
@@ -75,7 +75,7 @@ function Login() {
         navigate("/");
       }
     } catch (err) {
-      setError(err, "Login failed");
+      setError(err.response?.data?.message || err.message || "Login failed");
     } finally {
       setLoading(false);
     }
