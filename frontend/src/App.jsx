@@ -19,7 +19,7 @@ import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard"
 // Admin Dashboard Components
 import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import AdminHeader from "./Pages/AdminDashboard/Header";
-
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard"
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
