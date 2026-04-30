@@ -1,3 +1,5 @@
+const Booking = require("../../models/BookingModel");
+
 const getWorkerRequest = async (req, res) => {
   try {
     const bookings = await Booking.find({

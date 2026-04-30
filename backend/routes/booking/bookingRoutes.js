@@ -19,6 +19,6 @@ router.get("/availability/:workerId", workerAvailabilityController);
 router.get("/worker", authMiddleware, getWorkerRequest);
 
 // Worker accepts or rejects
-router.get("/:id", authMiddleware, updateBookingStatus);
+router.put("/:id", authMiddleware, updateBookingStatus);
 
 module.exports = router;
