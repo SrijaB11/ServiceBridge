@@ -4,7 +4,7 @@ const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
 const workerListRoutes = require("./routes/customer/workersListRoutes");
-const adminWorkerRoutes = require("./routes/adminWorkerRoutes");
+const adminWorkerRoutes = require("./routes/admin/adminWorkerRoutes");
 const bookingRoutes = require("./routes/booking/bookingRoutes");
 const reviewRoutes = require("./routes/review/reviewRoutes");
 
@@ -20,6 +20,7 @@ app.use("/customer",workerListRoutes);
 app.use("/admin", adminWorkerRoutes);
 app.use("/booking", bookingRoutes);
 app.use("/review", reviewRoutes);
+
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
