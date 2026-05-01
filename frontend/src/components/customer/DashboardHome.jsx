@@ -7,25 +7,25 @@ const services = [
     id: "plumbing",
     title: "Plumbing",
     desc: "Fix leaks, pipes, and installations",
-    icon: "🔧",
+    image: "/images/services/plumber.jpg",
   },
   {
     id: "cleaning",
     title: "House Cleaning",
     desc: "Home deep cleaning services",
-    icon: "🧹",
+    image: "/images/services/cleaning.jpg",
   },
   {
     id: "electrical",
     title: "Electrical",
     desc: "Wiring and electrical repairs",
-    icon: "⚡",
+    image: "/images/services/electrician.jpg",
   },
   {
     id: "painting",
     title: "Painting",
     desc: "Wall painting & renovation",
-    icon: "🎨",
+    image: "/images/services/painter.jpg",
   },
 ];
 
@@ -78,7 +78,11 @@ function DashboardHome() {
               className="bg-white p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
               onClick={() => navigate(`/service/${s.id}`)}
             >
-              <div className="text-3xl">{s.icon}</div>
+              <img
+                className="w-40 h-40 object-cover"
+                src={s.image}
+                alt={s.title}
+              />
               <h3 className="font-semibold mt-2">{s.title}</h3>
               <p className="text-gray-500 text-sm mt-1">{s.desc}</p>
 
