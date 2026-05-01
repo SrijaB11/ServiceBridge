@@ -13,6 +13,7 @@ import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
 
+<<<<<<< HEAD
 import WorkerNavBar from "./pages/WorkersDashboard/Navbar";
 import WorkerHeader from "./pages/WorkersDashboard/Header";
 
@@ -22,6 +23,8 @@ import Users from "./pages/AdminDashboard/Users";
 import RecentRequests from "./pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./pages/AdminDashboard/RecentComplaints";
 
+=======
+>>>>>>> 0f1eb6f70e94843ce51e252bc2a69f346256d43e
 import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
 import NavBar from "./Pages/WorkersDashboard/Navbar";
 import Header from "./Pages/WorkersDashboard/Header";
@@ -30,6 +33,13 @@ import Requests from "./Pages/WorkersDashboard/Requests";
 // Admin Dashboard Components
 
 import AdminHeader from "./Pages/AdminDashboard/Header";
+<<<<<<< HEAD
+=======
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard"
+import Users from "./Pages/AdminDashboard/Users";
+import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
+import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
+>>>>>>> 0f1eb6f70e94843ce51e252bc2a69f346256d43e
 
 import "./App.css";
 
@@ -106,11 +116,17 @@ export default function App() {
           path="/worker/*"
           element={
             <ProtectedRoute role="worker">
+<<<<<<< HEAD
               <WorkerDashboardLayout />
 
               <WorkerDashboardLayout />
 
               <WorkersDashboard />
+=======
+
+              <WorkersDashboard />
+
+>>>>>>> 0f1eb6f70e94843ce51e252bc2a69f346256d43e
             </ProtectedRoute>
           }
         />

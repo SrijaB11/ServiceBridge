@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const bookingSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -11,15 +11,21 @@ const bookingSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  date: {
-    type: Date,
+  booking: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Booking",
     required: true
   },
-  status: {
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    required: true
+  },
+  comment: {
     type: String,
-    enum: ["pending", "accepted", "rejected","completed"],
-    default: "pending"
+    default: ""
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Booking", bookingSchema);
+module.exports = mongoose.model("Review", reviewSchema);
