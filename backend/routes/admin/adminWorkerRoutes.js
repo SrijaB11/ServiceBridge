@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { createWorker,getAllWorkers,updateWorker,deleteWorker, } = require("../controllers/adminWorkerController");
+const { createWorker,getAllWorkers,updateWorker,deleteWorker, } = require("../../controllers/admin/adminWorkerController");
 
 router.post("/workers", createWorker);
 router.get("/workers", getAllWorkers);

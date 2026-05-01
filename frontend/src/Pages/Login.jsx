@@ -57,7 +57,7 @@ function Login() {
         password,
       });
 
-      const { token, role } = res.data;
+      const { token, role, user } = res.data;
 
       // token
       localStorage.setItem("token", token);
@@ -86,14 +86,22 @@ function Login() {
       <div className="w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
         <div className="relative bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-100 md:w-[42%] p-8 lg:p-10 flex flex-col justify-between min-h-[340px] md:min-h-[640px]">
           <h2 className="text-lg font-semibold flex items-center gap-2 mb-8">
-            <img src="/images/logo.png" alt="logo" className="w-18 h-14" />
+            <img
+              src="/images/logo.png"
+              alt="logo"
+              className="w-18 h-14 cursor-pointer relative z-10"
+              onClick={() => {
+                console.log("clicked");
+                navigate("/");
+              }}
+            />
             <span className="text-green-600 font-bold">Service</span>
             <span className="text-purple-600 font-bold">Bridge</span>
           </h2>
 
           <img
             src="/images/service_bridge_illustration.png"
-            className="w-[320px] mt-2"
+            className="w-[320px] mt-2 "
             alt="image"
           />
 

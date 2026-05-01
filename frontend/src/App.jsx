@@ -3,27 +3,33 @@ import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 
 import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
-import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
+
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Dashboard Components
 
-import ActiveJobs from "./pages/WorkersDashboard/ActiveJobs";
 import WorkerNavBar from "./pages/WorkersDashboard/Navbar";
 import WorkerHeader from "./pages/WorkersDashboard/Header";
-import Requests from "./pages/WorkersDashboard/Requests";
 
 // Admin Dashboard Components
 import AdminNavBar from "./pages/AdminDashboard/Navbar";
-import AdminHeader from "./pages/AdminDashboard/Header";
-
 import Users from "./pages/AdminDashboard/Users";
 import RecentRequests from "./pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./pages/AdminDashboard/RecentComplaints";
+
+import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
+import NavBar from "./Pages/WorkersDashboard/Navbar";
+import Header from "./Pages/WorkersDashboard/Header";
+import Requests from "./Pages/WorkersDashboard/Requests";
+
+// Admin Dashboard Components
+
+import AdminHeader from "./Pages/AdminDashboard/Header";
 
 import "./App.css";
 
@@ -101,6 +107,10 @@ export default function App() {
           element={
             <ProtectedRoute role="worker">
               <WorkerDashboardLayout />
+
+              <WorkerDashboardLayout />
+
+              <WorkersDashboard />
             </ProtectedRoute>
           }
         />
