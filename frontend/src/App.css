@@ -1,11 +1,10 @@
 .app-layout {
-    display: flex;
-    min-height: 100vh;
+  display: flex; /* Aligns NavBar and Main Content side-by-side */
+  min-height: calc(100vh - 60px); /* Adjust 60px to your Header height */
 }
 
 .main-content {
-    flex: 1;
-    min-height: 100vh;
-    background-color: #f5f6fa;
-    overflow-x: auto;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
 }
