@@ -1,0 +1,219 @@
+
+.requests-container {
+  padding:30px;
+  border-radius:10px;
+  box-shadow:0px 4px 16px 0px;
+}
+
+.requests-header-container {
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.requests-title {
+  font-size:16px;
+  color:black;
+}
+
+.requests-details {
+  font-size:14px;
+  color:black;
+  cursor:pointer;
+}
+
+.horizantal-line {
+  width:2px solid navy;
+  margin-bottom:20px;
+}
+
+.requests-details-container {
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:20px;
+  box-shadow:0px 4px 16px 0px;
+}
+
+.requests-profile {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:20px;
+}
+
+.requests-logo {
+  height:35px;
+  width:45px;
+}
+
+.person-name {
+  font-size:18px;
+  color:black;
+}
+
+.requests-person-details {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:5px;
+  margin-bottom:10px;
+  margin-top:10px;
+}
+
+.location {
+  height:16px;
+  width:16px;
+}
+
+.person-work {
+  font-size:14px;
+  color:black;
+}
+
+.person-location {
+  font-size:14px;
+  color:black;
+}
+
+.requests-date {
+  font-size:16px;
+  color:black;
+  margin-bottom:10px;
+}
+
+.request-money-container {
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.rupee-logo {
+  height:12px;
+  width:12px;
+}
+
+.requests-value {
+  font-size:15px;
+  color:green;
+}
+
+.requests-button-container {
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  gap:25px;
+}
+
+
+.accept {
+  display:inline-block;
+  font-weight: 400;
+  color:green;
+  text-align:center;
+  vertical-align:middle;
+  cursor:pointer;
+  user-select:none;
+  background-color:transparent;
+  border:1px solid transparent;
+  padding:0.375rem 0.75rem;
+  font-size:1rem;
+  line-height:1.5;
+  border-radius:0.375rem;
+  transition:all 0.15s ease-in-out;
+}
+
+
+.accept-button {
+  color:green;
+  border-color:green;
+  background-color:transparent;
+}
+
+
+.accept-button:hover {
+  color:#ffffff;
+  background-color:green;
+  border-color:green;
+}
+
+
+.accept-button:active {
+  color:#ffffff;
+  background-color:green;
+  border-color:green;
+}
+
+/* Focus state */
+.accept-button:focus {
+  outline:none;
+  box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Disabled state */
+.accept-button:disabled {
+  color:green;
+  background-color:transparent;
+  border-color:green;
+  opacity:0.65;
+  cursor:not-allowed;
+}
+
+.reject {
+  display:inline-block;
+  font-weight: 400;
+  color:red;
+  text-align:center;
+  vertical-align:middle;
+  cursor:pointer;
+  user-select:none;
+  background-color:transparent;
+  border:1px solid transparent;
+  padding:0.375rem 0.75rem;
+  font-size:1rem;
+  line-height:1.5;
+  border-radius:0.375rem;
+  transition:all 0.15s ease-in-out;
+}
+
+
+.reject-button {
+  color:red;
+  border-color:red;
+  background-color:transparent;
+}
+
+
+.reject-button:hover {
+  color:#ffffff;
+  background-color:red;
+  border-color:red;
+}
+
+
+.reject-button:active {
+  color:#ffffff;
+  background-color:red;
+  border-color:red;
+}
+
+/* Focus state */
+.reject-button:focus {
+  outline:none;
+  box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Disabled state */
+.reject-button:disabled {
+  color:red;
+  background-color:transparent;
+  border-color:red;
+  opacity:0.65;
+  cursor:not-allowed;
+}
