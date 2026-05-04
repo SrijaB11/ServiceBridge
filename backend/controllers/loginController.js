@@ -1,38 +1,48 @@
 const userModel = require("../models/UserModel");
-let jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 const loginController = async (req, res) => {
-  let data = req.body;
   try {
-    let result = await userModel.findOne({ email: data.email });
+    const data = req.body;
 
-    if (!result) {
+    const user = await userModel.findOne({ email: data.email });
+
+    if (!user) {
       return res.status(401).json({
-        message: "Invalid email",
+        message: "Invalid credentials",
       });
     }
 
-    if (result.password !== data.password) {
+    // compare password
+    const isMatch = await bcrypt.compare(data.password, user.password);
+
+    if (!isMatch) {
       return res.status(401).json({
-        message: "Password wrong",
+        message: "Invalid credentials",
       });
     }
-    //token generation
-    let token = jwt.sign(
-      { id: result._id, role: result.role },
+
+    // Generate JWT
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" },
+      { expiresIn: "1d" }
     );
-    res.json({
-      token: token,
-      role: result.role,
-      message: "Successfull Login",
+
+    return res.json({
+      token,
+      role: user.role,
+      message: "Login successful",
     });
+
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
-      message: "Error ",
+      message: "Error",
     });
   }
 };
+
 module.exports = loginController;
