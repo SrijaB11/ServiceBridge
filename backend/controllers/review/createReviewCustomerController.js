@@ -12,7 +12,7 @@ const createReview = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    // customer can review
+    // Only customer can review
     if (booking.customer.toString() !== userId.toString()) {
       return res.status(403).json({ message: "Not allowed" });
     }
