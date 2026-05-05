@@ -9,7 +9,7 @@ const services = [
     image: "/images/services/cleaning.jpg",
   },
   {
-    id: 2,
+    id: "plumber",
     title: "Plumber",
     desc: "Expert plumbing services at your door.",
     image: "/images/services/plumber.jpg",
@@ -45,23 +45,26 @@ function CustomerServices() {
 
   return (
     <section className="py-16 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-          {services.map((service) => (
-            <div key={service.id} className="bg-white rounded-2xl p-6 border">
-              <img src={service.image} alt={service.title} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {services.map((s) => (
+          <div
+            key={s.id}
+            className="bg-white p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
+            onClick={() => navigate(`/service/${s.id}`)}
+          >
+            <img
+              className="w-40 h-40 object-cover"
+              src={s.image}
+              alt={s.title}
+            />
+            <h3 className="font-semibold mt-2">{s.title}</h3>
+            <p className="text-gray-500 text-sm mt-1">{s.desc}</p>
 
-              <h3 className="mt-2 font-semibold">{service.title}</h3>
-
-              <button
-                onClick={() => navigate(`/service/${service.id}`)}
-                className="mt-3 bg-green-500 text-white px-3 py-1 rounded"
-              >
-                Book Service
-              </button>
-            </div>
-          ))}
-        </div>
+            <button className="mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">
+              Book Now
+            </button>
+          </div>
+        ))}
       </div>
     </section>
   );

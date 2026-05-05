@@ -4,7 +4,7 @@ import React from "react";
 
 const services = [
   {
-    id: "plumbing",
+    id: "plumber",
     title: "Plumbing",
     desc: "Fix leaks, pipes, and installations",
     image: "/images/services/plumber.jpg",

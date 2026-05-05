@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -11,7 +12,7 @@ export default function RegisterForm() {
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -22,7 +23,7 @@ export default function RegisterForm() {
     phone: "",
   });
 
-  // TIMER LOGIC
+  // TIMER
   useEffect(() => {
     let interval;
 
@@ -40,24 +41,56 @@ export default function RegisterForm() {
     return () => clearInterval(interval);
   }, [step, timer]);
 
-  //  VALIDATION
+  // VALIDATION
   const validate = () => {
     const e = {};
 
-    if (!formData.fullName.trim()) e.fullName = "Full name required";
-    if (!formData.email.trim()) e.email = "Email required";
-    if (!formData.password) e.password = "Password required";
-    if (formData.password !== formData.confirmPassword)
+    if (!formData.fullName.trim()) {
+      e.fullName = "Full name required";
+    } else if (formData.fullName.length < 3) {
+      e.fullName = "Name must be at least 3 characters";
+    }
+
+    if (!formData.email.trim()) {
+      e.email = "Email required";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        e.email = "Invalid email format";
+      }
+    }
+
+    if (!formData.password) {
+      e.password = "Password required";
+    } else if (formData.password.length < 6) {
+      e.password = "Password must be at least 6 characters";
+    }
+
+    if (!formData.confirmPassword) {
+      e.confirmPassword = "Confirm password required";
+    } else if (formData.password !== formData.confirmPassword) {
       e.confirmPassword = "Passwords do not match";
-    if (!formData.role) e.role = "Select role";
-    if (!formData.phone) e.phone = "Phone required";
-    if (!formData.location) e.location = "Location required";
+    }
+
+    if (!formData.role) {
+      e.role = "Select role";
+    }
+
+    if (!formData.phone) {
+      e.phone = "Phone required";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      e.phone = "Enter valid 10-digit phone";
+    }
+
+    if (!formData.location.trim()) {
+      e.location = "Location required";
+    }
 
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  //  SEND OTP
+  // SEND OTP
   const handleSendOtp = async () => {
     if (!validate()) return;
 
@@ -77,22 +110,20 @@ export default function RegisterForm() {
     }
   };
 
-  // VERIFY OTP + REGISTER
+  // VERIFY OTP
   const handleVerifyOtp = async () => {
     try {
       setLoading(true);
 
       await axios.post(`${API_BASE}/verifyotp`, {
         email: formData.email,
-        otp: otp,
+        otp,
         ...formData,
       });
 
-      toast.success("Account created successfully 🎉");
+      toast.success("Account created successfully");
+      navigate("/login");
 
-      // reset
-      setStep(1);
-      setOtp("");
       setFormData({
         fullName: "",
         email: "",
@@ -104,13 +135,19 @@ export default function RegisterForm() {
       });
     } catch (err) {
       toast.error(err?.response?.data?.message || "Invalid OTP");
+      //  if (message === "User not found" || message === "Invalid email") {
+      //     setStep(1);
+      //   } else {
+      //     setOtp("");
+      //   }
+      setOtp("");
     } finally {
       setLoading(false);
     }
   };
 
   const inputClass =
-    "w-full mb-3 px-4 py-3 border rounded-xl text-sm border-gray-200";
+    "w-full px-4 py-3 border rounded-xl text-sm border-gray-200";
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -118,9 +155,8 @@ export default function RegisterForm() {
         {step === 1 ? "Create Account" : "Verify OTP"}
       </h1>
 
-      {/* STEP 1 FORM */}
       {step === 1 && (
-        <>
+        <div className="space-y-4">
           <input
             className={inputClass}
             placeholder="Full Name"
@@ -129,6 +165,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, fullName: e.target.value })
             }
           />
+          {errors.fullName && (
+            <p className="text-red-500 text-sm">{errors.fullName}</p>
+          )}
 
           <input
             className={inputClass}
@@ -138,6 +177,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, email: e.target.value })
             }
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
 
           <input
             type="password"
@@ -148,6 +190,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, password: e.target.value })
             }
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
+          )}
 
           <input
             type="password"
@@ -161,6 +206,9 @@ export default function RegisterForm() {
               })
             }
           />
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+          )}
 
           <select
             className={inputClass}
@@ -171,6 +219,7 @@ export default function RegisterForm() {
             <option value="customer">Customer</option>
             <option value="worker">Worker</option>
           </select>
+          {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
 
           <input
             className={inputClass}
@@ -180,6 +229,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, location: e.target.value })
             }
           />
+          {errors.location && (
+            <p className="text-red-500 text-sm">{errors.location}</p>
+          )}
 
           <input
             className={inputClass}
@@ -189,6 +241,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, phone: e.target.value })
             }
           />
+          {errors.phone && (
+            <p className="text-red-500 text-sm">{errors.phone}</p>
+          )}
 
           <button
             onClick={handleSendOtp}
@@ -197,19 +252,9 @@ export default function RegisterForm() {
           >
             {loading ? "Sending..." : "Send OTP"}
           </button>
-          <p className="text-center text-sm text-gray-500 mt-4">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="text-green-500 font-semibold hover:underline"
-            >
-              Login
-            </a>
-          </p>
-        </>
+        </div>
       )}
 
-      {/* STEP 2 OTP */}
       {step === 2 && (
         <>
           <input
@@ -239,6 +284,17 @@ export default function RegisterForm() {
             }`}
           >
             Resend OTP
+          </button>
+          <button
+            onClick={() => {
+              setStep(1);
+              setOtp("");
+            }}
+            className="w-full py-2 text-sm text-blue-500 hover:text-blue-700 transition"
+
+            //className="w-full py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+          >
+            Change Email
           </button>
         </>
       )}
