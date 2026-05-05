@@ -1,8 +1,9 @@
-import { Shield, Lock, Zap, TrendingUp } from "lucide-react";
+import { Shield, Lock, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-export default function LeftPanel({ page }) {
-  const page1 = {
-    tag: null,
+export default function LeftPanel() {
+  const navigate = useNavigate();
+  const page = {
     heading: (
       <>
         Join Thousands of{" "}
@@ -40,46 +41,20 @@ export default function LeftPanel({ page }) {
     ],
   };
 
-  const page2 = {
-    tag: "Step 3 of 3",
-    heading: (
-      <>
-        Build Your <span className="text-green-500 block">Trusted Profile</span>
-      </>
-    ),
-    sub: "Complete your profile to unlock better visibility and trust.",
-    features: [
-      {
-        icon: <Shield size={18} className="text-green-500" />,
-        bg: "bg-green-50",
-        border: "border-green-200",
-        title: "Verified Identity",
-        desc: "Build trust with verified identity & documents.",
-      },
-      {
-        icon: <TrendingUp size={18} className="text-purple-500" />,
-        bg: "bg-purple-50",
-        border: "border-purple-200",
-        title: "More Job Visibility",
-        desc: "Get discovered by more customers and businesses.",
-      },
-      {
-        icon: <Zap size={18} className="text-yellow-500" />,
-        bg: "bg-yellow-50",
-        border: "border-yellow-200",
-        title: "Faster Hiring",
-        desc: "Complete profile helps you get hired quickly.",
-      },
-    ],
-  };
-
-  const data = page === 1 ? page1 : page2;
+  const data = page;
 
   return (
     <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-50 to-blue-50 p-10 rounded-2xl min-h-full">
       <div>
         <div className="flex items-center gap-2 mb-10">
-          <img src="/images/logo.png" className="w-18 h-14" />
+          <img
+            src="/images/logo.png"
+            className="w-18 h-14 cursor-pointer relative z-10"
+            onClick={() => {
+              console.log("clicked");
+              navigate("/");
+            }}
+          />
           <span className="text-xl font-bold">
             Service <span className="text-green-500">Bridge</span>
           </span>
