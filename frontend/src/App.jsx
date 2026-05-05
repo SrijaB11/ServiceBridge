@@ -1,52 +1,51 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
-
 import ServiceProviders from "./components/customer/ServiceProviders";
 
-// Worker Dashboard Components
-
+// Worker Components
+import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
 import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
-import NavBar from "./Pages/WorkersDashboard/Navbar";
-import Header from "./Pages/WorkersDashboard/Header";
 import Requests from "./Pages/WorkersDashboard/Requests";
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard"
+import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
+import WorkerHeader from "./Pages/WorkersDashboard/Header";
 
-// Admin Dashboard Components
-import AdminNavBar from "./Pages/AdminDashboard/Navbar";
+// Admin Components
+import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
 import AdminHeader from "./Pages/AdminDashboard/Header";
-import AdminDashboard from "./Pages/AdminDashboard/Dashboard"
+import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 
 import "./App.css";
 
-// Worker Dashboard Layout Component
+/* =======================
+   Worker Layout
+======================= */
 function WorkerDashboardLayout() {
   return (
     <>
-      <Header />
+      <WorkerHeader />
       <div className="app-layout">
-        <NavBar />
+        <WorkerNavBar />
         <div className="main-content">
-          <Routes>
-            <Route path="/" element={<WorkersDashboard />} />
-            <Route path="/requests" element={<Requests />} />
-            <Route path="/active-jobs" element={<ActiveJobs />} />
-          </Routes>
+          <Outlet />
         </div>
       </div>
     </>
   );
 }
 
-// Admin Dashboard Layout Component
+/* =======================
+   Admin Layout
+======================= */
 function AdminDashboardLayout() {
   return (
     <>
@@ -54,30 +53,28 @@ function AdminDashboardLayout() {
       <div className="app-layout">
         <AdminNavBar />
         <div className="main-content">
-          <Routes>
-            <Route path="/" element={<AdminDashboard />} />
-            <Route path="/recent-requests" element={<RecentRequests />} />
-            <Route path="/recent-complaints" element={<RecentComplaints />} />
-            <Route path="/users" element={<Users />} />
-          </Routes>
+          <Outlet />
         </div>
       </div>
     </>
   );
 }
 
-// Main App Component
+/* =======================
+   Main App
+======================= */
 export default function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
+
       <Routes>
-        {/* Public Routes */}
+        {/* Public */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Customer Dashboard */}
+        {/* Customer */}
         <Route
           path="/customer/*"
           element={
@@ -86,6 +83,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/service/:id"
           element={
@@ -95,27 +93,34 @@ export default function App() {
           }
         />
 
-        {/* Worker Dashboard with nested routes */}
+        {/* Worker */}
         <Route
-          path="/worker/*"
+          path="/worker"
           element={
             <ProtectedRoute role="worker">
-
-              <WorkersDashboard />
-
+              <WorkerDashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<WorkersDashboard />} />
+          <Route path="requests" element={<Requests />} />
+          <Route path="active-jobs" element={<ActiveJobs />} />
+        </Route>
 
-        {/* Admin Dashboard with nested routes */}
+        {/* Admin */}
         <Route
-          path="/admin/*"
+          path="/admin"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboard />
+              <AdminDashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="recent-requests" element={<RecentRequests />} />
+          <Route path="recent-complaints" element={<RecentComplaints />} />
+          <Route path="users" element={<Users />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

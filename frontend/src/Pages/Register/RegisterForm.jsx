@@ -1,217 +1,7 @@
-// import { useState } from "react";
-// import axios from "axios";
-// import toast from "react-hot-toast";
-// import { User, Mail, Lock, Phone, MapPin } from "lucide-react";
-
-// const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-// export default function RegisterForm() {
-//   const [loading, setLoading] = useState(false);
-//   const [errors, setErrors] = useState({});
-
-//   const [formData, setFormData] = useState({
-//     fullName: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//     role: "",
-
-//     location: "",
-//     phone: "",
-//   });
-
-//   // ✅ VALIDATION
-//   const validate = () => {
-//     const e = {};
-
-//     if (!formData.fullName.trim()) e.fullName = "Full name is required";
-//     else if (formData.fullName.trim().length < 2)
-//       e.fullName = "Name must be at least 2 characters";
-
-//     if (!formData.email.trim()) e.email = "Email is required";
-//     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-//       e.email = "Enter a valid email address";
-
-//     if (!formData.password) e.password = "Password is required";
-//     else if (formData.password.length < 8)
-//       e.password = "Password must be at least 8 characters";
-//     else if (!/(?=.*[A-Z])(?=.*\d)/.test(formData.password))
-//       e.password = "Include at least 1 uppercase letter and 1 number";
-
-//     if (!formData.confirmPassword)
-//       e.confirmPassword = "Please confirm your password";
-//     else if (formData.password !== formData.confirmPassword)
-//       e.confirmPassword = "Passwords do not match";
-
-//     if (!formData.role) e.role = "Please select a role";
-
-//     if (!formData.phone.trim()) e.phone = "Phone number is required";
-//     else if (!/^\+?[\d\s\-()]{7,15}$/.test(formData.phone))
-//       e.phone = "Enter a valid phone number";
-
-//     if (!formData.location.trim()) e.location = "Location is required";
-
-//     setErrors(e);
-//     return Object.keys(e).length === 0;
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!validate()) return;
-
-//     const toastId = toast.loading("Creating account...");
-
-//     try {
-//       setLoading(true);
-
-//       const payload = {
-//         fullName: formData.fullName,
-//         email: formData.email,
-//         password: formData.password,
-//         role: formData.role,
-//         phone: formData.phone,
-//         location: formData.location,
-//       };
-
-//       const { data } = await axios.post(`${API_BASE}/register`, payload);
-
-//       // ✅ SUCCESS TOAST
-//       toast.success("Account created successfully 🎉", { id: toastId });
-
-//       console.log(data);
-
-//       // reset form
-//       setFormData({
-//         fullName: "",
-//         email: "",
-//         password: "",
-//         confirmPassword: "",
-//         role: "",
-//         phone: "",
-//         location: "",
-//       });
-
-//       setErrors({});
-//     } catch (err) {
-//       // ❌ ERROR TOAST
-//       toast.error(err?.response?.data?.message || "Something went wrong", {
-//         id: toastId,
-//       });
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const inputClass = (field) =>
-//     `w-full mb-3 px-4 py-3 border rounded-xl text-sm outline-none ${
-//       errors[field]
-//         ? "border-red-400 focus:ring-2 focus:ring-red-100"
-//         : "border-gray-200 focus:ring-2 focus:ring-green-100"
-//     }`;
-
-//   return (
-//     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-//       <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
-
-//       {/* NAME */}
-//       <input
-//         className={inputClass("fullName")}
-//         placeholder="Full Name"
-//         value={formData.fullName}
-//         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-//       />
-//       {errors.fullName && (
-//         <p className="text-red-500 text-xs">{errors.fullName}</p>
-//       )}
-
-//       {/* EMAIL */}
-//       <input
-//         className={inputClass("email")}
-//         placeholder="Email"
-//         value={formData.email}
-//         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//       />
-//       {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
-
-//       {/* PASSWORD */}
-//       <input
-//         type="password"
-//         className={inputClass("password")}
-//         placeholder="Password"
-//         value={formData.password}
-//         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-//       />
-//       {errors.password && (
-//         <p className="text-red-500 text-xs">{errors.password}</p>
-//       )}
-
-//       {/* CONFIRM PASSWORD */}
-//       <input
-//         type="password"
-//         className={inputClass("confirmPassword")}
-//         placeholder="Confirm Password"
-//         value={formData.confirmPassword}
-//         onChange={(e) =>
-//           setFormData({ ...formData, confirmPassword: e.target.value })
-//         }
-//       />
-//       {errors.confirmPassword && (
-//         <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
-//       )}
-
-//       {/* ROLE */}
-//       <select
-//         className={inputClass("role")}
-//         value={formData.role}
-//         onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-//       >
-//         <option value="">Select Role</option>
-//         <option value="customer">Customer</option>
-//         <option value="worker">Worker</option>
-//       </select>
-//       {errors.role && <p className="text-red-500 text-xs">{errors.role}</p>}
-
-//       {/* LOCATION */}
-//       <input
-//         className={inputClass("location")}
-//         placeholder="Location"
-//         value={formData.location}
-//         onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-//       />
-//       {errors.location && (
-//         <p className="text-red-500 text-xs">{errors.location}</p>
-//       )}
-//       {/* PHONE */}
-//       <input
-//         className={inputClass("phone")}
-//         placeholder="Phone Number"
-//         value={formData.phone}
-//         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-//       />
-//       {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
-
-//       <button
-//         disabled={loading}
-//         className="w-full mt-4 bg-green-500 text-white py-3 rounded-xl font-semibold"
-//       >
-//         {loading ? "Creating..." : "Create Account"}
-//       </button>
-//       <p className="text-center text-sm text-gray-500 mt-4">
-//         Already have an account?{" "}
-//         <a
-//           href="/login"
-//           className="text-green-500 font-semibold hover:underline"
-//         >
-//           Login
-//         </a>
-//       </p>
-//     </form>
-//   );
-// }
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -222,7 +12,7 @@ export default function RegisterForm() {
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -233,7 +23,7 @@ export default function RegisterForm() {
     phone: "",
   });
 
-  // ⏱ TIMER LOGIC
+  // TIMER
   useEffect(() => {
     let interval;
 
@@ -251,24 +41,56 @@ export default function RegisterForm() {
     return () => clearInterval(interval);
   }, [step, timer]);
 
-  // ✅ VALIDATION
+  // VALIDATION
   const validate = () => {
     const e = {};
 
-    if (!formData.fullName.trim()) e.fullName = "Full name required";
-    if (!formData.email.trim()) e.email = "Email required";
-    if (!formData.password) e.password = "Password required";
-    if (formData.password !== formData.confirmPassword)
+    if (!formData.fullName.trim()) {
+      e.fullName = "Full name required";
+    } else if (formData.fullName.length < 3) {
+      e.fullName = "Name must be at least 3 characters";
+    }
+
+    if (!formData.email.trim()) {
+      e.email = "Email required";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        e.email = "Invalid email format";
+      }
+    }
+
+    if (!formData.password) {
+      e.password = "Password required";
+    } else if (formData.password.length < 6) {
+      e.password = "Password must be at least 6 characters";
+    }
+
+    if (!formData.confirmPassword) {
+      e.confirmPassword = "Confirm password required";
+    } else if (formData.password !== formData.confirmPassword) {
       e.confirmPassword = "Passwords do not match";
-    if (!formData.role) e.role = "Select role";
-    if (!formData.phone) e.phone = "Phone required";
-    if (!formData.location) e.location = "Location required";
+    }
+
+    if (!formData.role) {
+      e.role = "Select role";
+    }
+
+    if (!formData.phone) {
+      e.phone = "Phone required";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      e.phone = "Enter valid 10-digit phone";
+    }
+
+    if (!formData.location.trim()) {
+      e.location = "Location required";
+    }
 
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  // 📩 SEND OTP
+  // SEND OTP
   const handleSendOtp = async () => {
     if (!validate()) return;
 
@@ -288,22 +110,20 @@ export default function RegisterForm() {
     }
   };
 
-  // ✅ VERIFY OTP + REGISTER
+  // VERIFY OTP
   const handleVerifyOtp = async () => {
     try {
       setLoading(true);
 
       await axios.post(`${API_BASE}/verifyotp`, {
         email: formData.email,
-        otp: otp,
+        otp,
         ...formData,
       });
 
-      toast.success("Account created successfully 🎉");
+      toast.success("Account created successfully");
+      navigate("/login");
 
-      // reset
-      setStep(1);
-      setOtp("");
       setFormData({
         fullName: "",
         email: "",
@@ -315,13 +135,19 @@ export default function RegisterForm() {
       });
     } catch (err) {
       toast.error(err?.response?.data?.message || "Invalid OTP");
+      //  if (message === "User not found" || message === "Invalid email") {
+      //     setStep(1);
+      //   } else {
+      //     setOtp("");
+      //   }
+      setOtp("");
     } finally {
       setLoading(false);
     }
   };
 
   const inputClass =
-    "w-full mb-3 px-4 py-3 border rounded-xl text-sm border-gray-200";
+    "w-full px-4 py-3 border rounded-xl text-sm border-gray-200";
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -329,9 +155,8 @@ export default function RegisterForm() {
         {step === 1 ? "Create Account" : "Verify OTP"}
       </h1>
 
-      {/* STEP 1 FORM */}
       {step === 1 && (
-        <>
+        <div className="space-y-4">
           <input
             className={inputClass}
             placeholder="Full Name"
@@ -340,6 +165,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, fullName: e.target.value })
             }
           />
+          {errors.fullName && (
+            <p className="text-red-500 text-sm">{errors.fullName}</p>
+          )}
 
           <input
             className={inputClass}
@@ -349,6 +177,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, email: e.target.value })
             }
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
 
           <input
             type="password"
@@ -359,6 +190,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, password: e.target.value })
             }
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
+          )}
 
           <input
             type="password"
@@ -372,6 +206,9 @@ export default function RegisterForm() {
               })
             }
           />
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+          )}
 
           <select
             className={inputClass}
@@ -382,6 +219,7 @@ export default function RegisterForm() {
             <option value="customer">Customer</option>
             <option value="worker">Worker</option>
           </select>
+          {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
 
           <input
             className={inputClass}
@@ -391,6 +229,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, location: e.target.value })
             }
           />
+          {errors.location && (
+            <p className="text-red-500 text-sm">{errors.location}</p>
+          )}
 
           <input
             className={inputClass}
@@ -400,6 +241,9 @@ export default function RegisterForm() {
               setFormData({ ...formData, phone: e.target.value })
             }
           />
+          {errors.phone && (
+            <p className="text-red-500 text-sm">{errors.phone}</p>
+          )}
 
           <button
             onClick={handleSendOtp}
@@ -408,19 +252,9 @@ export default function RegisterForm() {
           >
             {loading ? "Sending..." : "Send OTP"}
           </button>
-          <p className="text-center text-sm text-gray-500 mt-4">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="text-green-500 font-semibold hover:underline"
-            >
-              Login
-            </a>
-          </p>
-        </>
+        </div>
       )}
 
-      {/* STEP 2 OTP */}
       {step === 2 && (
         <>
           <input
@@ -450,6 +284,17 @@ export default function RegisterForm() {
             }`}
           >
             Resend OTP
+          </button>
+          <button
+            onClick={() => {
+              setStep(1);
+              setOtp("");
+            }}
+            className="w-full py-2 text-sm text-blue-500 hover:text-blue-700 transition"
+
+            //className="w-full py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+          >
+            Change Email
           </button>
         </>
       )}
