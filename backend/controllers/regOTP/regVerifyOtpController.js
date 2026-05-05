@@ -1,45 +1,44 @@
+
 const userModel = require("../../models/UserModel");
-const otpStore = require("../../temporaryOTP/otpStore");
+const otpModel = require("../../models/OtpModel");
 
 const verifyOtpController = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    const data = otpStore[email];
+    const record = await otpModel.findOne({ email });
 
-    if (!data) {
+    if (!record) {
       return res.status(400).json({
         message: "No OTP found",
       });
     }
 
     // Expiry check
-    if (Date.now() > data.expiresAt) {
+    if (new Date() > record.expiresAt) {
       return res.status(400).json({
         message: "OTP expired",
       });
     }
 
     // OTP match
-    if (data.otp !== otp) {
+    if (record.otp !== otp) {
       return res.status(400).json({
         message: "Invalid OTP",
       });
     }
 
-    // Create user NOW
-    await userModel.create(data.userData);
+    // Create user
+    await userModel.create(record.userData);
 
-    // Clean memory
-    delete otpStore[email];
+    // Delete OTP 
+    await otpModel.deleteOne({ email });
 
     return res.status(201).json({
       message: "Registration successful",
     });
 
-  } 
-  
-  catch (err) {
+  } catch (err) {
     return res.status(500).json({
       message: "Verification failed",
     });
