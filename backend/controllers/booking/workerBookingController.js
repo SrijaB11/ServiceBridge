@@ -1,7 +1,5 @@
-// controllers/bookingController.js
 const Booking = require("../../models/BookingModel");
 
-// 📌 Create booking (Customer clicks "Book Now")
 const createBookingWorker = async (req, res) => {
   try {
     const { workerId, date } = req.body;

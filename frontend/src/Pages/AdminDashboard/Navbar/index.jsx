@@ -17,7 +17,7 @@ const AdminNavBar = () => {
       </div>
       <ul className="navbar-list">
         <li className="navbar-list-items">
-          <Link to="/" className="navbar-tabs-container">
+          <Link to="/admin" className="navbar-tabs-container">
             <img
               src="/images/dashboard.png"
               alt="dashboard"
@@ -27,7 +27,7 @@ const AdminNavBar = () => {
           </Link>
         </li>
         <li className="navbar-list-items">
-          <Link to="/users" className="navbar-tabs-container">
+          <Link to="/admin/users" className="navbar-tabs-container">
             <img
               src="/images/users.png"
               alt="total users"
@@ -37,7 +37,7 @@ const AdminNavBar = () => {
           </Link>
         </li>
         <li className="navbar-list-items">
-          <Link to="/active-jobs" className="navbar-tabs-container">
+          <Link to="/admin/active-jobs" className="navbar-tabs-container">
             <img
               src="/images/workers.png"
               alt="workers"
@@ -47,7 +47,7 @@ const AdminNavBar = () => {
           </Link>
         </li>
         <li className="navbar-list-items">
-          <Link to="/recent-requests" className="navbar-tabs-container">
+          <Link to="/admin/recent-requests" className="navbar-tabs-container">
             <img
               src="/images/requests.png"
               alt="requests"
@@ -57,7 +57,7 @@ const AdminNavBar = () => {
           </Link>
         </li>
         <li className="navbar-list-items">
-          <Link to="/reviews" className="navbar-tabs-container">
+          <Link to="/admin/reviews" className="navbar-tabs-container">
             <img
               src="/images/companies.png"
               alt="companies"
@@ -67,7 +67,7 @@ const AdminNavBar = () => {
           </Link>
         </li>
         <li className="navbar-list-items">
-          <Link to="/profile" className="navbar-tabs-container">
+          <Link to="/admin/profile" className="navbar-tabs-container">
             <img
               src="/images/payments.png"
               alt="payments"
@@ -77,7 +77,7 @@ const AdminNavBar = () => {
           </Link>
         </li>
         <li className="navbar-list-items">
-          <Link to="/logout" className="navbar-tabs-container">
+          <Link to="/admin/logout" className="navbar-tabs-container">
             <img
               src="/images/logout.png"
               alt="logout"
