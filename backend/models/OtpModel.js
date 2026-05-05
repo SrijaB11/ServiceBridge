@@ -19,7 +19,7 @@ const otpSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-// ⏳ Auto delete after expiry (TTL index)
+// Auto delete after expiry
 otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = mongoose.model("Otp", otpSchema);
