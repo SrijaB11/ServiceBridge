@@ -19,7 +19,7 @@ const Footer = () => {
             gridTemplateColumns: {
               xs: "1fr",
               sm: "repeat(2, 1fr)",
-              md: "repeat(5, 1fr)", // 5 columns here
+              md: "repeat(5, 1fr)",
             },
             gap: 4,
           }}
