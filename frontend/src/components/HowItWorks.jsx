@@ -23,7 +23,6 @@ const HowItWorks = () => {
   return (
     <Box sx={{ py: 6 }}>
       <Container>
-        {/* Heading */}
         <Box textAlign="center" mb={4}>
           <Typography variant="subtitle2" color="green" fontWeight="bold">
             HOW IT WORKS
@@ -33,21 +32,19 @@ const HowItWorks = () => {
           </Typography>
         </Box>
 
-        {/* Horizontal Row */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             gap: 3,
-            flexWrap: "nowrap", 
-            overflowX: "auto", 
+            flexWrap: "nowrap",
+            overflowX: "auto",
             "&::-webkit-scrollbar": { display: "none" },
           }}
         >
           {steps.map((step, index) => (
             <Card key={index}>
               <CardContent sx={{ display: "flex" }}>
-                {/* Image */}
                 <Box mb={2} sx={{ height: "100px" }}>
                   <img
                     src={step.img}
@@ -57,13 +54,11 @@ const HowItWorks = () => {
                   />
                 </Box>
 
-                {/* Title */}
                 <Box>
                   <Typography variant="subtitle1" fontWeight="bold" mb={1}>
                     {step.title}
                   </Typography>
 
-                  {/* Description */}
                   <Typography variant="body2" color="text.secondary">
                     {step.desc}
                   </Typography>

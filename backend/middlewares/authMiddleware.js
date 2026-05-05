@@ -9,7 +9,7 @@ const authMiddleware = async (req, res, next) => {
     //  Check token exists
     if (!authHeader) {
       return res.status(401).json({
-        message: "No token provided"
+        message: "No token provided",
       });
     }
 
@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
 
     if (!user) {
       return res.status(404).json({
-        message: "User not found"
+        message: "User not found",
       });
     }
 
@@ -30,7 +30,7 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (err) {
     return res.status(401).json({
-      message: "Invalid or expired token"
+      message: "Invalid or expired token",
     });
   }
 };
