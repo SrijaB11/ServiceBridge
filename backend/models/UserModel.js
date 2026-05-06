@@ -41,6 +41,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+
+  // ✅ documents field
+  documents: {
+    profilePhoto: {
+      type: String,
+      default: "",
+    },
+    panCard: {
+      type: String,
+      default: "",
+    },
+    skillDoc: {
+      type: String,
+      default: "",
+    },
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

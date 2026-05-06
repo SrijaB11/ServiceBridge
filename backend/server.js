@@ -8,7 +8,7 @@ const adminWorkerRoutes = require("./routes/admin/adminWorkerRoutes");
 const bookingRoutes = require("./routes/booking/bookingRoutes");
 const reviewRoutes = require("./routes/review/reviewRoutes");
 const adminCustomerRoutes = require("./routes/admin/adminCustomerRoutes");
-const complaintRoutes = require("./routes/complaint/complaintRoutes");
+const workerRoutes = require("./routes/worker/workerRoutes");
 
 const app = express();
 
@@ -23,7 +23,9 @@ app.use("/admin", adminWorkerRoutes);
 app.use("/admin", adminCustomerRoutes);                 
 app.use("/booking", bookingRoutes);
 app.use("/review", reviewRoutes);
-app.use("/complaint", complaintRoutes);
+app.use("/worker", workerRoutes);
+app.use("/uploads", express.static("uploads"));
+
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

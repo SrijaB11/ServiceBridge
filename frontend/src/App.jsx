@@ -27,34 +27,32 @@ import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 import "./App.css";
 
 /* =======================
-   Worker Layout
+   Layout Components
 ======================= */
+
 function WorkerDashboardLayout() {
   return (
     <>
       <WorkerHeader />
       <div className="app-layout">
         <WorkerNavBar />
-        <div className="main-content">
-          <Outlet />
-        </div>
+        <main className="main-content">
+          <Outlet /> 
+        </main>
       </div>
     </>
   );
 }
 
-/* =======================
-   Admin Layout
-======================= */
 function AdminDashboardLayout() {
   return (
     <>
       <AdminHeader />
       <div className="app-layout">
         <AdminNavBar />
-        <div className="main-content">
+        <main className="main-content">
           <Outlet />
-        </div>
+        </main>
       </div>
     </>
   );
@@ -63,37 +61,29 @@ function AdminDashboardLayout() {
 /* =======================
    Main App
 ======================= */
+
 export default function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
 
       <Routes>
-        {/* Public */}
+        {/* --- Public Routes --- */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Customer */}
-        <Route
-          path="/customer/*"
-          element={
-            <ProtectedRoute role="customer">
-              <CustomerDashboard />
-            </ProtectedRoute>
-          }
+        {/* --- Customer Routes --- */}
+        <Route 
+          path="/customer" 
+          element={<ProtectedRoute role="customer"><CustomerDashboard /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/service/:id" 
+          element={<ProtectedRoute role="customer"><ServiceProviders /></ProtectedRoute>} 
         />
 
-        <Route
-          path="/service/:id"
-          element={
-            <ProtectedRoute role="customer">
-              <ServiceProviders />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Worker */}
+        {/* --- Worker Routes (Nested) --- */}
         <Route
           path="/worker"
           element={
@@ -105,9 +95,14 @@ export default function App() {
           <Route index element={<WorkersDashboard />} />
           <Route path="requests" element={<Requests />} />
           <Route path="active-jobs" element={<ActiveJobs />} />
+          {/* Ensure these components exist or point to placeholders */}
+          <Route path="earnings" element={<div>Earnings Page</div>} />
+          <Route path="reviews" element={<div>Reviews Page</div>} />
+          <Route path="profile" element={<div>Profile Page</div>} />
+          <Route path="logout" element={<div>Logging out...</div>} />
         </Route>
 
-        {/* Admin */}
+        {/* --- Admin Routes (Nested) --- */}
         <Route
           path="/admin"
           element={
@@ -117,10 +112,18 @@ export default function App() {
           }
         >
           <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<Users />} />
           <Route path="recent-requests" element={<RecentRequests />} />
           <Route path="recent-complaints" element={<RecentComplaints />} />
-          <Route path="users" element={<Users />} />
+          {/* Matching the paths used in your AdminNavBar.jsx */}
+          <Route path="active-jobs" element={<div>Admin Workers View</div>} />
+          <Route path="reviews" element={<div>Companies/Reviews View</div>} />
+          <Route path="profile" element={<div>Admin Payments/Profile</div>} />
+          <Route path="logout" element={<div>Logging out...</div>} />
         </Route>
+
+        {/* --- Fallback --- */}
+        <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
     </BrowserRouter>
   );
