@@ -67,6 +67,7 @@ const regController = async (req, res) => {
       email: data.email,
       otp,
       userData: data,
+      purpose: "register",
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
@@ -75,7 +76,7 @@ const regController = async (req, res) => {
     });
 
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({
       message: "Registration unsuccessful",
     });

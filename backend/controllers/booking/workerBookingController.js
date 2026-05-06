@@ -15,6 +15,7 @@ const createBookingWorker = async (req, res) => {
     const existing = await Booking.findOne({
       worker: workerId,
       date: date,
+      status: { $in: ["pending", "accepted"] },
     });
 
     if (existing) {

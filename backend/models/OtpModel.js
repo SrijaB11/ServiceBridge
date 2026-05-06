@@ -11,11 +11,16 @@ const otpSchema = new mongoose.Schema({
   },
   userData: {
     type: Object,
-    required: true,
+    required: false ,
   },
   expiresAt: {
     type: Date,
     required: true,
+  },
+  purpose: {
+  type: String,
+  enum: ["register", "reset"],
+  required: true
   },
 }, { timestamps: true });
 
