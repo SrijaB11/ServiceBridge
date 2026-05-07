@@ -11,7 +11,7 @@ const forgotPasswordController = async (req, res) => {
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(200).json({
-        message: "If the email exists, an OTP has been sent",
+        message: "user not found",
       });
     }
 
@@ -27,7 +27,7 @@ const forgotPasswordController = async (req, res) => {
 
     if (!emailSent) {
       return res.status(200).json({
-        message: "If the email exists, an OTP has been sent",
+        message: "OTP sending failed",
       });
     }
 
@@ -38,12 +38,12 @@ const forgotPasswordController = async (req, res) => {
     await otpModel.create({
       email,
       otp,
-      purpose: "reset", // important
+      purpose: "reset", 
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
     return res.status(200).json({
-      message: "If the email exists, an OTP has been sent",
+      message: " OTP has been sent",
     });
 
   } catch (err) {
