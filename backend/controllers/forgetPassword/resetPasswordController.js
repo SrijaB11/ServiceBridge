@@ -1,13 +1,12 @@
-
 const userModel = require("../../models/UserModel");
 const otpModel = require("../../models/OtpModel");
+const bcrypt = require("bcrypt");
 
-const verifyOtpController = async (req, res) => {
+const resetPasswordController = async (req, res) => {
   try {
-    const { email, otp } = req.body;
+    const { email, otp, newPassword } = req.body;
 
-   // const record = await otpModel.findOne({ email });
-    const record = await otpModel.findOne({ email, purpose: "register" });
+    const record = await otpModel.findOne({ email, purpose: "reset" });
 
     if (!record) {
       return res.status(400).json({
@@ -29,21 +28,27 @@ const verifyOtpController = async (req, res) => {
       });
     }
 
-    // Create user
-    await userModel.create(record.userData);
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Delete OTP 
+    // Update password
+    await userModel.updateOne(
+      { email },
+      { $set: { password: hashedPassword } }
+    );
+
+    // Delete OTP
     await otpModel.deleteOne({ email });
 
-    return res.status(201).json({
-      message: "Registration successful",
+    return res.status(200).json({
+      message: "Password reset successful",
     });
 
   } catch (err) {
     return res.status(500).json({
-      message: "Verification failed",
+      message: "Reset failed",
     });
   }
 };
 
-module.exports = verifyOtpController;
+module.exports = resetPasswordController;

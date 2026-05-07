@@ -34,6 +34,7 @@ const loginController = async (req, res) => {
     return res.json({
       token,
       role: user.role,
+      name: user.fullName,
       message: "Login successful",
     });
 
