@@ -1,11 +1,11 @@
 const Complaint = require("../../models/ComplaintModel");
 const Booking = require("../../models/BookingModel");
 
+
 const addComplaint = async (req, res) => {
   try {
-       // only customers allowed
     if (req.role !== "customer") {
-      return res.status(403).json({ message: "Only customers can file complaints" });
+      return res.status(403).json({ message: "Only customers can file complaints" }); //only customers are allowed
     }
 
     const { bookingId, complaintText } = req.body;
@@ -14,11 +14,16 @@ const addComplaint = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
-
-    // booking belong to logged-in customers
-
+ 
+     // booking belongs to logged-in customers
     if (booking.customer.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Unauthorized booking access" });
+    }
+
+    if (booking.status !== "accepted" && booking.status !== "completed") {
+      return res.status(400).json({
+        message: "Complaint allowed only after worker accepts the booking"
+      });
     }
 
     const complaint = await Complaint.create({
