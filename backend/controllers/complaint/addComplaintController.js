@@ -15,7 +15,7 @@ const addComplaint = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
  
-     // booking belongs to logged-in customers
+     // booking belongs to login customers
     if (booking.customer.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Unauthorized booking access" });
     }
