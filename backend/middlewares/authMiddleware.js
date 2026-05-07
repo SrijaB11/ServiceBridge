@@ -26,7 +26,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     req.user = user;
-     
+       req.role = user.role;  
     next();
   } catch (err) {
     return res.status(401).json({
