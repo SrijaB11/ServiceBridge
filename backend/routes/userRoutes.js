@@ -1,6 +1,6 @@
 const express = require("express");
-const regController = require("../controllers/regController");
-const loginController = require("../controllers/loginController");
+const regController = require("../controllers/registration/customerRegController");
+const loginController = require("../controllers/login/loginController");
 
 const regSendOtpController = require("../controllers/regOTP/regSendOtpController");
 const regVerifyOtpController = require("../controllers/regOTP/regVerifyOtpController");

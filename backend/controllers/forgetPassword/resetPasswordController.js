@@ -1,6 +1,7 @@
 const userModel = require("../../models/UserModel");
 const otpModel = require("../../models/OtpModel");
-const bcrypt = require("bcrypt");
+//const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const resetPasswordController = async (req, res) => {
   try {
@@ -38,7 +39,7 @@ const resetPasswordController = async (req, res) => {
     );
 
     // Delete OTP
-    await otpModel.deleteOne({ email });
+    await otpModel.deleteOne({ _id: record._id });
 
     return res.status(200).json({
       message: "Password reset successful",
