@@ -1,23 +1,5 @@
 const User = require("../../models/UserModel"); 
 
-// create
-const createWorker = async (req, res) => {
-  try {
-    const data = req.body;
-
-    data.role = "worker"; 
-
-    const worker = await User.create(data);
-
-    res.status(201).json({
-      message: "Worker created successfully",
-      worker,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 
 //get
 const getAllWorkers = async (req, res) => {
@@ -83,4 +65,4 @@ const deleteWorker = async (req, res) => {
 
 
 
-module.exports = { createWorker,getAllWorkers,updateWorker,deleteWorker };
+module.exports = { getAllWorkers,updateWorker,deleteWorker };
