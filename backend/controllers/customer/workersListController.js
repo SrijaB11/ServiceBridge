@@ -8,7 +8,6 @@ const getWorkersByService = async (req, res) => {
     const workers = await userModel.find({ role: "worker", services: service}).select("-password");
 
     res.json(workers);
-
   } 
   catch (error) {
     res.status(500).json({
