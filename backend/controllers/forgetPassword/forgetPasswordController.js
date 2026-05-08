@@ -32,7 +32,7 @@ const forgotPasswordController = async (req, res) => {
     }
 
     // Delete old OTP
-    await otpModel.deleteMany({ email });
+    await otpModel.deleteMany({ email, purpose: "reset" });
 
     // Save OTP
     await otpModel.create({

@@ -1,48 +1,49 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  fullName: {
-    type: String,
-    required: true,
-  },
+const userSchema = new mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+    },
 
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
-  phone: {
-    type: String,
-    required: true,
-  },
+    password: {
+      type: String,
+      required: true,
+    },
 
-  location: {
-    type: String,
-    required: true,
-  },
+    location: {
+      type: String,
+      required: true,
+    },
 
-  password: {
-    type: String,
-    required: true,
-  },
+    phone: {
+      type: String,
+      required: true,
+    },
 
-  role: {
-    type: String,
-    required: true,
-  },
+    role:{
+      type: String,
+      require:true,
+    },
 
-  services: {
-    type: String,
-    default: "",
-  },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
 
-  address: {
-    type: String,
-    default: "",
-  },
+    services: {
+      type: String,
+      default: "",
+    },
 
-  // ✅ documents field
+     // documents field
   documents: {
     profilePhoto: {
       type: String,
@@ -57,6 +58,7 @@ const userSchema = new mongoose.Schema({
       default: "",
     },
   }
-});
+  }
+);
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("users", userSchema);
