@@ -204,7 +204,7 @@ export default function RegisterForm({
     try {
       setLoading(true);
 
-      const endpoint = role === "worker" ? "/worker/register" : "/register";
+      const endpoint = role === "worker" ? "/workerregister" : "/register";
 
       await axios.post(`${API_BASE}${endpoint}`, {
         ...formData,
