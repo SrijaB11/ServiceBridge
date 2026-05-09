@@ -1,6 +1,7 @@
-const userModel = require("../models/UserModel");
+const userModel = require("../../models/UserModel");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+//const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const loginController = async (req, res) => {
@@ -16,7 +17,11 @@ const loginController = async (req, res) => {
     }
 
     // compare password
-    const isMatch = await bcrypt.compare(data.password, user.password);
+    //const isMatch = await bcrypt.compare(data.password, user.password);
+    const isMatch = await bcrypt.compare(
+      data.password,
+      user.password
+    );
 
     if (!isMatch) {
       return res.status(401).json({
@@ -34,11 +39,12 @@ const loginController = async (req, res) => {
     return res.json({
       token,
       role: user.role,
+      name: user.fullName,
       message: "Login successful",
     });
 
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return res.status(500).json({
       message: "Error",
     });
