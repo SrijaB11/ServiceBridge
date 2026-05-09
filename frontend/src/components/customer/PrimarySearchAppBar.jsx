@@ -110,7 +110,7 @@ export default function PrimarySearchAppBar() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* DESKTOP USER MENU */}
+          {/* DESKTOP MENU */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
