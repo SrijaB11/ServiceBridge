@@ -154,13 +154,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-<<<<<<< HEAD
-import Login from "./Pages/Login";
-import Home from "./Pages/Home";
-import Register from "./Pages/Register/Register";
-=======
-
->>>>>>> 6b03019dbb1be2ada42a8b928013910bb27dc241
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import "./App.css";
@@ -211,25 +204,11 @@ import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 
-<<<<<<< HEAD
 // Worker Management Components
 import Worker from "./Pages/AdminDashboard/Worker";
 import WorkerVerification from "./Pages/AdminDashboard/Certifications";
 
 import "./App.css";
-=======
-/* =======================
-   Loading Component
-======================= */
-
-function Loader() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="h-10 w-10 rounded-full border-4 border-green-500 border-t-transparent animate-spin"></div>
-    </div>
-  );
-}
->>>>>>> 6b03019dbb1be2ada42a8b928013910bb27dc241
 
 /* =======================
    Layout Components
@@ -273,7 +252,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
-<<<<<<< HEAD
       <Routes>
         {/* --- Public Routes --- */}
         <Route path="/" element={<Home />} />
@@ -334,19 +312,6 @@ export default function App() {
           <Route path="profile" element={<div>Admin Payments/Profile</div>} />
           <Route path="logout" element={<div>Logging out...</div>} />
         </Route>
-=======
-
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          {/* --- Public Routes --- */}
-          <Route path="/" element={<Home />} />
-
-          <Route path="/login" element={<Login />} />
-
-          <Route path="/customer-register" element={<CustomerRegister />} />
-
-          <Route path="/worker-register" element={<WorkerRegister />} />
->>>>>>> 6b03019dbb1be2ada42a8b928013910bb27dc241
 
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
