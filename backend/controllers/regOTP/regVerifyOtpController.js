@@ -1,11 +1,10 @@
-
-const userModel = require("../../models/UserModel");
 const otpModel = require("../../models/OtpModel");
 
 const verifyOtpController = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
+    // Check OTP record
     const record = await otpModel.findOne({ email });
 
     if (!record) {
@@ -21,26 +20,26 @@ const verifyOtpController = async (req, res) => {
       });
     }
 
-    // OTP match
+    // Match OTP
     if (record.otp !== otp) {
       return res.status(400).json({
         message: "Invalid OTP",
       });
     }
 
-    // Create user
-    await userModel.create(record.userData);
+    // Verified
+    record.verified = true;
 
-    // Delete OTP 
-    await otpModel.deleteOne({ email });
+    await record.save();
 
-    return res.status(201).json({
-      message: "Registration successful",
+    res.status(200).json({
+      message: "OTP verified successfully",
     });
+  } catch (error) {
+    //console.log(error);
 
-  } catch (err) {
-    return res.status(500).json({
-      message: "Verification failed",
+    res.status(500).json({
+      message: "Server Error",
     });
   }
 };

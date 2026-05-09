@@ -1,85 +1,68 @@
-const userModel = require("../../models/UserModel");
-const otpModel = require("../../models/OtpModel");
 const otpGenerator = require("otp-generator");
-const sendEmail = require("../../temporaryOTP/sendEmail");
 const validator = require("validator");
-const bcrypt = require("bcrypt");
 
-const regController = async (req, res) => {
+const otpModel = require("../../models/OtpModel");
+const userModel = require("../../models/UserModel");
+
+const sendEmail = require("../../temporaryOTP/sendEmail");
+
+const sendOtpController = async (req, res) => {
   try {
-    const data = req.body;
+    const { email } = req.body;
 
-    // Required fields
-    if (
-      !data.fullName ||
-      !data.email ||
-      !data.phone ||
-      !data.location ||
-      !data.password ||
-      !data.role
-    ) {
+    // Email required
+    if (!email) {
       return res.status(400).json({
-        message: "All fields are required",
+        message: "Email is required",
       });
     }
 
-    // Email format validation
-    if (!validator.isEmail(data.email)) {
+    // Email validation
+    if (!validator.isEmail(email)) {
       return res.status(400).json({
-        message: "Invalid email format",
+        message: "Invalid email",
       });
     }
 
     // Check existing user
-    const existingUser = await userModel.findOne({ email: data.email });
+    const existingUser = await userModel.findOne({ email });
+
     if (existingUser) {
-      return res.status(409).json({
-        message: "Email already exists",
+      return res.status(400).json({
+        message: "Email already registered",
       });
     }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    data.password = hashedPassword;
 
     // Generate OTP
     const otp = otpGenerator.generate(6, {
-      upperCase: false,
+      upperCaseAlphabets: false,
       specialChars: false,
+      lowerCaseAlphabets: false,
     });
 
-    //console.log("Attempting to send OTP to:", data.email);
+    // Delete old OTP
+    await otpModel.deleteMany({ email });
 
-    // Send email
-    const emailSent = await sendEmail(data.email, otp);
-
-    // Email exists or not 
-    if (!emailSent) {
-      return res.status(200).json({
-        message: "If the email exists, an OTP has been sent"
-      });
-    }
-
-    // Store otp in database
-    await otpModel.deleteMany({ email: data.email });
-
+    // Save new OTP
     await otpModel.create({
-      email: data.email,
+      email,
       otp,
-      userData: data,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
-    return res.status(200).json({
-      message: "If the email exists, an OTP has been sent"
-    });
+    // Send email
+    await sendEmail(email, otp);
 
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      message: "Registration unsuccessful",
+    res.status(200).json({
+      message: "OTP sent successfully",
+    });
+  } catch (error) {
+    //console.log(error);
+
+    res.status(500).json({
+      message: "Server Error",
     });
   }
 };
 
-module.exports = regController;
+module.exports = sendOtpController;

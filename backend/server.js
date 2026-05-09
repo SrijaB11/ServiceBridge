@@ -10,6 +10,8 @@ const reviewRoutes = require("./routes/review/reviewRoutes");
 const adminCustomerRoutes = require("./routes/admin/adminCustomerRoutes");
 const workerRoutes = require("./routes/worker/workerRoutes");
 const complaintRoutes = require("./routes/complaint/complaintRoutes");
+const customerRegRoutes = require("./routes/register/customerRegRoutes");
+const workerRegRoutes = require("./routes/register/workerRegRoutes");
 
 const app = express();
 
@@ -19,6 +21,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/",userRoutes);
+app.use("/",customerRegRoutes);
+app.use("/",workerRegRoutes);
 app.use("/customer",workerListRoutes);  
 app.use("/admin", adminWorkerRoutes);
 app.use("/admin", adminCustomerRoutes);                 
