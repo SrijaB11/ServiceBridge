@@ -22,21 +22,6 @@ export default function ForgotPassword() {
   const inputStyle =
     "w-full h-14 rounded-2xl border border-gray-200 bg-gray-50 pl-12 pr-4 text-sm sm:text-base transition-all duration-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400";
 
-  // SEND OTP
-  // const handleSendOtp = async () => {
-  //   if (!email) {
-  //     setMessage("Please enter your email");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     setMessage("OTP sent successfully");
-  //     setStep(2);
-  //   }, 1500);
-  // };
   const handleSendOtp = async () => {
     try {
       if (!email) {
@@ -46,7 +31,7 @@ export default function ForgotPassword() {
 
       setLoading(true);
 
-      const response = await fetch("http://localhost:8000/forgotpassword", {
+      const response = await fetch("http://localhost:5000/forgotpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,26 +53,6 @@ export default function ForgotPassword() {
     }
   };
 
-  // VERIFY OTP
-  // const handleVerifyOtp = async () => {
-  //   if (!otp) {
-  //     setMessage("Please enter OTP");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   setTimeout(() => {
-  //     setLoading(false);
-
-  //     if (otp === "123456") {
-  //       setMessage("OTP verified");
-  //       setStep(3);
-  //     } else {
-  //       setMessage("Invalid OTP");
-  //     }
-  //   }, 1200);
-  // };
   const handleVerifyOtp = async () => {
     if (!otp) {
       setMessage("Please enter OTP");
