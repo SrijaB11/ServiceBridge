@@ -1,20 +1,20 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register/Register";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
 import ServiceProviders from "./components/customer/ServiceProviders";
 
 // Worker Components
 import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
-import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
+import History from "./Pages/WorkersDashboard/History";
 import Requests from "./Pages/WorkersDashboard/Requests";
 import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
 import WorkerHeader from "./Pages/WorkersDashboard/Header";
+import Reviews from "./Pages/WorkersDashboard/Reviews";
+import Profile from "./Pages/WorkersDashboard/Profile";
 
 // Admin Components
 import AdminDashboard from "./Pages/AdminDashboard/Dashboard";
@@ -24,12 +24,15 @@ import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 
+// Worker Management Components
+import Worker from "./Pages/AdminDashboard/Worker";
+import WorkerVerification from "./Pages/AdminDashboard/Certifications";
+
 import "./App.css";
 
 /* =======================
    Layout Components
 ======================= */
-
 function WorkerDashboardLayout() {
   return (
     <>
@@ -37,7 +40,7 @@ function WorkerDashboardLayout() {
       <div className="app-layout">
         <WorkerNavBar />
         <main className="main-content">
-          <Outlet /> 
+          <Outlet />
         </main>
       </div>
     </>
@@ -61,12 +64,10 @@ function AdminDashboardLayout() {
 /* =======================
    Main App
 ======================= */
-
 export default function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
-
       <Routes>
         {/* --- Public Routes --- */}
         <Route path="/" element={<Home />} />
@@ -74,16 +75,16 @@ export default function App() {
         <Route path="/register" element={<Register />} />
 
         {/* --- Customer Routes --- */}
-        <Route 
-          path="/customer" 
-          element={<ProtectedRoute role="customer"><CustomerDashboard /></ProtectedRoute>} 
+        <Route
+          path="/customer"
+          element={<ProtectedRoute role="customer"><CustomerDashboard /></ProtectedRoute>}
         />
-        <Route 
-          path="/service/:id" 
-          element={<ProtectedRoute role="customer"><ServiceProviders /></ProtectedRoute>} 
+        <Route
+          path="/service/:id"
+          element={<ProtectedRoute role="customer"><ServiceProviders /></ProtectedRoute>}
         />
 
-        {/* --- Worker Routes (Nested) --- */}
+        {/* --- Worker Routes --- */}
         <Route
           path="/worker"
           element={
@@ -94,15 +95,14 @@ export default function App() {
         >
           <Route index element={<WorkersDashboard />} />
           <Route path="requests" element={<Requests />} />
-          <Route path="active-jobs" element={<ActiveJobs />} />
-          {/* Ensure these components exist or point to placeholders */}
+          <Route path="history" element={<History />} />
           <Route path="earnings" element={<div>Earnings Page</div>} />
-          <Route path="reviews" element={<div>Reviews Page</div>} />
-          <Route path="profile" element={<div>Profile Page</div>} />
+          <Route path="reviews" element={<Reviews/>} />
+          <Route path="profile" element={<Profile/>} />
           <Route path="logout" element={<div>Logging out...</div>} />
         </Route>
 
-        {/* --- Admin Routes (Nested) --- */}
+        {/* --- Admin Routes --- */}
         <Route
           path="/admin"
           element={
@@ -115,8 +115,15 @@ export default function App() {
           <Route path="users" element={<Users />} />
           <Route path="recent-requests" element={<RecentRequests />} />
           <Route path="recent-complaints" element={<RecentComplaints />} />
-          {/* Matching the paths used in your AdminNavBar.jsx */}
-          <Route path="active-jobs" element={<div>Admin Workers View</div>} />
+
+          {/* Workers Management */}
+          <Route path="workers" element={<Worker />} />
+          
+          {/* Document Verification - New Route */}
+          <Route path="workers/verification" element={<WorkerVerification />} />
+
+          <Route path="history" element={<Worker />} />
+
           <Route path="reviews" element={<div>Companies/Reviews View</div>} />
           <Route path="profile" element={<div>Admin Payments/Profile</div>} />
           <Route path="logout" element={<div>Logging out...</div>} />

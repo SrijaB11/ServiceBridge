@@ -1,6 +1,6 @@
 
 import Requests from "../Requests"
-import ActiveJobDetails from "../ActiveJobs"
+import ActiveJobDetails from "../History"
 import "./index.css"
 
 const WorkersDetails = [

@@ -5,10 +5,8 @@ const WorkerNavBar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear the session data
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    // Redirect to login page
     navigate("/login");
   };
 
@@ -46,11 +44,11 @@ const WorkerNavBar = () => {
 
         <li className="navbar-list-items">
           <NavLink 
-            to="/worker/active-jobs" 
+            to="/worker/history" 
             className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
           >
             <img src="/images/active jobs.png" alt="active jobs" className="navbar-logo" />
-            <p className="tab-name">Active Jobs</p>
+            <p className="tab-name">History</p>
           </NavLink>
         </li>
 
