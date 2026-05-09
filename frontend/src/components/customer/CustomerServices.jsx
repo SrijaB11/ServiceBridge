@@ -16,7 +16,7 @@ const services = [
   },
   {
     id: 3,
-    title: "Electrical",
+    title: "Electrician",
     desc: "Safe and reliable electrical solutions.",
     image: "/images/services/electrician.jpg",
   },
