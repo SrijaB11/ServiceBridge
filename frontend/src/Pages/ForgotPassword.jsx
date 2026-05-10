@@ -100,7 +100,7 @@ export default function ForgotPassword() {
 
       setLoading(true);
 
-      const response = await fetch("http://localhost:8000/resetpassword", {
+      const response = await fetch("http://localhost:5000/resetpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
