@@ -48,6 +48,7 @@ const sendOtpController = async (req, res) => {
       email,
       otp,
       purpose: "register",
+      verified: false,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 

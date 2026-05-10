@@ -9,45 +9,45 @@ const forgotPasswordController = async (req, res) => {
 
     // Check user exists
     const user = await userModel.findOne({ email });
+
     if (!user) {
-      return res.status(200).json({
-        message: "user not found",
+      return res.status(400).json({
+        message: "User not found",
       });
     }
 
     // Generate OTP
     const otp = otpGenerator.generate(6, {
-      upperCase: false,
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
       specialChars: false,
     });
-    //console.log(otp);
-
-    // Send email
-    const emailSent = await sendEmail(email, otp);
-
-    if (!emailSent) {
-      return res.status(200).json({
-        message: "OTP sending failed",
-      });
-    }
 
     // Delete old OTP
-    await otpModel.deleteMany({ email, purpose: "reset" });
+    await otpModel.deleteMany({
+      email,
+      purpose: "reset",
+    });
 
     // Save OTP
     await otpModel.create({
       email,
       otp,
-      purpose: "reset", 
+      purpose: "reset",
+      verified: false,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
+    // Send email
+    await sendEmail(email, otp);
+
     return res.status(200).json({
-      message: " OTP has been sent",
+      message: "OTP has been sent",
     });
 
   } catch (err) {
-    //console.log("Forgot Password Error:", err);
+   // console.log(err);
+
     return res.status(500).json({
       message: "Something went wrong",
     });

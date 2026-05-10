@@ -14,6 +14,7 @@ const workerRegisterController = async (req, res) => {
       password,
       confirmPassword,
       role,
+      services
     } = req.body;
 
     // Required fields
@@ -86,6 +87,7 @@ const workerRegisterController = async (req, res) => {
       password: hashedPassword,
       role,
       services,
+      isVerified: true,
 
       documents: {
         profilePhoto: "",
