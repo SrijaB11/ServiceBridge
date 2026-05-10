@@ -400,7 +400,6 @@ export default function App() {
 
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
-      </Suspense>
     </BrowserRouter>
   );
 }

@@ -14,7 +14,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-import cities from "cities.json";
+//import cities from "cities.json";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -86,11 +86,33 @@ export default function RegisterForm({
   };
 
   // CITY LIST
-  const cityNames = useMemo(() => {
-    return [
-      ...new Set(cities.filter((c) => c.country === "IN").map((c) => c.name)),
-    ];
-  }, []);
+  // const cityNames = useMemo(() => {
+  //   return [
+  //     ...new Set(cities.filter((c) => c.country === "IN").map((c) => c.name)),
+  //   ];
+  // }, []);
+  const cityNames = [
+    "Hyderabad",
+    "Secunderabad",
+    "Madhapur",
+    "Hitech City",
+    "Gachibowli",
+    "Kukatpally",
+    "Ameerpet",
+    "Banjara Hills",
+    "Jubilee Hills",
+    "Charminar",
+    "Warangal",
+    "Karimnagar",
+    "Nizamabad",
+    "Khammam",
+    "Mahabubnagar",
+    "Siddipet",
+    "Medchal",
+    "Shamshabad",
+    "LB Nagar",
+    "Uppal",
+  ];
 
   // VALIDATION
   const validateForm = () => {
@@ -204,7 +226,7 @@ export default function RegisterForm({
     try {
       setLoading(true);
 
-      const endpoint = role === "worker" ? "/worker/register" : "/register";
+      const endpoint = role === "worker" ? "/workerregister" : "/register";
 
       await axios.post(`${API_BASE}${endpoint}`, {
         ...formData,
@@ -458,7 +480,6 @@ export default function RegisterForm({
             />
 
             <Autocomplete
-              multiple
               options={servicesList}
               value={formData.services}
               onChange={(event, newValue) => {

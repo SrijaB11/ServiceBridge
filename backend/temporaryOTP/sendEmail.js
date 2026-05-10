@@ -23,8 +23,10 @@ const sendEmail = async (email, otp) => {
     });
 
    // console.log("OTP Sent");
+    return true;
   } catch (error) {
     //console.log(error);
+    return false;
   }
 };
 
