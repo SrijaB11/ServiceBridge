@@ -4,17 +4,23 @@ const createBookingWorker = async (req, res) => {
   try {
     const { workerId, date } = req.body;
 
-    // Prevent booking past dates
-    if (new Date(date) < new Date()) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const bookingDate = new Date(date);
+    bookingDate.setHours(0, 0, 0, 0);
+
+    // Prevent past booking
+    if (bookingDate < today) {
       return res.status(400).json({
         message: "Cannot book past dates",
       });
     }
 
-    // Prevent duplicate booking
+    // Check existing booking
     const existing = await Booking.findOne({
       worker: workerId,
-      date: date,
+      date: bookingDate,
       status: { $in: ["pending", "accepted"] },
     });
 
@@ -24,20 +30,22 @@ const createBookingWorker = async (req, res) => {
       });
     }
 
-    const booking = new Booking({
+    const booking = await Booking.create({
       customer: req.user._id,
       worker: workerId,
-      date,
+      date: bookingDate,
+      status: "pending",
     });
-
-    await booking.save();
 
     res.status(201).json({
       message: "Request sent to worker",
       booking,
     });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
