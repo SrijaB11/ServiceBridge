@@ -44,7 +44,7 @@ export default function ForgotPassword() {
       setLoading(false);
       setMessage(data.message);
 
-      if (response.ok && data.message === " OTP has been sent") {
+      if (response.ok && data.message === "OTP has been sent") {
         setStep(2);
       }
     } catch (error) {
