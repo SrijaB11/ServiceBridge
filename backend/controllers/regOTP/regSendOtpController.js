@@ -48,15 +48,16 @@ const sendOtpController = async (req, res) => {
       email,
       otp,
       purpose: "register",
+      verified: false,
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
     // Send email
     await sendEmail(email, otp);
 
-    res.status(200).json({
-      message: "OTP sent successfully",
-    });
+      res.status(200).json({
+        message: "OTP sent successfully",
+      });
   } catch (error) {
     //console.log(error);
 
