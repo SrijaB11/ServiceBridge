@@ -183,7 +183,11 @@ function Login() {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                setError("");
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleLogin();
+                }
               }}
               placeholder="Enter your password"
               className="w-full h-14 rounded-2xl border border-gray-200 bg-gray-50 pl-12 pr-12 text-sm sm:text-base transition-all duration-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"
