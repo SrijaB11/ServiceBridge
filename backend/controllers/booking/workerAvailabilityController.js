@@ -12,7 +12,11 @@ const getWorkerAvailability = async (req, res) => {
 
     const bookedDates = bookings.map(b => b.date);
 
-    res.json(bookedDates);
+    //res.json(bookedDates);
+    res.status(200).json({
+      workerId,
+      unavailableDates: bookedDates,
+    });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
