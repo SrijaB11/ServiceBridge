@@ -6,7 +6,6 @@ const userModel = require("../../models/UserModel");
 
 const workerRegisterController = async (req, res) => {
   try {
-
     const {
       fullName,
       email,
@@ -24,7 +23,7 @@ const workerRegisterController = async (req, res) => {
       !phone ||
       !location ||
       !password ||
-      !confirmPassword 
+      !confirmPassword
     ) {
       return res.status(400).json({
         message: "All fields are required",
@@ -65,7 +64,7 @@ const workerRegisterController = async (req, res) => {
     }
 
     // Existing worker
-    const existingWorker = await workerModel.findOne({ email });
+    const existingWorker = await userModel.findOne({ email });
 
     if (existingWorker) {
       return res.status(400).json({
@@ -79,7 +78,7 @@ const workerRegisterController = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create worker
-    await workerModel.create({
+    await userModel.create({
       fullName,
       email,
       phone,
@@ -101,7 +100,6 @@ const workerRegisterController = async (req, res) => {
     res.status(201).json({
       message: "Worker registration successful",
     });
-
   } catch (error) {
     //console.log(error);
 
