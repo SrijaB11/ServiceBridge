@@ -1,159 +1,204 @@
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
+
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
+
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MoreIcon from "@mui/icons-material/MoreVert";
+
 import { useNavigate } from "react-router-dom";
 
-/* SEARCH STYLE */
+/* SEARCH BOX */
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: "12px",
+  borderRadius: "14px",
   backgroundColor: alpha(theme.palette.common.white, 0.15),
+
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginLeft: 16,
+
   width: "100%",
-  maxWidth: 300,
+  maxWidth: 340,
 }));
 
 const SearchIconWrapper = styled("div")(() => ({
   position: "absolute",
-  left: 10,
+  left: 14,
   top: "50%",
   transform: "translateY(-50%)",
   pointerEvents: "none",
 }));
 
 const StyledInputBase = styled(InputBase)(() => ({
-  color: "inherit",
-  paddingLeft: 35,
+  color: "white",
   width: "100%",
+
+  "& .MuiInputBase-input": {
+    padding: "10px 14px 10px 45px",
+  },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function Navbar() {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileAnchorEl);
 
   const username = localStorage.getItem("name") || "User";
 
-  /* MENU HANDLERS */
-  const handleProfileMenuOpen = (event) => {
+  /* MENU */
+  const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setMobileAnchorEl(null);
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileAnchorEl(event.currentTarget);
-  };
-
+  /* LOGOUT */
   const handleLogout = () => {
     localStorage.clear();
+
     navigate("/login");
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="sticky"
+        elevation={0}
         sx={{
           background: "linear-gradient(90deg, #16a34a, #22c55e)",
+          borderBottom: "1px solid rgba(255,255,255,0.1)",
         }}
       >
-        <Toolbar>
-          {/* MENU ICON */}
-          <IconButton edge="start" color="inherit">
-            <MenuIcon />
-          </IconButton>
-
+        <Toolbar
+          sx={{
+            minHeight: "70px",
+            px: {
+              xs: 2,
+              md: 4,
+            },
+          }}
+        >
           {/* LOGO */}
           <Typography
             variant="h6"
             sx={{
-              ml: 1,
-              fontWeight: "bold",
-              display: { xs: "none", sm: "block" },
+              fontWeight: 700,
+              letterSpacing: 0.5,
+              cursor: "pointer",
+
+              fontSize: {
+                xs: "1.1rem",
+                sm: "1.4rem",
+              },
             }}
+            onClick={() => navigate("/")}
           >
             Service Bridge
           </Typography>
 
-          {/* SEARCH BAR */}
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search services..."
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-
+          {/* SPACE */}
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* DESKTOP MENU */}
+          {/* SEARCH */}
           <Box
             sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-              gap: 1,
+              display: {
+                xs: "none",
+                sm: "block",
+              },
+              mr: 2,
             }}
           >
-            <IconButton color="inherit" onClick={handleProfileMenuOpen}>
-              <AccountCircle />
-              <Typography sx={{ ml: 1 }}>{username}</Typography>
-            </IconButton>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon fontSize="small" />
+              </SearchIconWrapper>
+
+              <StyledInputBase
+                placeholder="Search services..."
+                inputProps={{
+                  "aria-label": "search",
+                }}
+              />
+            </Search>
           </Box>
 
-          {/* MOBILE MENU */}
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton color="inherit" onClick={handleMobileMenuOpen}>
-              <MoreIcon />
-            </IconButton>
+          {/* PROFILE */}
+          <Box>
+            <Box
+              onClick={handleMenuOpen}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                cursor: "pointer",
+
+                px: 2,
+                py: 1,
+
+                borderRadius: "12px",
+
+                transition: "0.3s",
+
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.12)",
+                },
+              }}
+            >
+              <AccountCircle />
+
+              <Typography
+                sx={{
+                  fontWeight: 500,
+
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                  },
+                }}
+              >
+                {username}
+              </Typography>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
 
-      {/* DESKTOP MENU */}
-      <Menu anchorEl={anchorEl} open={isMenuOpen} onClose={handleMenuClose}>
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
+      {/* MENU */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
         <MenuItem
           onClick={() => {
             handleMenuClose();
-            handleLogout();
+            navigate("/profile");
           }}
         >
-          Logout
+          Profile
         </MenuItem>
-      </Menu>
 
-      {/* MOBILE MENU */}
-      <Menu
-        anchorEl={mobileAnchorEl}
-        open={isMobileMenuOpen}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleMenuClose();
+            navigate("/account");
+          }}
+        >
+          My Account
+        </MenuItem>
+
         <MenuItem
           onClick={() => {
             handleMenuClose();

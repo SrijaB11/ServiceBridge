@@ -35,24 +35,25 @@ function WhyChoose() {
     <Box
       sx={{
         px: { xs: 2, sm: 4, md: 6 },
-        py: { xs: 5, md: 8 },
+        py: { xs: 6, md: 10 },
+        background:
+          "linear-gradient(to bottom right, #f0fdf4, #ffffff, #f5f3ff)",
+        fontFamily: "Poppins",
       }}
     >
       <Card
         sx={{
-          borderRadius: 6,
+          borderRadius: "28px",
           overflow: "hidden",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
+          border: "1px solid #f0f0f0",
+          backgroundColor: "#fff",
         }}
       >
         <Grid container>
           {/* LEFT SECTION */}
           <Grid item xs={12} md={5}>
-            <CardActionArea
-              sx={{
-                height: "100%",
-              }}
-            >
+            <CardActionArea sx={{ height: "100%" }}>
               <Box
                 sx={{
                   display: "flex",
@@ -77,9 +78,9 @@ function WhyChoose() {
                       lg: "45%",
                     },
                     height: {
-                      xs: 240,
+                      xs: 260,
                       sm: "100%",
-                      md: 260,
+                      md: 280,
                       lg: "100%",
                     },
                     objectFit: "cover",
@@ -89,59 +90,80 @@ function WhyChoose() {
                 <CardContent
                   sx={{
                     flex: 1,
-                    p: { xs: 3, md: 4 },
+                    p: { xs: 3, md: 5 },
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
                   }}
                 >
+                  {/* TAG */}
                   <Typography
-                    variant="overline"
                     sx={{
-                      color: "success.main",
+                      color: "#22c55e",
                       fontWeight: 700,
-                      letterSpacing: 1,
+                      fontSize: "0.8rem",
+                      letterSpacing: 1.5,
+                      mb: 1,
                     }}
                   >
                     WHY CHOOSE US
                   </Typography>
 
+                  {/* TITLE */}
                   <Typography
-                    variant="h4"
-                    fontWeight="bold"
-                    mb={2}
                     sx={{
+                      fontWeight: 700,
+                      color: "#111827",
+                      lineHeight: 1.2,
+                      mb: 2,
                       fontSize: {
-                        xs: "1.8rem",
-                        md: "2.2rem",
+                        xs: "2rem",
+                        md: "2.6rem",
                       },
                     }}
                   >
                     We Go Beyond Expectations
                   </Typography>
 
+                  {/* DESCRIPTION */}
                   <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    mb={3}
                     sx={{
-                      lineHeight: 1.8,
+                      color: "#6b7280",
+                      lineHeight: 1.9,
+                      mb: 4,
+                      fontSize: {
+                        xs: "0.95rem",
+                        md: "1rem",
+                      },
                     }}
                   >
-                    We're committed to providing reliable, transparent, and
-                    high-quality service every single time.
+                    We provide reliable, affordable, and professional home
+                    services with verified experts and fast support.
                   </Typography>
 
+                  {/* BUTTON */}
                   <Button
                     variant="contained"
                     size="large"
                     sx={{
                       width: "fit-content",
-                      borderRadius: 3,
+                      borderRadius: "14px",
                       px: 4,
-                      py: 1.2,
+                      py: 1.4,
                       textTransform: "none",
-                      fontWeight: "bold",
+                      fontWeight: 600,
+                      fontSize: "0.95rem",
+                      background: "linear-gradient(to right, #22c55e, #14b8a6)",
+                      boxShadow: "none",
+
+                      "&:hover": {
+                        background:
+                          "linear-gradient(to right, #16a34a, #0f766e)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 10px 20px rgba(34,197,94,0.25)",
+                      },
+
+                      transition: "all 0.3s ease",
                     }}
                   >
                     Learn More
@@ -161,27 +183,29 @@ function WhyChoose() {
                     sx={{
                       height: "100%",
                       borderRadius: 0,
-                      borderBottom: "1px solid #eee",
+                      borderBottom: "1px solid #f3f4f6",
                       borderRight: {
                         xs: "none",
-                        sm: index % 2 === 0 ? "1px solid #eee" : "none",
+                        sm: index % 2 === 0 ? "1px solid #f3f4f6" : "none",
+                      },
+                      transition: "all 0.3s ease",
+
+                      "&:hover": {
+                        backgroundColor: "#f9fafb",
                       },
                     }}
                   >
-                    <CardActionArea
-                      sx={{
-                        height: "100%",
-                      }}
-                    >
+                    <CardActionArea sx={{ height: "100%" }}>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 2,
-                          p: 3,
-                          minHeight: 180,
+                          gap: 2.5,
+                          p: 3.5,
+                          minHeight: 200,
                         }}
                       >
+                        {/* IMAGE */}
                         <CardMedia
                           component="img"
                           image={item.image}
@@ -189,22 +213,31 @@ function WhyChoose() {
                           sx={{
                             width: 90,
                             height: 90,
-                            borderRadius: 3,
+                            borderRadius: "18px",
                             objectFit: "cover",
                             flexShrink: 0,
+                            boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
                           }}
                         />
 
+                        {/* CONTENT */}
                         <Box>
-                          <Typography variant="h6" fontWeight="bold" mb={1}>
+                          <Typography
+                            sx={{
+                              fontWeight: 700,
+                              color: "#111827",
+                              mb: 1,
+                              fontSize: "1.05rem",
+                            }}
+                          >
                             {item.title}
                           </Typography>
 
                           <Typography
-                            variant="body2"
-                            color="text.secondary"
                             sx={{
-                              lineHeight: 1.7,
+                              color: "#6b7280",
+                              lineHeight: 1.8,
+                              fontSize: "0.92rem",
                             }}
                           >
                             {item.desc}
