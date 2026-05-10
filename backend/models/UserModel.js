@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
 
     role:{
       type: String,
-      require:true,
+      required: true,
     },
 
     isVerified: {
@@ -39,8 +39,8 @@ const userSchema = new mongoose.Schema(
     },
 
     services: {
-      type: String,
-      default: "",
+      type: [String],
+      default: [],
     },
 
      // documents field

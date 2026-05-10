@@ -15,6 +15,7 @@ const workerRegisterController = async (req, res) => {
       password,
       confirmPassword,
       role,
+      services
     } = req.body;
 
     // Required fields
@@ -65,7 +66,7 @@ const workerRegisterController = async (req, res) => {
     }
 
     // Existing worker
-    const existingWorker = await workerModel.findOne({ email });
+    const existingWorker = await userModel.findOne({ email });
 
     if (existingWorker) {
       return res.status(400).json({
@@ -79,7 +80,7 @@ const workerRegisterController = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create worker
-    await workerModel.create({
+    await userModel.create({
       fullName,
       email,
       phone,
@@ -87,6 +88,7 @@ const workerRegisterController = async (req, res) => {
       password: hashedPassword,
       role,
       services,
+      isVerified: true,
 
       documents: {
         profilePhoto: "",
