@@ -4,25 +4,25 @@ import React from "react";
 
 const services = [
   {
-    id: "plumber",
+    id: "Plumber",
     title: "Plumbing",
     desc: "Fix leaks, pipes, and installations",
     image: "/images/services/plumber.jpg",
   },
   {
-    id: "cleaning",
+    id: "Cleaning",
     title: "House Cleaning",
     desc: "Home deep cleaning services",
     image: "/images/services/cleaning.jpg",
   },
   {
-    id: "electrical",
+    id: "Electrician",
     title: "Electrical",
     desc: "Wiring and electrical repairs",
     image: "/images/services/electrician.jpg",
   },
   {
-    id: "painting",
+    id: "Painting",
     title: "Painting",
     desc: "Wall painting & renovation",
     image: "/images/services/painter.jpg",
