@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+
 const services = [
   {
     title: "House Cleaning",
@@ -32,22 +35,42 @@ const services = [
 ];
 
 function Services() {
+  const navigate = useNavigate();
+
+  // HANDLE SERVICE CLICK
+  const handleServiceClick = (service) => {
+    const token = localStorage.getItem("token");
+
+    // NOT LOGGED IN
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    // LOGGED IN
+    navigate(`/service/${service.toLowerCase()}`);
+  };
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4">
+        {/* HEADING */}
         <div className="text-center mb-12">
           <p className="text-green-500 text-sm font-semibold">WHAT WE OFFER</p>
+
           <h2 className="text-3xl font-bold text-gray-900 mt-2">
             Our Popular Services
           </h2>
         </div>
 
+        {/* SERVICES GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
           {services.map((service, i) => (
             <div
               key={i}
               className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
             >
+              {/* IMAGE */}
               <div className="flex justify-center mb-4">
                 <img
                   src={service.image}
@@ -56,20 +79,41 @@ function Services() {
                 />
               </div>
 
+              {/* TITLE */}
               <h3 className="text-sm font-semibold text-gray-800 text-center">
                 {service.title}
               </h3>
 
+              {/* DESCRIPTION */}
               <p className="text-xs text-gray-500 text-center mt-1">
                 {service.desc}
               </p>
 
+              {/* ARROW BUTTON */}
               <div className="flex justify-center mt-4">
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-green-500 group-hover:to-teal-500 transition">
-                  <span className="text-gray-400 group-hover:text-white text-sm">
-                    →
-                  </span>
-                </div>
+                <button
+                  onClick={() => handleServiceClick(service.title)}
+                  className="
+                    w-10 h-10 rounded-full bg-gray-100
+                    flex items-center justify-center
+                    hover:bg-gradient-to-r
+                    hover:from-green-500
+                    hover:to-teal-500
+                    transition-all duration-300
+                    cursor-pointer
+                    group/arrow
+                  "
+                >
+                  <ArrowRight
+                    size={18}
+                    className="
+                      text-gray-500
+                      group-hover/arrow:text-white
+                      transition-transform duration-300
+                      group-hover/arrow:rotate-45
+                    "
+                  />
+                </button>
               </div>
             </div>
           ))}

@@ -34,7 +34,7 @@ function ServiceProviders() {
     }
   };
 
-  // 🔥 Booking function
+  //  Booking function
   const handleBook = async () => {
     try {
       if (!selectedDate || !selectedWorker) {
