@@ -6,7 +6,6 @@ const userModel = require("../../models/UserModel");
 
 const workerRegisterController = async (req, res) => {
   try {
-
     const {
       fullName,
       email,
@@ -25,7 +24,7 @@ const workerRegisterController = async (req, res) => {
       !phone ||
       !location ||
       !password ||
-      !confirmPassword 
+      !confirmPassword
     ) {
       return res.status(400).json({
         message: "All fields are required",
@@ -103,7 +102,6 @@ const workerRegisterController = async (req, res) => {
     res.status(201).json({
       message: "Worker registration successful",
     });
-
   } catch (error) {
     //console.log(error);
 
