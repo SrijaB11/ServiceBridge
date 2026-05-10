@@ -32,7 +32,6 @@ app.use("/worker", workerRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/complaint", complaintRoutes);
 
-
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });

@@ -55,9 +55,9 @@ const sendOtpController = async (req, res) => {
     // Send email
     await sendEmail(email, otp);
 
-    res.status(200).json({
-      message: "OTP sent successfully",
-    });
+      res.status(200).json({
+        message: "OTP sent successfully",
+      });
   } catch (error) {
     //console.log(error);
 
