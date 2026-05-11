@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchWorkers } from '../../../redux/slices/workerSlice';
-import "./index.css"
 
 const Users = () => {
     const dispatch = useDispatch();
@@ -14,10 +13,9 @@ const Users = () => {
         dispatch(fetchWorkers());
     }, [dispatch]);
 
-    console.log("🔍 Full API Data:", workers);
-    console.log("📌 Current Worker:", currentWorker);
+    console.log('Current Redux State:', { workers, currentWorker, loading, error });
 
-    if (loading) return <div className="loading">Loading...</div>;
+    if (loading) return <div className="loading">Loading user details...</div>;
     if (error) return <div className="error">Error: {error}</div>;
 
     const user = currentWorker || (workers.length > 0 ? workers[0] : null);
@@ -25,12 +23,7 @@ const Users = () => {
     return (
         <div className="table-wrapper">
             <div className="table-title">User Details</div>
-
-            {/* Debug Info */}
-            <pre style={{ background: '#f4f4f4', padding: '10px', fontSize: '12px' }}>
-                {JSON.stringify(user, null, 2)}
-            </pre>
-
+            
             {user ? (
                 <table className="user-table">
                     <thead>
@@ -42,24 +35,24 @@ const Users = () => {
                     <tbody>
                         <tr className="table-data">
                             <td data-label="Field">Full Name</td>
-                            <td data-label="Value">{user.fullName || user.name || user.full_name || 'N/A'}</td>
+                            <td data-label="Value">{user.fullName || user.name || 'N/A'}</td>
                         </tr>
                         <tr className="table-data">
                             <td data-label="Field">Email</td>
-                            <td data-label="Value">{user.email || user.emailId || 'N/A'}</td>
+                            <td data-label="Value">{user.email}</td>
                         </tr>
                         <tr className="table-data">
                             <td data-label="Field">Phone</td>
-                            <td data-label="Value">{user.phone || user.phoneNumber || user.mobile || 'N/A'}</td>
+                            <td data-label="Value">{user.phone}</td>
                         </tr>
                         <tr className="table-data">
                             <td data-label="Field">Location</td>
-                            <td data-label="Value">{user.location || 'N/A'}</td>
+                            <td data-label="Value">{user.location}</td>
                         </tr>
                         <tr className="table-data">
                             <td data-label="Field">Role</td>
                             <td data-label="Value">
-                                <span className="badge">{user.role || 'Worker'}</span>
+                                <span className="badge">Worker</span>
                             </td>
                         </tr>
                         <tr className="table-data">
@@ -68,12 +61,12 @@ const Users = () => {
                         </tr>
                         <tr className="table-data">
                             <td data-label="Field">Address</td>
-                            <td data-label="Value">{user.address || user.location || 'N/A'}</td>
+                            <td data-label="Value">{user.address}</td>
                         </tr>
                     </tbody>
                 </table>
             ) : (
-                <p>No data available</p>
+                <p>No user data available.</p>
             )}
         </div>
     );

@@ -1,77 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import "./index.css";
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [detailLoading, setDetailLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchRequests();
+  // Helper to get fresh headers for every request
+  const getAuthConfig = useCallback(() => {
+    const token = localStorage.getItem('token');
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
   }, []);
 
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
       const token = localStorage.getItem('token');
-
       if (!token) {
         setError("Please login again. No token found.");
         return;
       }
 
-      console.log("Fetching requests with token:", token ? "Present" : "Missing");
+      // Updated to handle common backend data structures
+      const response = await axios.get('http://localhost:5000/booking/worker', getAuthConfig());
+      const data = response.data?.data || response.data?.bookings || response.data?.requests || response.data;
 
-      const response = await axios.get('http://localhost:5000/admin/workers', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      console.log("API Response:", response.data); // For debugging
-
-      // Handle different possible response structures
-      const data = response.data.data || response.data.requests || response.data;
       setRequests(Array.isArray(data) ? data : []);
-
     } catch (err) {
-      console.error("Full Error:", err);
-      
-      if (err.response) {
-        console.error("Response Error Data:", err.response.data);
-        setError(err.response.data?.message || `Server Error: ${err.response.status}`);
-      } else if (err.request) {
-        setError("Cannot connect to server. Is backend running?");
-      } else {
-        setError("Something went wrong while fetching requests");
-      }
+      console.error("Error fetching requests:", err);
+      setError(err.response?.data?.message || "Cannot connect to server. Is backend running?");
     } finally {
       setLoading(false);
+    }
+  }, [getAuthConfig]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
+
+  const fetchBookingDetails = async (id) => {
+    try {
+      setDetailLoading(true);
+      const response = await axios.get(`http://localhost:5000/booking/${id}`, getAuthConfig());
+      setSelectedRequest(response.data.data || response.data);
+    } catch (err) {
+      console.error("Error details:", err);
+      alert(err.response?.data?.message || "Failed to load details");
+    } finally {
+      setDetailLoading(false);
     }
   };
 
   const handleAction = async (requestId, action) => {
+    const statusValue = action === 'accept' ? 'accepted' : 'rejected';
+    
     if (!window.confirm(`Do you want to ${action} this request?`)) return;
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/worker/requests/${requestId}/status`, {
-        status: action === 'accept' ? 'accepted' : 'rejected'
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      // NOTE: Verify this endpoint matches your backend route exactly
+      await axios.put(
+        `http://localhost:5000/worker/requests/${requestId}/status`,
+        { status: statusValue },
+        getAuthConfig()
+      );
 
+      alert(`Request ${statusValue} successfully!`);
+
+      // Update local state: Remove the item from the list
       setRequests(prev => prev.filter(req => req._id !== requestId));
-      alert(`Request ${action}ed successfully!`);
+
+      if (selectedRequest?._id === requestId) {
+        setSelectedRequest(null);
+      }
     } catch (err) {
-      alert(err.response?.data?.message || `Failed to ${action} request`);
+      console.error("Action Error:", err.response || err);
+      const serverMsg = err.response?.data?.message;
+      alert(serverMsg || `Failed to ${action} request. Check console for details.`);
     }
   };
 
@@ -96,24 +110,31 @@ const Requests = () => {
       ) : (
         <ul className="requests-list">
           {requests.map((request) => (
-            <li className="requests-details-container" key={request._id}>
+            <li
+              className="requests-details-container"
+              key={request._id}
+              onClick={() => fetchBookingDetails(request._id)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="requests-profile">
-                <img 
-                  src={request.customer?.profileImage || "/images/male-logo.png"} 
-                  alt={request.customer?.name || "Customer"} 
+                <img
+                  src={request.customer?.profileImage || "/images/male-logo.png"}
+                  alt="Customer"
                   className="requests-logo"
                 />
                 <div>
                   <h1 className="person-name">
-                    {request.customer?.name || request.customerName || "New Customer"}
+                    {request.customer?.name || "New Customer"}
                   </h1>
                   <div className="requests-person-details">
-                    <img src="/images/location.png" alt="service" className="location" />
-                    <p className="person-work">{request.service || request.workTitle || "Service Request"}</p>
+                    <p className="person-work">
+                      {request.service || "Service Requested"}
+                    </p>
                   </div>
                   <div className="requests-person-details">
-                    <img src="/images/location.png" alt="location" className="location" />
-                    <p className="person-location">{request.address || request.location || "Location not provided"}</p>
+                    <p className="person-location">
+                      {request.address || "Location not provided"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -123,8 +144,7 @@ const Requests = () => {
                   {request.createdAt ? new Date(request.createdAt).toLocaleDateString() : "Today"}
                 </h1>
                 <div className="request-money-container">
-                  <img src="/assets/Images/rupee.png" alt="rupee" className="rupee-logo" />
-                  <p className="requests-value">₹{request.amount || request.cost || "N/A"}</p>
+                  <p className="requests-value">₹{request.amount || "N/A"}</p>
                 </div>
               </div>
 
@@ -132,14 +152,14 @@ const Requests = () => {
                 <button
                   type="button"
                   className="accept accept-button"
-                  onClick={() => handleAction(request._id, 'accept')}
+                  onClick={(e) => { e.stopPropagation(); handleAction(request._id, 'accept'); }}
                 >
                   Accept
                 </button>
                 <button
                   type="button"
                   className="reject reject-button"
-                  onClick={() => handleAction(request._id, 'reject')}
+                  onClick={(e) => { e.stopPropagation(); handleAction(request._id, 'reject'); }}
                 >
                   Reject
                 </button>
@@ -147,6 +167,40 @@ const Requests = () => {
             </li>
           ))}
         </ul>
+      )}
+
+      {selectedRequest && (
+        <div className="modal-overlay" onClick={() => setSelectedRequest(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h2>Booking Details</h2>
+            {detailLoading ? (
+              <p>Loading details...</p>
+            ) : (
+              <>
+                <p><strong>Customer:</strong> {selectedRequest.customer?.name}</p>
+                <p><strong>Service:</strong> {selectedRequest.service}</p>
+                <p><strong>Location:</strong> {selectedRequest.address}</p>
+                <p><strong>Amount:</strong> ₹{selectedRequest.amount}</p>
+                
+                <div className="modal-buttons">
+                  <button
+                    className="accept accept-button"
+                    onClick={() => handleAction(selectedRequest._id, 'accept')}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="reject reject-button"
+                    onClick={() => handleAction(selectedRequest._id, 'reject')}
+                  >
+                    Reject
+                  </button>
+                  <button onClick={() => setSelectedRequest(null)}>Close</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

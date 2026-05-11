@@ -63,6 +63,16 @@ const AdminNavBar = () => {
           </NavLink>
         </li>
 
+        <li className="navbar-list-items">
+          <NavLink 
+            to="/admin/recent-complaints" 
+            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+          >
+            <img src="/images/requests.png" alt="requests" className="navbar-logo" />
+            <p className="tab-name">Complaints</p>
+          </NavLink>
+        </li>
+
         {/* LOGOUT BUTTON */}
         <li className="navbar-list-items">
           <button 
