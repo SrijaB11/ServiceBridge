@@ -4,25 +4,25 @@ import React from "react";
 
 const services = [
   {
-    id: "plumber",
+    id: "Plumber",
     title: "Plumbing",
     desc: "Fix leaks, pipes, and installations",
     image: "/images/services/plumber.jpg",
   },
   {
-    id: "cleaning",
+    id: "Cleaning",
     title: "House Cleaning",
     desc: "Home deep cleaning services",
     image: "/images/services/cleaning.jpg",
   },
   {
-    id: "electrical",
+    id: "Electrician",
     title: "Electrical",
     desc: "Wiring and electrical repairs",
     image: "/images/services/electrician.jpg",
   },
   {
-    id: "painting",
+    id: "Painting",
     title: "Painting",
     desc: "Wall painting & renovation",
     image: "/images/services/painter.jpg",
@@ -91,15 +91,6 @@ function DashboardHome() {
               </button>
             </div>
           ))}
-        </div>
-
-        {/* RECENT BOOKINGS */}
-        <div className="mt-10 bg-white p-6 rounded-2xl shadow-sm">
-          <h2 className="text-lg font-semibold mb-3">Recent Bookings</h2>
-
-          <p className="text-gray-500 text-sm">
-            No bookings yet. Start by selecting a service above.
-          </p>
         </div>
       </div>
     </div>

@@ -47,10 +47,15 @@ const StyledInputBase = styled(InputBase)(() => ({
   },
 }));
 
-export default function Navbar() {
+export default function PrimarySearchAppBar({
+  setActiveTab,
+  setSearchService,
+}) {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const [search, setSearch] = React.useState("");
 
   const username = localStorage.getItem("name") || "User";
 
@@ -68,6 +73,17 @@ export default function Navbar() {
     localStorage.clear();
 
     navigate("/login");
+  };
+
+  /* SEARCH */
+  const handleSearch = () => {
+    if (!search.trim()) return;
+
+    setActiveTab("services");
+
+    setSearchService(search.toLowerCase());
+
+    setSearch("");
   };
 
   return (
@@ -126,9 +142,16 @@ export default function Navbar() {
               </SearchIconWrapper>
 
               <StyledInputBase
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search services..."
                 inputProps={{
                   "aria-label": "search",
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
                 }}
               />
             </Search>
