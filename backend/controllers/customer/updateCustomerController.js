@@ -30,7 +30,7 @@ const updateCustomerController = async (req, res) => {
     });
 
   } catch (error) {
-    console.log("Update Customer Error:", error);
+   // console.log("Update Customer Error:", error);
 
     res.status(500).json({
       message: "Server Error",
