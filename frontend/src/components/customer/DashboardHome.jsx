@@ -92,15 +92,6 @@ function DashboardHome() {
             </div>
           ))}
         </div>
-
-        {/* RECENT BOOKINGS */}
-        <div className="mt-10 bg-white p-6 rounded-2xl shadow-sm">
-          <h2 className="text-lg font-semibold mb-3">Recent Bookings</h2>
-
-          <p className="text-gray-500 text-sm">
-            No bookings yet. Start by selecting a service above.
-          </p>
-        </div>
       </div>
     </div>
   );
