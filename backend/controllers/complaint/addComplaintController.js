@@ -4,7 +4,7 @@ const Booking = require("../../models/BookingModel");
 
 const addComplaint = async (req, res) => {
   try {
-    if (req.role !== "customer") {
+    if (req.user.role !== "customer") {
       return res.status(403).json({ message: "Only customers can file complaints" }); //only customers are allowed
     }
 
