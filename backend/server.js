@@ -12,6 +12,7 @@ const workerRoutes = require("./routes/worker/workerRoutes");
 const complaintRoutes = require("./routes/complaint/complaintRoutes");
 const customerRegRoutes = require("./routes/register/customerRegRoutes");
 const workerRegRoutes = require("./routes/register/workerRegRoutes");
+// const paymentRoutes = require("./routes/payment/paymentRoutes");
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/review", reviewRoutes);
 app.use("/worker", workerRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/complaint", complaintRoutes);
+// app.use("/payment", paymentRoutes);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
