@@ -5,7 +5,7 @@ export const fetchWorkers = createAsyncThunk(
     'workers/fetchWorkers',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('http://localhost:5000/admin/customers');
+            const response = await fetch('http://localhost:5000/admin/workers');
             if (!response.ok) {
                 throw new Error(`Server responded with ${response.status}`);
             }

@@ -1,6 +1,9 @@
 
+import Users from "../Users"
+import Worker from "../Worker"
 import RecentRequests from "../RecentRequests"
 import RecentComplaints from "../RecentComplaints"
+import WorkerVerification from "../Certifications"
 import "./index.css"
 
 const AdminDetails = [
@@ -67,6 +70,9 @@ const AdminDashboard = () => {
                     </ul>
                     <RecentRequests />
                     <RecentComplaints />
+                    <WorkerVerification/>
+                    <Users/>
+                    <Worker/>
                 </div>
             </div>
         </div>

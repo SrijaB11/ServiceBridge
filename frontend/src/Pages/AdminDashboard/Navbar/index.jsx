@@ -68,7 +68,7 @@ const AdminNavBar = () => {
             to="/admin/recent-complaints" 
             className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
           >
-            <img src="/images/requests.png" alt="requests" className="navbar-logo" />
+            <img src="/images/complaints.png" alt="complaints" className="navbar-logo" />
             <p className="tab-name">Complaints</p>
           </NavLink>
         </li>

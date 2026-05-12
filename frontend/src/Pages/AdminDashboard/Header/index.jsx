@@ -17,10 +17,7 @@ const AdminHeader = () => (
                     <div className="profile">
                         <img src="/images/profile picture.png" alt="profile picture" className="profile-picture"/>
                     </div>
-                    <select id="options" name="">
-                        <option value="name" className="option-value">Rakesh Kumar</option>
-                        <option value="logout" className="option-value">Logout</option>
-                    </select>
+                    <h1 value="name" className="option-value options">Rakesh Kumar</h1>
                 </div>
             </div>
         </div>
