@@ -5,7 +5,6 @@ const getAllServicesController = async (req, res) => {
 
     res.status(200).json({
       message: "Services fetched successfully",
-      totalServices: services.length,
       services,
     });
 
