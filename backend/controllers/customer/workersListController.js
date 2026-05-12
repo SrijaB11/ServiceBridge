@@ -1,6 +1,6 @@
 const userModel = require("../../models/UserModel");
 
-// Get workers by service
+
 const getWorkersByService = async (req, res) => {
   try {
     const { service } = req.params;
