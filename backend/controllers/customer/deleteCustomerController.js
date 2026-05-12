@@ -18,7 +18,7 @@ const deleteCustomerController = async (req, res) => {
     });
 
   } catch (error) {
-    console.log("Delete Customer Error:", error);
+    //console.log("Delete Customer Error:", error);
 
     res.status(500).json({
       message: "Server Error",

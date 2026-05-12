@@ -1,16 +1,13 @@
 const services = require("../../services/services");
 
-const getAllServicesController = async (req, res) => {
+const getTotalServicesController = async (req, res) => {
   try {
-
     res.status(200).json({
-      message: "Services fetched successfully",
+      message: "Total services fetched successfully",
       totalServices: services.length,
-      services,
     });
-
   } catch (error) {
-    //console.log("Get Services Error:", error);
+    //console.log("Total Services Error:", error);
 
     res.status(500).json({
       message: "Server Error",
@@ -18,4 +15,4 @@ const getAllServicesController = async (req, res) => {
   }
 };
 
-module.exports = getAllServicesController;
+module.exports = getTotalServicesController;
