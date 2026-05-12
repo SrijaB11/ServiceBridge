@@ -1,24 +1,18 @@
+// src/redux/slices/workerSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/admin/workers';
 
 export const fetchWorkers = createAsyncThunk(
     'workers/fetchWorkers',
     async (_, { rejectWithValue }) => {
         try {
-            console.log('🚀 Fetching from:', API_URL);   // Debug log
-            const response = await axios.get(API_URL);
-            
-            console.log('✅ API Response:', response.data); // See what API actually returns
-            return response.data;
-        } catch (error) {
-            console.error('❌ API Error:', error.response?.data || error.message);
-            return rejectWithValue(
-                error.response?.data?.message || 
-                error.message || 
-                'Failed to fetch workers'
-            );
+            const response = await fetch('http://localhost:5000/admin/customers');
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            return rejectWithValue(err.message);
         }
     }
 );
@@ -27,20 +21,10 @@ const workerSlice = createSlice({
     name: 'workers',
     initialState: {
         workers: [],
-        currentWorker: null,
         loading: false,
         error: null,
     },
-    reducers: {
-        setCurrentWorker: (state, action) => {
-            state.currentWorker = action.payload;
-        },
-        clearWorkerState: (state) => {
-            state.workers = [];
-            state.currentWorker = null;
-            state.error = null;
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchWorkers.pending, (state) => {
@@ -49,18 +33,31 @@ const workerSlice = createSlice({
             })
             .addCase(fetchWorkers.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log('📦 Data saved to Redux:', action.payload);
                 
-                state.workers = Array.isArray(action.payload) ? action.payload : [action.payload];
-                state.currentWorker = state.workers[0] || null;
+                const payload = action.payload;
+
+                if (Array.isArray(payload)) {
+                    state.workers = payload;
+                } 
+                else if (payload?.data && Array.isArray(payload.data)) {
+                    state.workers = payload.data;
+                } 
+                else if (payload?.workers && Array.isArray(payload.workers)) {
+                    state.workers = payload.workers;
+                }
+                else if (payload && typeof payload === 'object') {
+                    // If it's a single object, try to see if it's wrapped
+                    state.workers = [payload];
+                } 
+                else {
+                    state.workers = [];
+                }
             })
             .addCase(fetchWorkers.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
-                console.error('🚨 Redux Error State:', action.payload);
+                state.error = action.payload || action.error.message;
             });
     },
 });
 
-export const { setCurrentWorker, clearWorkerState } = workerSlice.actions;
 export default workerSlice.reducer;
