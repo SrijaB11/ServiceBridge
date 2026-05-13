@@ -35,6 +35,33 @@ const uploadWorkerDocs = async (
   try {
     const userId = req.user._id;
 
+    // FIND USER
+    const worker = await User.findById(
+      userId
+    );
+
+    if (!worker) {
+      return res.status(404).json({
+        success: false,
+        message: "Worker not found",
+      });
+    }
+
+    // PREVENT RE-UPLOAD
+    if (
+      worker.documents?.profilePhoto ||
+      worker.documents?.panCard ||
+      worker.documents?.skillDocs
+        ?.length > 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Documents already uploaded",
+      });
+    }
+
+    // CHECK FILES
     if (
       !req.files ||
       Object.keys(req.files).length === 0
@@ -45,23 +72,26 @@ const uploadWorkerDocs = async (
       });
     }
 
-    // GET FILE PATHS
+    // PROFILE PHOTO
     const profilePhoto =
       req.files["profilePhoto"]
         ? req.files["profilePhoto"][0]
             .path
         : "";
 
+    // PAN CARD
     const panCard =
       req.files["panCard"]
         ? req.files["panCard"][0].path
         : "";
 
-    const skillDoc =
-      req.files["skillDoc"]
-        ? req.files["skillDoc"][0]
-            .path
-        : "";
+    // SKILL DOCS ARRAY
+    const skillDocs =
+      req.files["skillDocs"]
+        ? req.files["skillDocs"].map(
+            (file) => file.path
+          )
+        : [];
 
     // UPDATE USER
     const updatedUser =
@@ -71,23 +101,22 @@ const uploadWorkerDocs = async (
           documents: {
             profilePhoto,
             panCard,
-            skillDoc,
+            skillDocs,
           },
+
+          professionalStatus:
+            "pending",
+
+          isProfessional: false,
         },
         { new: true }
       );
 
-    if (!updatedUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
     res.status(200).json({
       success: true,
       message:
-        "Documents uploaded successfully",
+        "Documents uploaded successfully. Waiting for admin verification.",
+
       data: updatedUser,
     });
 
@@ -98,6 +127,7 @@ const uploadWorkerDocs = async (
     });
   }
 };
+
 
 module.exports = {
   getWorkerProfile,
