@@ -38,7 +38,7 @@ router.post(
     },
 
     {
-      name: "skillDocs",
+      name: "skillDoc",
       maxCount: 5,
     },
   ]),
