@@ -1,61 +1,72 @@
-// src/Pages/AdminDashboard/Users/index.jsx
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchWorkers } from '../../../redux/slices/workerSlice';
+import "./index.css";
 
-const Users = () => {
-    const dispatch = useDispatch();
-    const { workers, loading, error } = useSelector((state) => state.workers);
+const UserDetails=[
+    {
+        UniqueId:1,
+        fullName:"Deepak Mahesh",
+        email:"deepak@gmail.com",
+        phone:123456789,
+        location:"KPHB Colony, Hyderabad Telangana",
+        role:"Software Developer at Google",
+        services:"",
+        address:"KPHB Colony, Hyderabad Telangana"
+    }
+]
 
-    useEffect(() => {
-        dispatch(fetchWorkers());
-    }, [dispatch]);
-
-    console.log('Workers Data:', workers);
-
-    if (loading) return <div className="loading">Loading users...</div>;
-    if (error) return <div className="error">Error: {error}</div>;
-
+function Users() {
     return (
         <div className="table-wrapper">
-            <div className="table-title">All Users ({workers.length})</div>
-
-            {workers.length > 0 ? (
-                <table className="user-table">
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Location</th>
-                            <th>Role</th>
-                            <th>Services</th>
-                            <th>Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {workers.map((user, index) => (
-                            <tr key={user._id || user.id || index} className="table-row">
-                                <td>{index + 1}</td>
-                                <td>{user.fullName || user.name || user.full_name || 'N/A'}</td>
-                                <td>{user.email || 'N/A'}</td>
-                                <td>{user.phone || 'N/A'}</td>
-                                <td>{user.location || 'N/A'}</td>
-                                <td>
-                                    <span className="badge badge-worker">Worker</span>
-                                </td>
-                                <td>{user.services || user.service || 'N/A'}</td>
-                                <td>{user.address || 'N/A'}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            ) : (
-                <p className="no-data">No users found in database.</p>
-            )}
+            <div className="table-title">User Details</div>
+            <table className="user-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ul>
+                        {
+                            UserDetails.map((User) => (
+                                <>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Full Name</td>
+                                        <td data-label="Value">{User.fullName}</td>
+                                    </tr>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Email</td>
+                                        <td data-label="Value">{User.email}</td>
+                                    </tr>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Phone</td>
+                                        <td data-label="Value">{User.phone}</td>
+                                    </tr>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Location</td>
+                                        <td data-label="Value">{User.location}</td>
+                                    </tr>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Role</td>
+                                        <td data-label="Value">
+                                            <span className="badge">User</span>
+                                        </td>
+                                    </tr>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Services</td>
+                                        <td data-label="Value">{User.services}</td>
+                                    </tr>
+                                    <tr className="table-data">
+                                        <td data-label="Field">Address</td>
+                                        <td data-label="Value">{User.address}</td>
+                                    </tr>
+                                </>
+                            ))
+                        }
+                    </ul>
+                </tbody>
+            </table>
         </div>
     );
-};
+}
 
 export default Users;

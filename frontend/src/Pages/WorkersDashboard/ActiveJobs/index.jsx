@@ -43,7 +43,7 @@ const ActiveJobs = () => {
     return (
         <div className="active-jobs-container">
             <div className="active-jobs-header-container">
-                <h1 className="active-jobs-title">History</h1>
+                <h1 className="active-jobs-title">Active Jobs</h1>
                 <h1 className="active-jobs-details">View All</h1>
             </div>
             <hr className="horizantal-line" />

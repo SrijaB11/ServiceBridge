@@ -1,37 +1,39 @@
-import { useState, useEffect } from "react";
-import "./index.css";
+import "./index.css"
+
+const RecentComplaintsDetails = [
+    {
+        UniqueId:1,
+        JobId:"#JOB001",
+        EmployeeName:"Suresh Yadav",
+        CustomerName:"Ramesh Kumar",
+        ComplaintTitle:"Poor Work Quality",
+        ComplaintStatus:"Pending",
+        ComplaintDate:"12 May 2024",
+        Status:"Resolve"
+    },
+    {
+        UniqueId:2,
+        JobId:"#JOB002",
+        EmployeeName:"Mahesh Das",
+        CustomerName:"Priya Patel",
+        ComplaintTitle:"Behaviour Issue",
+        ComplaintStatus:"Pending",
+        ComplaintDate:"11 May 2024",
+        Status:"Resolve"
+    },
+    {
+        UniqueId:3,
+        JobId:"#JOB003",
+        EmployeeName:"Vikram Singh",
+        CustomerName:"Amit Sharma",
+        ComplaintTitle:"Delay in Service",
+        ComplaintStatus:"Resolved",
+        ComplaintDate:"10 May 2024",
+        Status:"Resolved"
+    }
+]
 
 const RecentComplaints = () => {
-    const [complaints, setComplaints] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    // Fetch complaints from backend
-    useEffect(() => {
-        const fetchComplaints = async () => {
-            try {
-                const response = await fetch("http://localhost:5000/complaint/worker");
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch complaints");
-                }
-
-                const data = await response.json();
-                setComplaints(data);
-            } catch (err) {
-                setError(err.message);
-                console.error("Error fetching complaints:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchComplaints();
-    }, []);
-
-    if (loading) return <div className="recent-complaints-container">Loading complaints...</div>;
-    if (error) return <div className="recent-complaints-container">Error: {error}</div>;
-
     return (
         <div className="recent-complaints-container">
             <div className="recent-complaints-header-container">
@@ -39,81 +41,36 @@ const RecentComplaints = () => {
                 <h1 className="recent-complaints-details">View All</h1>
             </div>
             <hr className="horizantal-line" />
-
             <ul className="active-jobs-container">
-                {complaints.length > 0 ? (
-                    complaints.map((complaint) => (
-                        <li key={complaint.UniqueId || complaint.id} className="recent-complaints-list-container">
-                            <div>
-                                <h1 className="complaint-id">{complaint.CustomerName}</h1>
-                                <h1 className="complaint-name">{`Against : ${complaint.EmployeeName}`}</h1>
-                            </div>
-                            <div>
-                                <h1 className="complaint-title">{complaint.ComplaintTitle}</h1>
-                                <h1 className="complaint-date">{complaint.ComplaintDate}</h1>
-                            </div>
-
-                            {complaint.Status !== "Resolved" ? (
-                                <>
-                                    <button 
-                                        className="complaint-request-status"
-                                        style={{ border: "2px solid #FFF7ED", color: "#EA580C", backgroundColor: "#FFF7ED" }}
-                                    >
-                                        Pending
-                                    </button>
-                                    <button 
-                                        className="complaint-request-status"
-                                        style={{ border: "2px solid #166534", color: "#FFFFFF", backgroundColor: "#166534" }}
-                                        onClick={() => handleResolve(complaint.UniqueId)}
-                                    >
-                                        Resolve
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button 
-                                        className="complaint-request-status"
-                                        style={{ border: "2px solid #90EE90", color: "#166534", backgroundColor: "#90EE90" }}
-                                    >
-                                        Resolved
-                                    </button>
-                                    <button 
-                                        className="complaint-request-status"
-                                        style={{ border: "2px solid #166534", color: "#166534", backgroundColor: "#ffffff" }}
-                                    >
-                                        View
-                                    </button>
-                                </>
-                            )}
-
-                            {/* Optional: Remove if not needed */}
-                            {/* <h1 className="request-date">{complaint.RequestDate}</h1> */}
-                        </li>
-                    ))
-                ) : (
-                    <li>No complaints found</li>
-                )}
+                {RecentComplaintsDetails.map((Complaint) => (
+                    <li key={Complaint.UniqueId} className="recent-complaints-list-container">
+                        <div>
+                            <h1 className="complaint-id">{Complaint.CustomerName}</h1>
+                            <h1 className="complaint-name">{`Aganist : ${Complaint.EmployeeName}`}</h1>
+                        </div>
+                        <div>
+                            <h1 className="complaint-title">{Complaint.ComplaintTitle}</h1>
+                            <h1 className="complaint-date">{Complaint.ComplaintDate}</h1>
+                        </div>
+                        {
+                            Complaint.Status !== "Resolved"
+                                ?
+                                    <>
+                                        <button className="complaint-request-status" style={{border:"2px solid #FFF7ED",color:"#EA580C",backgroundColor:"#FFF7ED"}}>Pending</button>
+                                        <button className="complaint-request-status" style={{border:"2px solid #166534",color:"#FFFFFF",backgroundColor:"#166534"}}>Resolve</button>
+                                    </>
+                                :
+                                    <>
+                                        <button className="complaint-request-status" style={{border:"2px solid #90EE90",color:"#166534",backgroundColor:"#90EE90"}}>Resolved</button>
+                                        <button className="complaint-request-status" style={{border:"2px solid #166534",color:"#166534",backgroundColor:"#ffffff"}}>View</button>
+                                    </>
+                        }
+                        <h1 className="request-date">{Complaint.RequestDate}</h1>
+                    </li>
+                ))}
             </ul>
         </div>
-    );
-};
+    )
+}
 
-// Optional: Handle resolve action
-const handleResolve = async (id) => {
-    try {
-        const response = await fetch(`http://localhost:5000/complaint/${id}/resolve`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (response.ok) {
-            alert("Complaint resolved successfully!");
-            // Refresh the list or update local state
-            window.location.reload();
-        }
-    } catch (error) {
-        console.error("Failed to resolve complaint", error);
-    }
-};
-
-export default RecentComplaints;
+export default RecentComplaints
