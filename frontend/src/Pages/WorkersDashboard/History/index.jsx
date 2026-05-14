@@ -1,4 +1,4 @@
-import "./index.css"
+import styles from "./index.module.css";
 
 const ActiveJobDetails = [
     {
@@ -37,38 +37,66 @@ const ActiveJobDetails = [
         RequestDate:"09 May 2024",
         Status:"Completed"
     }
-]
+];
 
 const ActiveJobs = () => {
     return (
-        <div className="active-jobs-container">
-            <div className="active-jobs-header-container">
-                <h1 className="active-jobs-title">History</h1>
-                <h1 className="active-jobs-details">View All</h1>
+        <div className={styles["active-jobs-container"]}>
+            <div className={styles["active-jobs-header-container"]}>
+                <h1 className={styles["active-jobs-title"]}>
+                    History
+                </h1>
+
+                <h1 className={styles["active-jobs-details"]}>
+                    View All
+                </h1>
             </div>
-            <hr className="horizantal-line" />
-            <ul className="active-jobs-container">
+
+            <hr className={styles["horizantal-line"]} />
+
+            <ul className={styles["active-jobs-container"]}>
                 {ActiveJobDetails.map((job) => (
-                    <li key={job.UniqueId} className="acitve-jobs-list-container">
-                        <h1 className="job-id">{job.JobId}</h1>
-                        <h1 className="employee-name">{job.EmployeeName}</h1>
-                        <h1 className="role">{job.Role}</h1>
-                        <button 
-                            className="request-status" 
+                    <li
+                        key={job.UniqueId}
+                        className={styles["acitve-jobs-list-container"]}
+                    >
+                        <h1 className={styles["job-id"]}>
+                            {job.JobId}
+                        </h1>
+
+                        <h1 className={styles["employee-name"]}>
+                            {job.EmployeeName}
+                        </h1>
+
+                        <h1 className={styles.role}>
+                            {job.Role}
+                        </h1>
+
+                        <button
+                            className={styles["request-status"]}
                             style={
-                                job.Status === "Completed" 
-                                ? { color:"#14532D", backgroundColor:"#DCFCE7" } 
-                                : { color:"#1E3A8A", backgroundColor:"#DBEAFE" }
+                                job.Status === "Completed"
+                                    ? {
+                                        color: "#14532D",
+                                        backgroundColor: "#DCFCE7"
+                                      }
+                                    : {
+                                        color: "#1E3A8A",
+                                        backgroundColor: "#DBEAFE"
+                                      }
                             }
                         >
                             {job.RequestStatus}
                         </button>
-                        <h1 className="request-date">{job.RequestDate}</h1>
+
+                        <h1 className={styles["request-date"]}>
+                            {job.RequestDate}
+                        </h1>
                     </li>
                 ))}
             </ul>
         </div>
-    )
-}
+    );
+};
 
-export default ActiveJobs
+export default ActiveJobs;

@@ -1,10 +1,9 @@
-
 import Users from "../Users"
 import Worker from "../Worker"
 import RecentRequests from "../RecentRequests"
 import RecentComplaints from "../RecentComplaints"
 import WorkerVerification from "../Certifications"
-import "./index.css"
+import styles from './index.module.css';
 
 const AdminDetails = [
     {
@@ -43,36 +42,69 @@ const AdminDetails = [
 
 const AdminDashboard = () => {
     return (
-        <div className="app-layout">
-            <div className="main-content">
-                <div className="main">
-                    <ul className="admin-dashboard-container1">
+        <div className={styles["app-layout"]}>
+            <div className={styles["main-content"]}>
+                <div className={styles.main}>
+                    <ul className={styles["admin-dashboard-container1"]}>
                         {AdminDetails.map((detail) => (
-                            <li className="admin-dashboard-container2" key={detail.UniqueId}>
-                                <img src={detail.ProfileIcon} alt="profile-icons" className="admin-dashboard-logo"/>
+                            <li
+                                className={styles["admin-dashboard-container2"]}
+                                key={detail.UniqueId}
+                            >
+                                <img
+                                    src={detail.ProfileIcon}
+                                    alt="profile-icons"
+                                    className={styles["admin-dashboard-logo"]}
+                                />
+
                                 <div>
-                                    <h1 className="admin-title">{detail.Title}</h1>
+                                    <h1 className={styles["admin-title"]}>
+                                        {detail.Title}
+                                    </h1>
+
                                     {detail.Title === "Total Revenue" ? (
-                                        <div className="rupee-container">
-                                            <img src="/assets/Images/rupee-symbol.png" alt="rupee" className="rupee-symbol"/>
-                                            <h1 className="value">{detail.Value}</h1>
+                                        <div className={styles["rupee-container"]}>
+                                            <img
+                                                src="/assets/Images/rupee-symbol.png"
+                                                alt="rupee"
+                                                className={styles["rupee-symbol"]}
+                                            />
+
+                                            <h1 className={styles.value}>
+                                                {detail.Value}
+                                            </h1>
                                         </div>
                                     ) : (
-                                        <h1 className="value">{detail.Value}</h1>
+                                        <h1 className={styles.value}>
+                                            {detail.Value}
+                                        </h1>
                                     )}
-                                    <div className="admin-dashboard-details-container">
-                                        <img src={detail.IncrementIcon} alt="increment" className="increment"/>
-                                        <p className="status">{detail.Status}</p>
+
+                                    <div
+                                        className={
+                                            styles["admin-dashboard-details-container"]
+                                        }
+                                    >
+                                        <img
+                                            src={detail.IncrementIcon}
+                                            alt="increment"
+                                            className={styles.increment}
+                                        />
+
+                                        <p className={styles.status}>
+                                            {detail.Status}
+                                        </p>
                                     </div>
                                 </div>
                             </li>
                         ))}
                     </ul>
+
                     <RecentRequests />
                     <RecentComplaints />
-                    <WorkerVerification/>
-                    <Users/>
-                    <Worker/>
+                    <WorkerVerification />
+                    <Users />
+                    <Worker />
                 </div>
             </div>
         </div>

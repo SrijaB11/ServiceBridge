@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "./index.css";
+import styles from "./index.module.css";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -24,7 +24,6 @@ const Reviews = () => {
         }
       });
 
-      // Handle both array and single object responses
       const data = response.data.data || response.data;
       setReviews(Array.isArray(data) ? data : [data].filter(Boolean));
     } catch (err) {
@@ -37,39 +36,41 @@ const Reviews = () => {
 
   const renderStars = (rating) => {
     return Array(5).fill(0).map((_, index) => (
-      <span key={index} className={`star ${index < rating ? 'filled' : ''}`}>
-        <img src="" alt=""/>
+      <span key={index} className={`${styles.star} ${index < rating ? styles.filled : ''}`}>
+        <img src="" alt="" />
       </span>
     ));
   };
 
-  if (loading) return <div className="reviews-loading">Loading your reviews...</div>;
-  if (error) return <div className="reviews-error">{error}</div>;
+  if (loading) return <div className={styles["reviews-loading"]}>Loading your reviews...</div>;
+  if (error) return <div className={styles["reviews-error"]}>{error}</div>;
 
   return (
-    <div className="reviews-container">
-      <div className="reviews-header">
-        <h1 className="reviews-title">My Reviews</h1>
-        <button onClick={fetchReviews} className="refresh-btn"><img src="" alt=""/> Refresh</button>
+    <div className={styles["reviews-container"]}>
+      <div className={styles["reviews-header"]}>
+        <h1 className={styles["reviews-title"]}>My Reviews</h1>
+        <button onClick={fetchReviews} className={styles["refresh-btn"]}>
+          <img src="" alt="" /> Refresh
+        </button>
       </div>
 
       {reviews.length === 0 ? (
-        <div className="no-reviews">
+        <div className={styles["no-reviews"]}>
           <h3>You haven't received any reviews yet</h3>
           <p>Complete more jobs to get customer feedback!</p>
         </div>
       ) : (
-        <div className="reviews-grid">
+        <div className={styles["reviews-grid"]}>
           {reviews.map((review) => (
-            <div key={review._id} className="review-card">
-              <div className="review-header">
-                <div className="customer-info">
-                  <div className="customer-avatar">
+            <div key={review._id} className={styles["review-card"]}>
+              <div className={styles["review-header"]}>
+                <div className={styles["customer-info"]}>
+                  <div className={styles["customer-avatar"]}>
                     {review.customer?.fullName?.charAt(0)?.toUpperCase() || "C"}
                   </div>
                   <div>
                     <h3>{review.customer?.fullName || "Customer"}</h3>
-                    <p className="review-date">
+                    <p className={styles["review-date"]}>
                       {new Date(review.createdAt).toLocaleDateString('en-IN', {
                         year: 'numeric',
                         month: 'short',
@@ -79,20 +80,22 @@ const Reviews = () => {
                   </div>
                 </div>
 
-                <div className="rating-container">
-                  <div className="stars">
+                <div className={styles["rating-container"]}>
+                  <div className={styles["stars"]}>
                     {renderStars(review.rating)}
                   </div>
-                  <span className="rating-number">({review.rating}/5)</span>
+                  <span className={styles["rating-number"]}>
+                    ({review.rating}/5)
+                  </span>
                 </div>
               </div>
 
-              <div className="review-comment">
+              <div className={styles["review-comment"]}>
                 "{review.comment}"
               </div>
 
-              <div className="review-footer">
-                <span className="service-tag">
+              <div className={styles["review-footer"]}>
+                <span className={styles["service-tag"]}>
                   {review.booking?.service || "Service"}
                 </span>
               </div>

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { 
-  Search, 
-  RefreshCw, 
-  Edit2, 
-  Trash2, 
-  MapPin, 
-  Mail, 
-  Briefcase, 
-  X, 
+import {
+  Search,
+  RefreshCw,
+  Edit2,
+  Trash2,
+  MapPin,
+  Mail,
+  Briefcase,
+  X,
   AlertCircle,
   UserCheck
 } from 'lucide-react';
-import './index.css';
+
+import styles from './index.module.css';
 
 const Worker = () => {
   const [workers, setWorkers] = useState([]);
@@ -20,7 +21,7 @@ const Worker = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [deletingId, setDeletingId] = useState(null);
-  
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentWorker, setCurrentWorker] = useState(null);
   const [formData, setFormData] = useState({});
@@ -34,12 +35,18 @@ const Worker = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get('http://localhost:5000/admin/workers');
+
+      const response = await axios.get(
+        'http://localhost:5000/admin/workers'
+      );
+
       if (response.data.success) {
         setWorkers(response.data.data || []);
       }
     } catch (err) {
-      setError("Unable to connect to the server. Please try again.");
+      setError(
+        "Unable to connect to the server. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -47,30 +54,47 @@ const Worker = () => {
 
   const openEditModal = (worker) => {
     setCurrentWorker(worker);
+
     setFormData({
       fullName: worker.fullName || "",
       location: worker.location || "",
       address: worker.address || "",
       services: worker.services || "",
     });
+
     setIsEditModalOpen(true);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
     try {
       setUpdating(true);
+
       const response = await axios.put(
         `http://localhost:5000/admin/workers/${currentWorker._id}`,
         formData
       );
-      setWorkers(prev => prev.map(w => w._id === currentWorker._id ? response.data.worker : w));
+
+      setWorkers((prev) =>
+        prev.map((w) =>
+          w._id === currentWorker._id
+            ? response.data.worker
+            : w
+        )
+      );
+
       setIsEditModalOpen(false);
+
       alert("Worker updated successfully!");
     } catch (err) {
       alert("Update failed. Please check your connection.");
@@ -80,11 +104,24 @@ const Worker = () => {
   };
 
   const handleDelete = async (workerId, fullName) => {
-    if (!window.confirm(`Are you sure you want to delete ${fullName}?`)) return;
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${fullName}?`
+      )
+    ) {
+      return;
+    }
+
     try {
       setDeletingId(workerId);
-      await axios.delete(`http://localhost:5000/admin/workers/${workerId}`);
-      setWorkers(prev => prev.filter(w => w._id !== workerId));
+
+      await axios.delete(
+        `http://localhost:5000/admin/workers/${workerId}`
+      );
+
+      setWorkers((prev) =>
+        prev.filter((w) => w._id !== workerId)
+      );
     } catch (err) {
       alert("Delete failed.");
     } finally {
@@ -92,96 +129,171 @@ const Worker = () => {
     }
   };
 
-  // ROBUST FILTER LOGIC (Prevents White Screen)
-  const filteredWorkers = workers.filter(worker => {
+  const filteredWorkers = workers.filter((worker) => {
     const term = searchTerm.toLowerCase().trim();
+
     if (!term) return true;
 
-    // We only search string fields to prevent numeric errors
     const name = String(worker.fullName || "").toLowerCase();
     const email = String(worker.email || "").toLowerCase();
     const role = String(worker.role || "").toLowerCase();
     const service = String(worker.services || "").toLowerCase();
 
-    return name.includes(term) || email.includes(term) || role.includes(term) || service.includes(term);
+    return (
+      name.includes(term) ||
+      email.includes(term) ||
+      role.includes(term) ||
+      service.includes(term)
+    );
   });
 
-  if (loading) return (
-    <div className="status-container">
-      <div className="loader"></div>
-      <p>Syncing Professionals...</p>
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className={styles["status-container"]}>
+        <div className={styles.loader}></div>
+        <p>Syncing Professionals...</p>
+      </div>
+    );
+  }
 
-  if (error) return (
-    <div className="status-container">
-      <AlertCircle size={48} color="#ef4444" />
-      <p className="error-text">{error}</p>
-      <button onClick={fetchWorkers} className="retry-btn">Retry Connection</button>
-    </div>
-  );
+  if (error) {
+    return (
+      <div className={styles["status-container"]}>
+        <AlertCircle size={48} color="#ef4444" />
+
+        <p className={styles["error-text"]}>
+          {error}
+        </p>
+
+        <button
+          onClick={fetchWorkers}
+          className={styles["retry-btn"]}
+        >
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
-        <div className="brand">
+    <div className={styles["dashboard-container"]}>
+      <header className={styles["dashboard-header"]}>
+        <div className={styles.brand}>
           <h1>Professional Directory</h1>
-          <span className="stats-badge">{workers.length} Total Workers</span>
+
+          <span className={styles["stats-badge"]}>
+            {workers.length} Total Workers
+          </span>
         </div>
-        
-        <div className="header-actions">
-          <div className="search-pill">
-            <Search size={18} className="search-icon" />
+
+        <div className={styles["header-actions"]}>
+          <div className={styles["search-pill"]}>
+            <Search
+              size={18}
+              className={styles["search-icon"]}
+            />
+
             <input
               type="text"
               placeholder="Search by name, email, or role..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) =>
+                setSearchTerm(e.target.value)
+              }
             />
           </div>
-          <button onClick={fetchWorkers} className="icon-action-btn" title="Refresh">
+
+          <button
+            onClick={fetchWorkers}
+            className={styles["icon-action-btn"]}
+            title="Refresh"
+          >
             <RefreshCw size={18} />
           </button>
         </div>
       </header>
 
-      <main className="grid-layout">
+      <main className={styles["grid-layout"]}>
         {filteredWorkers.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon-box">
+          <div className={styles["empty-state"]}>
+            <div className={styles["empty-icon-box"]}>
               <Search size={40} />
             </div>
+
             <h2>No matching workers found</h2>
-            <p>Try adjusting your search terms or filters.</p>
-            <button onClick={() => setSearchTerm("")} className="clear-btn">Clear Search</button>
+
+            <p>
+              Try adjusting your search terms or filters.
+            </p>
+
+            <button
+              onClick={() => setSearchTerm("")}
+              className={styles["clear-btn"]}
+            >
+              Clear Search
+            </button>
           </div>
         ) : (
           filteredWorkers.map((worker) => (
-            <div key={worker._id} className="worker-card">
-              <div className="card-inner">
-                <div className="card-header">
-                  <div className="avatar-wrapper">
-                    {worker.fullName?.charAt(0) || <UserCheck size={20}/>}
+            <div
+              key={worker._id}
+              className={styles["worker-card"]}
+            >
+              <div className={styles["card-inner"]}>
+                <div className={styles["card-header"]}>
+                  <div className={styles["avatar-wrapper"]}>
+                    {worker.fullName?.charAt(0) || (
+                      <UserCheck size={20} />
+                    )}
                   </div>
-                  <div className="title-box">
+
+                  <div className={styles["title-box"]}>
                     <h3>{worker.fullName}</h3>
-                    <p className="role-label">{worker.role || 'Professional'}</p>
+
+                    <p className={styles["role-label"]}>
+                      {worker.role || 'Professional'}
+                    </p>
                   </div>
                 </div>
 
-                <div className="info-grid">
-                  <div className="info-row"><Mail size={14}/> <span>{worker.email}</span></div>
-                  <div className="info-row"><MapPin size={14}/> <span>{worker.location || 'Not Specified'}</span></div>
-                  <div className="info-row"><Briefcase size={14}/> <span>{worker.services || 'General Service'}</span></div>
+                <div className={styles["info-grid"]}>
+                  <div className={styles["info-row"]}>
+                    <Mail size={14} />
+                    <span>{worker.email}</span>
+                  </div>
+
+                  <div className={styles["info-row"]}>
+                    <MapPin size={14} />
+                    <span>
+                      {worker.location || 'Not Specified'}
+                    </span>
+                  </div>
+
+                  <div className={styles["info-row"]}>
+                    <Briefcase size={14} />
+                    <span>
+                      {worker.services || 'General Service'}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="card-footer">
-                  <button className="edit-link" onClick={() => openEditModal(worker)}>
-                    <Edit2 size={14} /> Edit Profile
+                <div className={styles["card-footer"]}>
+                  <button
+                    className={styles["edit-link"]}
+                    onClick={() => openEditModal(worker)}
+                  >
+                    <Edit2 size={14} />
+                    Edit Profile
                   </button>
-                  <button 
-                    className="delete-link" 
-                    onClick={() => handleDelete(worker._id, worker.fullName)}
+
+                  <button
+                    className={styles["delete-link"]}
+                    onClick={() =>
+                      handleDelete(
+                        worker._id,
+                        worker.fullName
+                      )
+                    }
                     disabled={deletingId === worker._id}
                   >
                     <Trash2 size={16} />
@@ -193,35 +305,81 @@ const Worker = () => {
         )}
       </main>
 
-      {/* Edit Modal */}
       {isEditModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <div className="modal-header">
+        <div className={styles["modal-overlay"]}>
+          <div className={styles["modal-box"]}>
+            <div className={styles["modal-header"]}>
               <h2>Update Information</h2>
-              <button onClick={() => setIsEditModalOpen(false)} className="close-x"><X/></button>
+
+              <button
+                onClick={() =>
+                  setIsEditModalOpen(false)
+                }
+                className={styles["close-x"]}
+              >
+                <X />
+              </button>
             </div>
-            <form onSubmit={handleUpdate} className="modal-form">
-              <div className="form-field">
+
+            <form
+              onSubmit={handleUpdate}
+              className={styles["modal-form"]}
+            >
+              <div className={styles["form-field"]}>
                 <label>Full Name</label>
-                <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} required />
+
+                <input
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
-              <div className="form-row">
-                <div className="form-field">
+
+              <div className={styles["form-row"]}>
+                <div className={styles["form-field"]}>
                   <label>Location</label>
-                  <input type="text" name="location" value={formData.location} onChange={handleInputChange} />
+
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                  />
                 </div>
-                <div className="form-field">
+
+                <div className={styles["form-field"]}>
                   <label>Services</label>
-                  <input type="text" name="services" value={formData.services} onChange={handleInputChange} />
+
+                  <input
+                    type="text"
+                    name="services"
+                    value={formData.services}
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
-              <div className="form-field">
+
+              <div className={styles["form-field"]}>
                 <label>Detailed Address</label>
-                <textarea name="address" value={formData.address} onChange={handleInputChange} rows="3" />
+
+                <textarea
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  rows="3"
+                />
               </div>
-              <button type="submit" className="save-button" disabled={updating}>
-                {updating ? "Updating..." : "Save Changes"}
+
+              <button
+                type="submit"
+                className={styles["save-button"]}
+                disabled={updating}
+              >
+                {updating
+                  ? "Updating..."
+                  : "Save Changes"}
               </button>
             </form>
           </div>

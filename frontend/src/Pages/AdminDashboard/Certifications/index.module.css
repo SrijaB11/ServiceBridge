@@ -1,4 +1,5 @@
-/* Container & Layout */
+
+
 .verification-container {
   padding: 40px 5%;
   background-color: #f8fafc;
@@ -6,7 +7,6 @@
   font-family: 'Inter', -apple-system, sans-serif;
 }
 
-/* Header & Search */
 .verification-header {
   display: flex;
   justify-content: space-between;
@@ -56,7 +56,7 @@
   background: #f1f5f9;
 }
 
-/* Grid & Cards */
+
 .verification-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -73,7 +73,7 @@
   flex-direction: column;
 }
 
-/* Worker Info Section */
+
 .worker-header-info {
   display: flex;
   gap: 16px;
@@ -107,7 +107,7 @@
   gap: 5px;
 }
 
-/* Documents Section */
+
 .documents-section {
   background: #f8fafc;
   padding: 16px;
@@ -149,7 +149,7 @@
   text-decoration: underline;
 }
 
-/* Action Buttons */
+
 .verification-actions {
   display: flex;
   gap: 12px;
@@ -193,7 +193,7 @@
   cursor: not-allowed;
 }
 
-/* States */
+
 .verification-loading, .verification-error, .no-data {
   text-align: center;
   padding: 100px;
@@ -204,3 +204,4 @@
 .verification-error {
   color: #ef4444;
 }
+

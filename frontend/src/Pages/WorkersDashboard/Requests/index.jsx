@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import "./index.css";
+import styles from "./index.module.css";
 
 const Requests = () => {
     const [requests, setRequests] = useState([]);
@@ -30,16 +30,16 @@ const Requests = () => {
                 return;
             }
 
-            // Try both endpoints if needed
-            const response = await axios.get('http://localhost:5000/booking/worker', getAuthConfig())
+            const response = await axios.get(
+                'http://localhost:5000/booking/worker',
+                getAuthConfig()
+            );
 
-            const Fdata = response.json()
-            console.log(Fdata)
-
-            const data = response.data?.data || 
-                        response.data?.bookings || 
-                        response.data?.requests || 
-                        response.data;
+            const data =
+                response.data?.data ||
+                response.data?.bookings ||
+                response.data?.requests ||
+                response.data;
 
             setRequests(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -54,11 +54,13 @@ const Requests = () => {
         fetchRequests();
     }, [fetchRequests]);
 
-    // ================== FETCH DETAILS ==================
     const fetchBookingDetails = async (id) => {
         try {
             setDetailLoading(true);
-            const response = await axios.get(`http://localhost:5000/booking/${id}`, getAuthConfig());
+            const response = await axios.get(
+                `http://localhost:5000/booking/${id}`,
+                getAuthConfig()
+            );
             setSelectedRequest(response.data.data || response.data);
         } catch (err) {
             console.error("Error fetching details:", err);
@@ -68,10 +70,9 @@ const Requests = () => {
         }
     };
 
-    // ================== ACCEPT / REJECT ==================
     const handleAction = async (requestId, action) => {
         const statusValue = action === 'accept' ? 'accepted' : 'rejected';
-        
+
         if (!window.confirm(`Do you want to ${action} this request?`)) return;
 
         try {
@@ -89,53 +90,69 @@ const Requests = () => {
         }
     };
 
-    if (loading) return <div className="requests-loading">Loading Incoming Requests...</div>;
+    if (loading) {
+        return <div className={styles["requests-loading"]}>Loading Incoming Requests...</div>;
+    }
 
     return (
-        <div className="requests-container">
-            <div className="requests-header-container">
-                <h1 className="requests-title">Incoming Requests</h1>
-                <button onClick={fetchRequests} className="requests-details">Refresh</button>
+        <div className={styles["requests-container"]}>
+            <div className={styles["requests-header-container"]}>
+                <h1 className={styles["requests-title"]}>Incoming Requests</h1>
+                <button
+                    onClick={fetchRequests}
+                    className={styles["requests-details"]}
+                >
+                    Refresh
+                </button>
             </div>
-            <hr className="horizantal-line" />
+
+            <hr className={styles["horizantal-line"]} />
 
             {error ? (
-                <div className="requests-error">
+                <div className={styles["requests-error"]}>
                     <p>{error}</p>
-                    <button onClick={fetchRequests} className="retry-btn">Try Again</button>
+                    <button onClick={fetchRequests} className={styles["retry-btn"]}>
+                        Try Again
+                    </button>
                 </div>
             ) : requests.length === 0 ? (
-                <p className="no-requests">No new requests at the moment.</p>
+                <p className={styles["no-requests"]}>No new requests at the moment.</p>
             ) : (
-                <ul className="requests-list">
+                <ul className={styles["requests-list"]}>
                     {requests.map((req) => {
                         const customer = req.customer || req;
-                        const workerBooking = req; // for date, status etc.
+                        const workerBooking = req;
 
                         return (
                             <li
-                                className="requests-details-container"
                                 key={req._id}
+                                className={styles["requests-details-container"]}
                                 onClick={() => fetchBookingDetails(req._id)}
-                                style={{ cursor: 'pointer' }}
                             >
-                                <div className="requests-profile">
+                                <div className={styles["requests-profile"]}>
                                     <img
-                                        src={customer.documents?.profilePhoto || customer.profileImage || "/images/male-logo.png"}
+                                        src={
+                                            customer.documents?.profilePhoto ||
+                                            customer.profileImage ||
+                                            "/images/male-logo.png"
+                                        }
                                         alt="Customer"
-                                        className="requests-logo"
+                                        className={styles["requests-logo"]}
                                     />
+
                                     <div>
-                                        <h1 className="person-name">
+                                        <h1 className={styles["person-name"]}>
                                             {customer.fullName || customer.name || "New Customer"}
                                         </h1>
-                                        <div className="requests-person-details">
-                                            <p className="person-work">
+
+                                        <div className={styles["requests-person-details"]}>
+                                            <p className={styles["person-work"]}>
                                                 {req.service || "Service Requested"}
                                             </p>
                                         </div>
-                                        <div className="requests-person-details">
-                                            <p className="person-location">
+
+                                        <div className={styles["requests-person-details"]}>
+                                            <p className={styles["person-location"]}>
                                                 {req.address || customer.location || "Location not provided"}
                                             </p>
                                         </div>
@@ -143,25 +160,38 @@ const Requests = () => {
                                 </div>
 
                                 <div>
-                                    <h1 className="requests-date">
-                                        {workerBooking.date ? new Date(workerBooking.date).toLocaleDateString() : 
-                                         workerBooking.createdAt ? new Date(workerBooking.createdAt).toLocaleDateString() : "Today"}
+                                    <h1 className={styles["requests-date"]}>
+                                        {workerBooking.date
+                                            ? new Date(workerBooking.date).toLocaleDateString()
+                                            : workerBooking.createdAt
+                                            ? new Date(workerBooking.createdAt).toLocaleDateString()
+                                            : "Today"}
                                     </h1>
-                                    <div className="request-money-container">
-                                        <p className="requests-value">₹{req.amount || "N/A"}</p>
+
+                                    <div className={styles["request-money-container"]}>
+                                        <p className={styles["requests-value"]}>
+                                            ₹{req.amount || "N/A"}
+                                        </p>
                                     </div>
                                 </div>
 
-                                <div className="requests-button-container">
+                                <div className={styles["requests-button-container"]}>
                                     <button
-                                        className="accept accept-button"
-                                        onClick={(e) => { e.stopPropagation(); handleAction(req._id, 'accept'); }}
+                                        className={`${styles["accept"]} ${styles["accept-button"]}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleAction(req._id, 'accept');
+                                        }}
                                     >
                                         Accept
                                     </button>
+
                                     <button
-                                        className="reject reject-button"
-                                        onClick={(e) => { e.stopPropagation(); handleAction(req._id, 'reject'); }}
+                                        className={`${styles["reject"]} ${styles["reject-button"]}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleAction(req._id, 'reject');
+                                        }}
                                     >
                                         Reject
                                     </button>
@@ -172,25 +202,58 @@ const Requests = () => {
                 </ul>
             )}
 
-            {/* Modal */}
             {selectedRequest && (
-                <div className="modal-overlay" onClick={() => setSelectedRequest(null)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                <div
+                    className={styles["modal-overlay"]}
+                    onClick={() => setSelectedRequest(null)}
+                >
+                    <div
+                        className={styles["modal-content"]}
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <h2>Booking Details</h2>
-                        {detailLoading ? <p>Loading...</p> : (
-                            <>
-                                <p><strong>Customer:</strong> {selectedRequest.customer?.fullName || selectedRequest.fullName}</p>
-                                <p><strong>Date:</strong> {new Date(selectedRequest.date).toLocaleDateString()}</p>
-                                <p><strong>Status:</strong> {selectedRequest.status}</p>
 
-                                <div className="modal-buttons">
-                                    <button className="accept accept-button" onClick={() => handleAction(selectedRequest._id, 'accept')}>
+                        {detailLoading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            <>
+                                <p>
+                                    <strong>Customer:</strong>{" "}
+                                    {selectedRequest.customer?.fullName ||
+                                        selectedRequest.fullName}
+                                </p>
+                                <p>
+                                    <strong>Date:</strong>{" "}
+                                    {new Date(selectedRequest.date).toLocaleDateString()}
+                                </p>
+                                <p>
+                                    <strong>Status:</strong> {selectedRequest.status}
+                                </p>
+
+                                <div className={styles["modal-buttons"]}>
+                                    <button
+                                        className={`${styles["accept"]} ${styles["accept-button"]}`}
+                                        onClick={() =>
+                                            handleAction(selectedRequest._id, 'accept')
+                                        }
+                                    >
                                         Accept
                                     </button>
-                                    <button className="reject reject-button" onClick={() => handleAction(selectedRequest._id, 'reject')}>
+
+                                    <button
+                                        className={`${styles["reject"]} ${styles["reject-button"]}`}
+                                        onClick={() =>
+                                            handleAction(selectedRequest._id, 'reject')
+                                        }
+                                    >
                                         Reject
                                     </button>
-                                    <button onClick={() => setSelectedRequest(null)}>Close</button>
+
+                                    <button
+                                        onClick={() => setSelectedRequest(null)}
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </>
                         )}

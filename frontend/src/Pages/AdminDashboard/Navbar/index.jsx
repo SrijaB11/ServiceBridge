@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "./index.css";
+import styles from "./index.module.css";
 
 const AdminNavBar = () => {
   const navigate = useNavigate();
@@ -11,86 +11,155 @@ const AdminNavBar = () => {
   };
 
   return (
-    <nav className="navbar-container1">
-      <div className="navbar-container2">
-        <img src="/images/service-bridge-logo.png" alt="logo" className="webiste-logo" />
+    <nav className={styles["navbar-container1"]}>
+      <div className={styles["navbar-container2"]}>
+        <img
+          src="/images/service-bridge-logo.png"
+          alt="logo"
+          className={styles["webiste-logo"]}
+        />
+
         <div>
-          <h1 className="navbar-title">Service Bridge</h1>
-          <p className="navbar-prfile">Admin</p>
+          <h1 className={styles["navbar-title"]}>Service Bridge</h1>
+          <p className={styles["navbar-prfile"]}>Admin</p>
         </div>
       </div>
 
-      <ul className="navbar-list">
-        <li className="navbar-list-items">
-          <NavLink 
-            end 
-            to="/admin" 
-            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+      <ul className={styles["navbar-list"]}>
+        <li className={styles["navbar-list-items"]}>
+          <NavLink
+            end
+            to="/admin"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["navbar-tabs-container"]} ${styles.active}`
+                : styles["navbar-tabs-container"]
+            }
           >
-            <img src="/images/dashboard.png" alt="dashboard" className="navbar-logo" />
-            <p className="tab-name">Dashboard</p>
+            <img
+              src="/images/dashboard.png"
+              alt="dashboard"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Dashboard</p>
           </NavLink>
         </li>
 
-        <li className="navbar-list-items">
-          <NavLink 
-            to="/admin/users" 
-            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+        <li className={styles["navbar-list-items"]}>
+          <NavLink
+            to="/admin/users"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["navbar-tabs-container"]} ${styles.active}`
+                : styles["navbar-tabs-container"]
+            }
           >
-            <img src="/images/users.png" alt="total users" className="navbar-logo" />
-            <p className="tab-name">Users</p>
+            <img
+              src="/images/users.png"
+              alt="total users"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Users</p>
           </NavLink>
         </li>
 
-        {/* ✅ NEW: Workers Link */}
-        <li className="navbar-list-items">
-          <NavLink 
-            to="/admin/workers" 
-            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+        <li className={styles["navbar-list-items"]}>
+          <NavLink
+            to="/admin/workers"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["navbar-tabs-container"]} ${styles.active}`
+                : styles["navbar-tabs-container"]
+            }
           >
-            <img src="/images/workers.png" alt="workers" className="navbar-logo" />
-            <p className="tab-name">Workers</p>
+            <img
+              src="/images/workers.png"
+              alt="workers"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Workers</p>
           </NavLink>
         </li>
 
-        <li className="navbar-list-items">
-          <NavLink 
-            to="/admin/recent-requests" 
-            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+        <li className={styles["navbar-list-items"]}>
+          <NavLink
+            to="/admin/recent-requests"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["navbar-tabs-container"]} ${styles.active}`
+                : styles["navbar-tabs-container"]
+            }
           >
-            <img src="/images/requests.png" alt="requests" className="navbar-logo" />
-            <p className="tab-name">Requests</p>
+            <img
+              src="/images/requests.png"
+              alt="requests"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Requests</p>
           </NavLink>
         </li>
 
-        <li className="navbar-list-items">
-          <NavLink 
-            to="/admin/recent-complaints" 
-            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+        <li className={styles["navbar-list-items"]}>
+          <NavLink
+            to="/admin/recent-complaints"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["navbar-tabs-container"]} ${styles.active}`
+                : styles["navbar-tabs-container"]
+            }
           >
-            <img src="/images/complaints.png" alt="complaints" className="navbar-logo" />
-            <p className="tab-name">Complaints</p>
+            <img
+              src="/images/complaints.png"
+              alt="complaints"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Complaints</p>
           </NavLink>
         </li>
 
-        {/* LOGOUT BUTTON */}
-        <li className="navbar-list-items">
-          <button 
-            onClick={handleLogout} 
-            className="navbar-tabs-container logout-btn" 
-            style={{ background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}
+        <li className={styles["navbar-list-items"]}>
+          <button
+            onClick={handleLogout}
+            className={`${styles["navbar-tabs-container"]} ${styles["logout-btn"]}`}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              width: "100%",
+              textAlign: "left",
+            }}
           >
-            <img src="/images/logout.png" alt="logout" className="navbar-logo" />
-            <p className="tab-name">Logout</p>
+            <img
+              src="/images/logout.png"
+              alt="logout"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Logout</p>
           </button>
         </li>
-        <li className="navbar-list-items">
-          <NavLink 
-            to="/admin/workers/verification" 
-            className={({ isActive }) => isActive ? "navbar-tabs-container active" : "navbar-tabs-container"}
+
+        <li className={styles["navbar-list-items"]}>
+          <NavLink
+            to="/admin/workers/verification"
+            className={({ isActive }) =>
+              isActive
+                ? `${styles["navbar-tabs-container"]} ${styles.active}`
+                : styles["navbar-tabs-container"]
+            }
           >
-            <img src="/images/verification.png" alt="verification" className="navbar-logo" />
-            <p className="tab-name">Verification</p>
+            <img
+              src="/images/verification.png"
+              alt="verification"
+              className={styles["navbar-logo"]}
+            />
+
+            <p className={styles["tab-name"]}>Verification</p>
           </NavLink>
         </li>
       </ul>

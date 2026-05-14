@@ -1,3 +1,5 @@
+
+
 :root {
   --primary: #6366f1;
   --bg: #f1f5f9;
@@ -8,6 +10,7 @@
   --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -15,13 +18,15 @@ body {
   color: var(--text-main);
 }
 
+
+
 .dashboard-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
-/* Header */
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -79,7 +84,7 @@ body {
 
 .icon-action-btn:hover { background: #f8fafc; color: var(--primary); }
 
-/* Grid & Cards */
+
 .grid-layout {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -176,7 +181,7 @@ body {
   cursor: pointer;
 }
 
-/* Modal */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -224,7 +229,7 @@ body {
   cursor: pointer;
 }
 
-/* States */
+
 .status-container {
   height: 80vh;
   display: flex;
@@ -254,3 +259,4 @@ body {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } }
+

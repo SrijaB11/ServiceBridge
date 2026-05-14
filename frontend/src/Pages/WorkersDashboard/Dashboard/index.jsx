@@ -1,7 +1,6 @@
-
-import Requests from "../Requests"
-import ActiveJobDetails from "../History"
-import "./index.css"
+import Requests from "../Requests";
+import ActiveJobDetails from "../History";
+import styles from "./index.module.css";
 
 const WorkersDetails = [
     {
@@ -36,41 +35,75 @@ const WorkersDetails = [
         IncrementIcon:"/images/increment-arrow.png",
         Status:"5.0% from last month"
     }
-]
+];
 
 const WorkersDashboard = () => {
     return (
-        <div className="app-layout">
-            <div className="main-content">
-                <div className="main">
-                    <ul className="workers-dashboard-container1">
+        <div className={styles["app-layout"]}>
+            <div className={styles["main-content"]}>
+                <div className={styles.main}>
+                    <ul className={styles["workers-dashboard-container1"]}>
                         {WorkersDetails.map((detail) => (
-                            <li className="workers-dashboard-container2" key={detail.UniqueId}>
-                                <img src={detail.ProfileIcon} alt="profile-icons" className="workers-dashboard-logo"/>
+                            <li
+                                className={styles["workers-dashboard-container2"]}
+                                key={detail.UniqueId}
+                            >
+                                <img
+                                    src={detail.ProfileIcon}
+                                    alt="profile-icons"
+                                    className={styles["workers-dashboard-logo"]}
+                                />
+
                                 <div>
-                                    <h1 className="title">{detail.Title}</h1>
+                                    <h1 className={styles.title}>
+                                        {detail.Title}
+                                    </h1>
+
                                     {detail.Title === "Earnings" ? (
-                                        <div className="rupee-container">
-                                            <img src="/images/rupee-symbol.png" alt="rupee" className="rupee-symbol"/>
-                                            <h1 className="value">{detail.Value}</h1>
+                                        <div className={styles["rupee-container"]}>
+                                            <img
+                                                src="/images/rupee-symbol.png"
+                                                alt="rupee"
+                                                className={styles["rupee-symbol"]}
+                                            />
+
+                                            <h1 className={styles.value}>
+                                                {detail.Value}
+                                            </h1>
                                         </div>
                                     ) : (
-                                        <h1 className="value">{detail.Value}</h1>
+                                        <h1 className={styles.value}>
+                                            {detail.Value}
+                                        </h1>
                                     )}
-                                    <div className="workers-dashboard-details-container">
-                                        <img src={detail.IncrementIcon} alt="increment" className="increment"/>
-                                        <p className="status">{detail.Status}</p>
+
+                                    <div
+                                        className={
+                                            styles["workers-dashboard-details-container"]
+                                        }
+                                    >
+                                        <img
+                                            src={detail.IncrementIcon}
+                                            alt="increment"
+                                            className={styles.increment}
+                                        />
+
+                                        <p className={styles.status}>
+                                            {detail.Status}
+                                        </p>
                                     </div>
                                 </div>
                             </li>
                         ))}
                     </ul>
+
                     <Requests />
+
                     <ActiveJobDetails />
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default WorkersDashboard
+export default WorkersDashboard;

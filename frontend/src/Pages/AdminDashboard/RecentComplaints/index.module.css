@@ -1,11 +1,12 @@
 
-.active-jobs-container {
+
+.recent-complaints-container {
   padding:30px;
   border-radius:10px;
   box-shadow:0px 4px 16px 0px;
 }
 
-.active-jobs-header-container {
+.recent-complaints-header-container {
   display:flex;
   flex-direction:row;
   justify-content:space-between;
@@ -13,12 +14,12 @@
   margin-bottom:20px;
 }
 
-.active-jobs-title {
+.recent-complaints-title {
   font-size:16px;
   color:black;
 }
 
-.active-jobs-details {
+.recent-complaints-details {
   font-size:14px;
   color:black;
   cursor:pointer;
@@ -28,11 +29,11 @@
   width:2px solid navy;
 }
 
-.active-jobs-container {
+.recent-complaints-container {
   list-style-type:none;
 }
 
-.acitve-jobs-list-container {
+.recent-complaints-list-container {
     padding:10px;
     display:flex;
     flex-direction:row;
@@ -44,24 +45,33 @@
     box-shadow:0px 4px 16px 0px;
 }
 
-.job-id {
-    font-size:16px;
+.complaint-details1 {
+  display:flex;
+  flex-direction:row;
+}
+
+.complaint-id {
+    font-size:14px;
     color:black;
 }
 
-.employee-name {
-    font-size:16px;
-    color:black;
+.complaint-name {
+    font-size:14px;
+    color:#787878;
 }
 
-.role {
-    font-size:16px;
-    color:black;
+.complaint-title {
+  font-size:14px;
+  color:gray;
 }
 
-.request-status {
+.complaint-date {
+  font-size:14px;
+  color:#A8A8A8;
+}
+
+.complaint-request-status {
     all:unset;
-    border:2px solid silver;
     height:30px;
     width:120px;
     font-size:14px;
@@ -70,7 +80,3 @@
     border-radius:6px;
 }
 
-.request-date {
-    font-size:16px;
-    color:black;
-}

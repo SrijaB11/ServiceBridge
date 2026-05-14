@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "./index.css";
+import styles from "./index.module.css";
 
 const Profile = () => {
   const [worker, setWorker] = useState(null);
@@ -16,20 +16,14 @@ const Profile = () => {
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('token');
-      const workerId = localStorage.getItem('workerId'); 
+      const workerId = localStorage.getItem('workerId');
 
       if (!workerId) {
         setError("Worker ID not found. Please login again.");
         return;
       }
 
-      
       const response = await axios.get('http://localhost:5000/admin/workers', {
-        data: {
-          email: "harshap3112@gmail.com",
-          password: "123456"
-        },
         headers: {
           'Content-Type': 'application/json',
         }
@@ -52,72 +46,86 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div className="profile-loading">Loading your profile...</div>;
+    return <div className={styles["profile-loading"]}>Loading your profile...</div>;
   }
 
   if (error) {
     return (
-      <div className="profile-error">
+      <div className={styles["profile-error"]}>
         <h3>Oops!</h3>
         <p>{error}</p>
-        <button onClick={fetchMyProfile} className="retry-btn">Try Again</button>
+        <button onClick={fetchMyProfile} className={styles["retry-btn"]}>
+          Try Again
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
+    <div className={styles["profile-container"]}>
+      <div className={styles["profile-header"]}>
         <h1>My Profile</h1>
-        <button onClick={fetchMyProfile} className="refresh-btn"><img src="" alt=""/></button>
+        <button onClick={fetchMyProfile} className={styles["refresh-btn"]}>
+          Refresh
+        </button>
       </div>
 
-      <div className="profile-card">
-        
-        <img src="" alt="" className="profile-avatar"/>
+      <div className={styles["profile-card"]}>
+        <div className={styles["profile-avatar"]} />
 
-        <div className="profile-info">
-          <h2 className="worker-name">{worker.fullName}</h2>
-          <p className="worker-role">{worker.role?.toUpperCase()}<img src="" alt=""/>{worker.services}</p>
+        <div className={styles["profile-info"]}>
+          <h2 className={styles["worker-name"]}>{worker.fullName}</h2>
+          <p className={styles["worker-role"]}>
+            {worker.role?.toUpperCase()} - {worker.services}
+          </p>
         </div>
 
-        <div className="status-badge active">
+        <div className={styles["status-badge"]}>
           Active Worker
         </div>
 
-        <div className="profile-details-grid">
-          <div className="detail-row">
-            <span className="label">Email</span>
-            <span className="value">{worker.email}</span>
+        <div className={styles["profile-details-grid"]}>
+          <div className={styles["detail-row"]}>
+            <span className={styles["label"]}>Email</span>
+            <span className={styles["value"]}>{worker.email}</span>
           </div>
-          <div className="detail-row">
-            <span className="label">Phone</span>
-            <span className="value">{worker.phone}</span>
+
+          <div className={styles["detail-row"]}>
+            <span className={styles["label"]}>Phone</span>
+            <span className={styles["value"]}>{worker.phone}</span>
           </div>
-          <div className="detail-row">
-            <span className="label">Location</span>
-            <span className="value">{worker.location}</span>
+
+          <div className={styles["detail-row"]}>
+            <span className={styles["label"]}>Location</span>
+            <span className={styles["value"]}>{worker.location}</span>
           </div>
-          <div className="detail-row">
-            <span className="label">Address</span>
-            <span className="value">{worker.address || "Not Provided"}</span>
+
+          <div className={styles["detail-row"]}>
+            <span className={styles["label"]}>Address</span>
+            <span className={styles["value"]}>
+              {worker.address || "Not Provided"}
+            </span>
           </div>
-          <div className="detail-row">
-            <span className="label">Service</span>
-            <span className="value">{worker.services}</span>
+
+          <div className={styles["detail-row"]}>
+            <span className={styles["label"]}>Service</span>
+            <span className={styles["value"]}>{worker.services}</span>
           </div>
         </div>
 
-        <div className="documents-section">
+        <div className={styles["documents-section"]}>
           <h3>Documents Status</h3>
-          <div className="documents-grid">
-            <div className={`doc-item ${worker.documents?.profilePhoto ? 'uploaded' : ''}`}>
+
+          <div className={styles["documents-grid"]}>
+            <div className={`${styles["doc-item"]} ${worker.documents?.profilePhoto ? styles["uploaded"] : ""}`}>
               Profile Photo
             </div>
-            <div className={`doc-item ${worker.documents?.panCard ? 'uploaded' : ''}`}>
+
+            <div className={`${styles["doc-item"]} ${worker.documents?.panCard ? styles["uploaded"] : ""}`}>
               PAN Card
             </div>
-            <div className={`doc-item ${worker.documents?.skillDoc ? 'uploaded' : ''}`}>
+
+            <div className={`${styles["doc-item"]} ${worker.documents?.skillDoc ? styles["uploaded"] : ""}`}>
               Skill Certificate
             </div>
           </div>

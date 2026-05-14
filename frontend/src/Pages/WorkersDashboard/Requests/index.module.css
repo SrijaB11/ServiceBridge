@@ -150,13 +150,13 @@
   border-color:green;
 }
 
-/* Focus state */
+
 .accept-button:focus {
   outline:none;
   box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* Disabled state */
+
 .accept-button:disabled {
   color:green;
   background-color:transparent;
@@ -203,13 +203,13 @@
   border-color:red;
 }
 
-/* Focus state */
+
 .reject-button:focus {
   outline:none;
   box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* Disabled state */
+
 .reject-button:disabled {
   color:red;
   background-color:transparent;
@@ -217,3 +217,4 @@
   opacity:0.65;
   cursor:not-allowed;
 }
+
