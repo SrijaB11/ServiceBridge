@@ -156,7 +156,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import Complaint from "./Pages/Customer/Complaint";
 import "./App.css";
 
 /* =======================
@@ -202,6 +202,13 @@ import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
+import ComplaintPage from "./components/customer/ComplaintPage";
+import DashboardHome from "./components/customer/DashboardHome";
+import CustomerServices from "./components/customer/CustomerServices";
+import Bookings from "./components/customer/Bookings";
+import History from "./components/customer/History";
+import Profile from "./components/customer/Profile";
+import BookWorkerPage from "./components/customer/BookWorkerPage";
 
 /* =======================
    Loading Component
@@ -282,22 +289,49 @@ export default function App() {
                 <CustomerDashboard />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<DashboardHome />} />
 
-          <Route
-            path="/customer/*"
-            element={
-              <ProtectedRoute role="customer">
-                <CustomerDashboard />
-              </ProtectedRoute>
-            }
-          />
+            <Route path="services" element={<CustomerServices />} />
+
+            <Route path="bookings" element={<Bookings />} />
+
+            <Route path="history" element={<History />} />
+
+            <Route path="complaints" element={<Complaint />} />
+
+            <Route path="profile" element={<Profile />} />
+          </Route>
 
           <Route
             path="/service/:id"
             element={
               <ProtectedRoute role="customer">
                 <ServiceProviders />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/complaint/:bookingId"
+            element={
+              <ProtectedRoute role="customer">
+                <ComplaintPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/complaints"
+            element={
+              <ProtectedRoute role="customer">
+                <Complaint />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/book-worker/:workerId"
+            element={
+              <ProtectedRoute role="customer">
+                <BookWorkerPage />
               </ProtectedRoute>
             }
           />

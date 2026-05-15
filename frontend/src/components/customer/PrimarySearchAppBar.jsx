@@ -51,7 +51,8 @@ export default function PrimarySearchAppBar({
   setActiveTab,
   setSearchService,
 }) {
-  const navigate = useNavigate();
+ 
+  
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 

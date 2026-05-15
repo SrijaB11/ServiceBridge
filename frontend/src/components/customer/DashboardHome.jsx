@@ -1,33 +1,8 @@
 import Services from "../Services";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-
-const services = [
-  {
-    id: "Plumber",
-    title: "Plumbing",
-    desc: "Fix leaks, pipes, and installations",
-    image: "/images/services/plumber.jpg",
-  },
-  {
-    id: "Cleaning",
-    title: "House Cleaning",
-    desc: "Home deep cleaning services",
-    image: "/images/services/cleaning.jpg",
-  },
-  {
-    id: "Electrician",
-    title: "Electrical",
-    desc: "Wiring and electrical repairs",
-    image: "/images/services/electrician.jpg",
-  },
-  {
-    id: "Painting",
-    title: "Painting",
-    desc: "Wall painting & renovation",
-    image: "/images/services/painter.jpg",
-  },
-];
+import CustomerServices from "./CustomerServices";
+import DashboardStats from "./DashboardStats";
 
 function DashboardHome() {
   const navigate = useNavigate();
@@ -46,52 +21,11 @@ function DashboardHome() {
         </div>
 
         {/* QUICK STATS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-            <h2 className="text-xl font-bold">12</h2>
-            <p className="text-gray-500 text-sm">Services Available</p>
-          </div>
-
-          <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-            <h2 className="text-xl font-bold">5+</h2>
-            <p className="text-gray-500 text-sm">Active Workers</p>
-          </div>
-
-          <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-            <h2 className="text-xl font-bold">24/7</h2>
-            <p className="text-gray-500 text-sm">Support</p>
-          </div>
-
-          <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-            <h2 className="text-xl font-bold">4.8★</h2>
-            <p className="text-gray-500 text-sm">User Rating</p>
-          </div>
-        </div>
-
+        <DashboardStats />
         {/* SERVICES */}
         <h2 className="text-xl font-semibold mt-8 mb-4">Explore Services</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {services.map((s) => (
-            <div
-              key={s.id}
-              className="bg-white p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
-              onClick={() => navigate(`/service/${s.id}`)}
-            >
-              <img
-                className="w-40 h-40 object-cover"
-                src={s.image}
-                alt={s.title}
-              />
-              <h3 className="font-semibold mt-2">{s.title}</h3>
-              <p className="text-gray-500 text-sm mt-1">{s.desc}</p>
-
-              <button className="mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">
-                Book Now
-              </button>
-            </div>
-          ))}
-        </div>
+        <CustomerServices />
       </div>
     </div>
   );
