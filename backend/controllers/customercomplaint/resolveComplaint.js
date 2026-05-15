@@ -1,8 +1,8 @@
-const Complaint = require("../../../models/ComplaintModel");
+const Complaint = require("../../models/ComplaintModel");
 
 const resolveComplaint = async (req, res) => {
   try {
-    if (req.role !== "admin") {
+    if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Only admin allowed" });
     }
 

@@ -3,7 +3,7 @@ const Booking = require("../../models/BookingModel");
 
 const addWorkerComplaint = async (req, res) => {
   try {
-    if (req.role !== "worker") {
+    if (req.user.role !== "worker") {
       return res.status(403).json({ message: "Only workers allowed" });
     }
 
@@ -18,7 +18,7 @@ const addWorkerComplaint = async (req, res) => {
       worker: req.user._id,
       customer: booking.customer,
       booking: bookingId,
-      message
+      complaintText: message 
     });
 
     res.status(201).json({ message: "Complaint submitted", complaint });

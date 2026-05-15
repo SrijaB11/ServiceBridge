@@ -1,5 +1,5 @@
-const Complaint = require("../../../models/ComplaintModel");
-const Booking = require("../../../models/BookingModel");
+const Complaint = require("../../models/ComplaintModel");
+const Booking = require("../../models/BookingModel");
 
 
 const addComplaint = async (req, res) => {

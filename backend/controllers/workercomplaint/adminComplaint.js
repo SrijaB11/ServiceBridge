@@ -1,14 +1,14 @@
-const Complaint = require("../../../models/ComplaintModel");
+const Complaint = require("../../models/ComplaintModel");
 
-const getAllComplaints = async (req, res) => {
+const adminComplaint = async (req, res) => {
   try {
-    if (req.role !== "admin") {
+    if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Only admin allowed" });
     }
 
     const complaints = await Complaint.find()
-      .populate("customer", "fullName phone")
       .populate("worker", "fullName phone")
+      .populate("customer", "fullName phone")
       .populate("booking", "service date")
       .sort({ createdAt: -1 });
 
@@ -19,4 +19,4 @@ const getAllComplaints = async (req, res) => {
   }
 };
 
-module.exports = getAllComplaints;
+module.exports =  adminComplaint ;

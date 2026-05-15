@@ -2,11 +2,11 @@ const Complaint = require("../../models/ComplaintModel");
 
 const resolveWorkerComplaints = async (req, res) => {
   try {
-    if (req.role !== "admin") {
+    if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Only admin allowed" });
     }
 
-    const { status, adminResponse } = req.body;
+    const { adminResponse } = req.body;
 
     const complaint = await Complaint.findById(req.params.id);
     if (!complaint) {

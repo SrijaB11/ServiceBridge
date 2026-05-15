@@ -1,8 +1,8 @@
-const Complaint = require("../../../models/ComplaintModel");
+const Complaint = require("../../models/ComplaintModel");
 
 const getCustomerComplaints = async (req, res) => {
   try {
-    if (req.role !== "customer") {
+    if (req.user.role !== "customer") {
       return res.status(403).json({ message: "Only customers allowed" });
     }
 
