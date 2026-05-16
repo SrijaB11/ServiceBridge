@@ -39,7 +39,6 @@ const Worker = () => {
       const response = await axios.get(
         'http://localhost:5000/admin/workers'
       );
-
       if (response.data.success) {
         setWorkers(response.data.data || []);
       }
@@ -52,14 +51,14 @@ const Worker = () => {
     }
   };
 
-  const openEditModal = (worker) => {
-    setCurrentWorker(worker);
+  const openEditModal = (workers) => {
+    setCurrentWorker(workers);
 
     setFormData({
-      fullName: worker.fullName || "",
-      location: worker.location || "",
-      address: worker.address || "",
-      services: worker.services || "",
+      fullName: workers.fullName || "",
+      location: workers.location || "",
+      address: workers.address || "",
+      services: workers.services || "",
     });
 
     setIsEditModalOpen(true);

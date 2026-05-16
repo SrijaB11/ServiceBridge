@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchWorkers } from '../../../redux/slices/workerSlice';
 import styles from "./index.module.css";
 
-const Users = () => {
+const UsersTable = () => {
     const dispatch = useDispatch();
 
     const { workers, loading, error } = useSelector(
@@ -59,46 +59,23 @@ const Users = () => {
                                 key={user._id || user.id || index}
                                 className={styles["table-row"]}
                             >
-                                <td data-label="S.No">
-                                    {index + 1}
-                                </td>
-
-                                <td data-label="Full Name">
+                                <td>{index + 1}</td>
+                                <td>
                                     {user.fullName ||
-                                        user.name ||
-                                        user.full_name ||
-                                        'N/A'}
+                                     user.name ||
+                                     user.full_name ||
+                                     'N/A'}
                                 </td>
-
-                                <td data-label="Email">
-                                    {user.email || 'N/A'}
-                                </td>
-
-                                <td data-label="Phone">
-                                    {user.phone || 'N/A'}
-                                </td>
-
-                                <td data-label="Location">
-                                    {user.location || 'N/A'}
-                                </td>
-
-                                <td data-label="Role">
-                                    <span
-                                        className={`${styles.badge} ${styles["badge-worker"]}`}
-                                    >
+                                <td>{user.email || 'N/A'}</td>
+                                <td>{user.phone || 'N/A'}</td>
+                                <td>{user.location || 'N/A'}</td>
+                                <td>
+                                    <span className={`${styles.badge} ${styles["badge-worker"]}`}>
                                         Worker
                                     </span>
                                 </td>
-
-                                <td data-label="Services">
-                                    {user.services ||
-                                        user.service ||
-                                        'N/A'}
-                                </td>
-
-                                <td data-label="Address">
-                                    {user.address || 'N/A'}
-                                </td>
+                                <td>{user.services || user.service || 'N/A'}</td>
+                                <td>{user.address || 'N/A'}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -112,4 +89,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default UsersTable

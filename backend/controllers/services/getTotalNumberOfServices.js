@@ -1,15 +1,19 @@
-const services = require("../../services/services");
+const Service = require("../../models/ServiceModel");
 
 const getTotalServicesController = async (req, res) => {
   try {
+
+    const totalServices = await Service.countDocuments();
+
     res.status(200).json({
-      message: "Total services fetched successfully",
-      totalServices: services.length,
+      success: true,
+      totalServices,
     });
+
   } catch (error) {
-    //console.log("Total Services Error:", error);
 
     res.status(500).json({
+      success: false,
       message: "Server Error",
     });
   }

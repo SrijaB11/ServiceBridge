@@ -8,15 +8,17 @@ const RecentComplaints = () => {
 
     // Fetch complaints from backend
     useEffect(() => {
+        const JwtToken=localStorage.getItem("token")
         const fetchComplaints = async () => {
             try {
-                const response = await fetch("http://localhost:5000/complaint/worker");
-
+                const response = await fetch("http://localhost:5000/complaint/admin",{method:"GET",headers:{Authorization:`Bearer ${JwtToken}`}});
+                console.log(response)
                 if (!response.ok) {
                     throw new Error("Failed to fetch complaints");
                 }
 
                 const data = await response.json();
+                console.log(data)
                 setComplaints(data);
             } catch (err) {
                 setError(err.message);
@@ -145,8 +147,8 @@ const RecentComplaints = () => {
                 )}
             </ul>
         </div>
-    );
-};
+    )
+}
 
 // Optional: Handle resolve action
 const handleResolve = async (id) => {
