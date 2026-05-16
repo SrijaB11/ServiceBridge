@@ -9,6 +9,7 @@ const workerAvailabilityController = require("../../controllers/booking/workerAv
 const getWorkerRequest = require("../../controllers/booking/getWorkerRequestController");
 const updateBookingStatus = require("../../controllers/booking/updateBookingStatusController");
 const getCustomerBookings = require("../../controllers/booking/workerBookinggetController");
+const admingetAllBookings = require("../../controllers/booking/adminGetsBookingstatusController");
 
 // Customer books
 router.post("/book", authMiddleware, workerBookingController);
@@ -24,5 +25,8 @@ router.put("/:id", authMiddleware, updateBookingStatus);
 
 // Customer sees booking status
 router.get("/customerbookingstatus", authMiddleware, getCustomerBookings);
+
+// Admin gets Customer sees booking status
+router.get("/customerbookingstatusforadmin", authMiddleware, admingetAllBookings);
 
 module.exports = router;

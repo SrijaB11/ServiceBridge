@@ -15,6 +15,8 @@ const workerRegRoutes = require("./routes/register/workerRegRoutes");
 const serviceRoutes = require("./routes/service/serviceRoutes");
 const customerRoutes = require("./routes/customer/customerCrudRoutes");
 const workercomplaintRoutes = require("./routes/complaint/workercomplaintRoutes");
+const appRatingRoutes = require("./routes/apprating/appRating");
+const skillCertificationApprovalRoutes = require("./routes/admin/skillCertificationRoutes");
 
 const app = express();
 
@@ -37,6 +39,8 @@ app.use("/complaint",customercomplaintRoutes);
 app.use("/service", serviceRoutes);
 app.use("/customer", customerRoutes);
 app.use("/complaint", workercomplaintRoutes);
+app.use("/apprating", appRatingRoutes);
+app.use("/admin", skillCertificationApprovalRoutes); 
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
