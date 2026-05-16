@@ -13,30 +13,15 @@ const customerMiddleware = require("../../middlewares/customerMiddleware");
 const router = express.Router();
 
 
-// GET PROFILE
-router.get(
-  "/profile",
-  authMiddleware,
-  customerMiddleware,
-  getCustomerController
-);
+// Get Profile
+router.get("/profile",authMiddleware, customerMiddleware,getCustomerController);
 
 
-// UPDATE PROFILE
-router.put(
-  "/update",
-  authMiddleware,
-  customerMiddleware,
-  updateCustomerController
-);
+// Update Profile
+router.put("/update",authMiddleware,customerMiddleware,updateCustomerController);
 
 
-// DELETE ACCOUNT
-router.delete(
-  "/delete",
-  authMiddleware,
-  customerMiddleware,
-  deleteCustomerController
-);
+// Delete Account
+router.delete("/delete",authMiddleware,customerMiddleware,deleteCustomerController);
 
 module.exports = router;

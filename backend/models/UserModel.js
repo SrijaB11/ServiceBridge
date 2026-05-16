@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
+    workerVerificationStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+
     services: {
       type: [String],
       default: [],

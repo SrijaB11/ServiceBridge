@@ -186,11 +186,11 @@ const ServiceProviders = lazy(
    Worker Components
 ======================= */
 
-import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
-import ActiveJobs from "./Pages/WorkersDashboard/ActiveJobs";
-import Requests from "./Pages/WorkersDashboard/Requests";
-import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
-import WorkerHeader from "./Pages/WorkersDashboard/Header";
+// import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+// import History from "./Pages/WorkersDashboard/History";
+// import Requests from "./Pages/WorkersDashboard/Requests";
+// import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
+// import WorkerHeader from "./Pages/WorkersDashboard/Header";
 
 /* =======================
    Admin Components
@@ -202,6 +202,10 @@ import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
+
+import Worker from "./Pages/AdminDashboard/Worker"
+import Certifications from "./Pages/AdminDashboard/Certifications";
+
 import ComplaintPage from "./components/customer/ComplaintPage";
 import DashboardHome from "./components/customer/DashboardHome";
 import CustomerServices from "./components/customer/CustomerServices";
@@ -209,6 +213,7 @@ import Bookings from "./components/customer/Bookings";
 import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
+
 
 /* =======================
    Loading Component
@@ -349,11 +354,11 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<WorkersDashboard />} />
+            {/* <Route index element={<WorkersDashboard />} />
 
             <Route path="requests" element={<Requests />} />
 
-            <Route path="active-jobs" element={<ActiveJobs />} />
+            <Route path="history" element={<History />} />
 
             <Route path="earnings" element={<div>Earnings Page</div>} />
 
@@ -361,7 +366,7 @@ export default function App() {
 
             <Route path="profile" element={<div>Profile Page</div>} />
 
-            <Route path="logout" element={<div>Logging out...</div>} />
+            <Route path="logout" element={<div>Logging out...</div>} /> */}
           </Route>
 
           {/* --- Admin Routes --- */}
@@ -382,7 +387,9 @@ export default function App() {
 
             <Route path="recent-complaints" element={<RecentComplaints />} />
 
-            <Route path="active-jobs" element={<div>Admin Workers View</div>} />
+            <Route path="workers" element={<Worker/>} />
+
+            <Route path="workers/verification" element={<Certifications />} />
 
             <Route path="reviews" element={<div>Companies/Reviews View</div>} />
 

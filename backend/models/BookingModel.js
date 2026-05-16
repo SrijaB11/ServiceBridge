@@ -17,7 +17,7 @@ const bookingSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "accepted", "rejected","completed"],
+    enum: ["pending", "accepted", "rejected","completed","cancelled"],
     default: "pending"
   },
   paymentStatus: {
@@ -25,9 +25,12 @@ const bookingSchema = new mongoose.Schema({
     enum: ["pending", "paid", "failed"],
     default: "pending"
   },
+  cancelledAt: {
+    type: Date,
+  },  
   orderId: String,
   paymentId: String,
-  amount: Number
+  amount: Number,
 }, { timestamps: true });
 
-module.exports = mongoose.model("Booking", bookingSchema);
+module.exports = mongoose.model("Booking", bookingSchema);  
