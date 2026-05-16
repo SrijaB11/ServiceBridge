@@ -235,7 +235,7 @@ function WhyChoose() {
 
                           <Typography
                             sx={{
-                              color: "#6b7280",
+                              color: "#111113",
                               lineHeight: 1.8,
                               fontSize: "0.92rem",
                             }}

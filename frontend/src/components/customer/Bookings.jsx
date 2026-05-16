@@ -1,33 +1,13 @@
-// function Bookings() {
-//   const bookings = [
-//     { service: "Electrician", date: "10 Apr 2026", status: "Pending" },
-//     { service: "Plumber", date: "12 Apr 2026", status: "Completed" },
-//   ];
-
-//   return (
-//     <div className="bg-white p-4 rounded shadow">
-//       {bookings.map((b, i) => (
-//         <div key={i} className="border-b py-2">
-//           <p>{b.service}</p>
-//           <p className="text-sm text-gray-500">{b.date}</p>
-//           <span className="text-green-500">{b.status}</span>
-//         </div>
-//       ))}
-//     </div>
-//   );
-
-// }
-
-// export default Bookings;
 import { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
 
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   /* FETCH BOOKINGS */
   useEffect(() => {
     fetchBookings();
@@ -119,7 +99,8 @@ function Bookings() {
             {/* WORKER INFO */}
             <div className="mt-6 flex items-center gap-4">
               <img
-                src="https://i.pravatar.cc/150?img=12"
+                // src="https://i.pravatar.cc/150?img=12"
+                src=""
                 alt="worker"
                 className="w-16 h-16 rounded-full object-cover"
               />
@@ -145,7 +126,7 @@ function Bookings() {
             </div>
 
             {/* FOOTER */}
-            <div className="mt-6 pt-4 border-t flex justify-between items-center">
+            <div className="mt-6 pt-4 border-t flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
               <p className="text-sm text-gray-500">
                 Created:
                 <span className="ml-1 text-gray-700">
@@ -153,9 +134,20 @@ function Bookings() {
                 </span>
               </p>
 
-              <button className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl transition">
-                View Details
-              </button>
+              <div className="flex gap-3">
+                <button
+                  disabled={booking.status !== "accepted"}
+                  onClick={() => navigate(`/complaint/${booking._id}`)}
+                  className={`px-5 py-2 rounded-xl text-white transition
+      ${
+        booking.status === "accepted"
+          ? "bg-red-500 hover:bg-red-600"
+          : "bg-gray-300 cursor-not-allowed"
+      }`}
+                >
+                  Raise Complaint
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -165,3 +157,111 @@ function Bookings() {
 }
 
 export default Bookings;
+
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+// import dayjs from "dayjs";
+
+// function Bookings() {
+//   const [bookings, setBookings] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [expandedId, setExpandedId] = useState(null);
+
+//   useEffect(() => {
+//     fetchBookings();
+//   }, []);
+
+//   const fetchBookings = async () => {
+//     try {
+//       setLoading(true);
+
+//       const token = localStorage.getItem("token");
+
+//       const res = await axios.get(
+//         "http://localhost:5000/booking/customerbookingstatus",
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         },
+//       );
+
+//       setBookings(res.data);
+//     } catch (error) {
+//       console.log(error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   if (loading) {
+//     return <div className="p-6 bg-white rounded-xl">Loading bookings...</div>;
+//   }
+
+//   return (
+//     <div className="p-6">
+//       <h2 className="text-3xl font-bold mb-6">My Bookings</h2>
+
+//       {bookings.length === 0 ? (
+//         <div className="text-center text-gray-500">No bookings found</div>
+//       ) : (
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//           {bookings.map((booking) => {
+//             const isOpen = expandedId === booking._id;
+
+//             return (
+//               <div
+//                 key={booking._id}
+//                 className="bg-white rounded-2xl p-6 shadow-sm"
+//               >
+//                 {/* BASIC INFO */}
+//                 <h3 className="text-xl font-bold text-gray-800">
+//                   {booking.worker?.services?.[0] || "Service"}
+//                 </h3>
+
+//                 <p className="text-sm text-gray-500">
+//                   ID: {booking._id.slice(-6)}
+//                 </p>
+
+//                 <p className="text-sm text-gray-500">
+//                   {dayjs(booking.date).format("DD MMM YYYY")}
+//                 </p>
+
+//                 {/* VIEW BUTTON */}
+//                 <button
+//                   onClick={() => setExpandedId(isOpen ? null : booking._id)}
+//                   className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl"
+//                 >
+//                   {isOpen ? "Hide Details" : "View Details"}
+//                 </button>
+
+//                 {/* EXPANDED DETAILS */}
+//                 {isOpen && (
+//                   <div className="mt-5 border-t pt-4 flex items-center gap-4">
+//                     <img
+//                       src={booking.worker?.image || "https://i.pravatar.cc/150"}
+//                       alt="worker"
+//                       className="w-16 h-16 rounded-full object-cover"
+//                     />
+
+//                     <div>
+//                       <h4 className="font-semibold text-gray-800">
+//                         {booking.worker?.fullName}
+//                       </h4>
+//                       <p className="text-sm text-gray-500">
+//                         {booking.worker?.email}
+//                       </p>
+//                       <p className="text-sm text-gray-500">
+//                         {booking.worker?.phone}
+//                       </p>
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+//             );
+//           })}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Bookings;

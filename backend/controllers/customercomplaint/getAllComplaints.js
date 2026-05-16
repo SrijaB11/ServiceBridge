@@ -1,12 +1,13 @@
 const Complaint = require("../../models/ComplaintModel");
 
-const getCustomerComplaints = async (req, res) => {
+const getAllComplaints = async (req, res) => {
   try {
-    if (req.role !== "customer") {
-      return res.status(403).json({ message: "Only customers allowed" });
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Only admin allowed" }); 
     }
 
-    const complaints = await Complaint.find({ customer: req.user._id })
+    const complaints = await Complaint.find()
+      .populate("customer", "fullName phone")
       .populate("worker", "fullName phone")
       .populate("booking", "service date")
       .sort({ createdAt: -1 });
@@ -18,4 +19,4 @@ const getCustomerComplaints = async (req, res) => {
   }
 };
 
-module.exports = getCustomerComplaints;
+module.exports = getAllComplaints;

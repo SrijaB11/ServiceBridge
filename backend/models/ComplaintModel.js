@@ -25,6 +25,16 @@ const complaintSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "in_review", "resolved"],
       default: "pending"
+    },
+    adminResponse: {
+      type: String
+    },
+    resolvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users"
+    },
+    resolvedAt: {
+      type: Date
     }
   },
   { timestamps: true }

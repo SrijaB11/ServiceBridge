@@ -3,10 +3,11 @@ const router = express.Router();
 
 const authMiddleware = require("../../middlewares/authMiddleware");
 
-const addComplaint = require("../../controllers/complaint/addComplaintController");
-const getAllComplaints = require("../../controllers/complaint/getAllComplaints");
-const resolveComplaint = require("../../controllers/complaint/resolveComplaint");
-const getCustomerComplaints = require("../../controllers/complaint/getCustomerComplaints");
+const addComplaint = require("../../controllers/customercomplaint/addComplaintController");
+const getAllComplaints = require("../../controllers/customercomplaint/getAllComplaints");
+const resolveComplaint = require("../../controllers/customercomplaint/resolveComplaint");
+const getCustomerComplaints = require("../../controllers/customercomplaint/getCustomerComplaints");
+
 
 // customer gives complaint
 router.post("/add", authMiddleware, addComplaint);
@@ -14,10 +15,11 @@ router.post("/add", authMiddleware, addComplaint);
 // admin views all complaints
 router.get("/admin", authMiddleware, getAllComplaints);
 
-// admin resolves complaint
+// admin resolve complaints
 router.put("/admin/:complaintId", authMiddleware, resolveComplaint);
 
-// customer checks complaint updates
+// customer checks all complaints
 router.get("/customer", authMiddleware, getCustomerComplaints);
+
 
 module.exports = router;
