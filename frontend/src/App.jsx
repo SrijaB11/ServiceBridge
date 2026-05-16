@@ -202,10 +202,10 @@ import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
-<<<<<<< HEAD
+
 import Worker from "./Pages/AdminDashboard/Worker"
 import Certifications from "./Pages/AdminDashboard/Certifications";
-=======
+
 import ComplaintPage from "./components/customer/ComplaintPage";
 import DashboardHome from "./components/customer/DashboardHome";
 import CustomerServices from "./components/customer/CustomerServices";
@@ -213,7 +213,7 @@ import Bookings from "./components/customer/Bookings";
 import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
->>>>>>> 7397d41c4ea2592b1de2a45abc987ed0a33a6d73
+
 
 /* =======================
    Loading Component
