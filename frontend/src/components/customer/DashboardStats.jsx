@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Star } from "lucide-react";
 
 function DashboardStats() {
   const [stats, setStats] = useState({
     totalServices: 0,
     totalWorkers: 0,
     totalBookings: 0,
-    avgRating: 0,
+    avgRating: 4.8,
   });
 
   const [loading, setLoading] = useState(true);
@@ -17,9 +18,18 @@ function DashboardStats() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/dashboard/stats");
+      const [servicesRes, bookingsRes, workersRes] = await Promise.all([
+        axios.get("http://localhost:5000/service/totalServices"),
+        axios.get("http://localhost:5000/bookings/totalbookings"),
+        axios.get("http://localhost:5000/workers/totalworkers"),
+      ]);
 
-      setStats(res.data);
+      setStats({
+        totalServices: servicesRes.data.totalServices,
+        totalBookings: bookingsRes.data.totalBookings,
+        totalWorkers: workersRes.data.totalWorkers,
+        avgRating: 4.8,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -54,9 +64,12 @@ function DashboardStats() {
       </div>
 
       {/* RATING */}
-      <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-        <h2 className="text-xl font-bold">{stats.avgRating}★</h2>
-        <p className="text-gray-500 text-sm">Rating</p>
+      <div className="bg-white p-4 rounded-xl shadow-sm text-center flex flex-col items-center">
+        <div className="flex items-center gap-1">
+          <h2 className="text-xl font-bold">{stats.avgRating}</h2>
+          <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+        </div>
+        <p className="text-gray-500 text-sm">Average Rating</p>
       </div>
     </div>
   );

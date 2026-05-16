@@ -316,9 +316,12 @@ export default function RegisterForm({
               <button
                 onClick={handleSendOtp}
                 disabled={loading}
-                className="h-12 px-5 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 transition-all duration-200 whitespace-nowrap"
+                className="h-12 px-5 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 transition-all duration-200 whitespace-nowrap flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                Send OTP
+                {loading && (
+                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                {loading ? "Sending..." : "Send OTP"}
               </button>
             )}
           </div>
