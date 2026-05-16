@@ -3,9 +3,8 @@ const router = express.Router();
 
 const authMiddleware = require("../../middlewares/authMiddleware");
 
-const gettotalWorkers = require("../../controllers/totalworkers/gettotalWorkers");
+const createOrder = require("../../controllers/payment/createOrder");
 
-
-router.get("/totalworkers", authMiddleware, gettotalWorkers);
+router.post("/create", authMiddleware, createOrder);
 
 module.exports = router;
