@@ -2,10 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../../middlewares/authMiddleware");
+const cancelBooking = require("../../controllers/cancelbooking/cancelBooking");
 
-const gettotalWorkers = require("../../controllers/totalworkers/gettotalWorkers");
-
-
-router.get("/totalworkers", authMiddleware, gettotalWorkers);
+router.put("/cancel/:bookingId", authMiddleware, cancelBooking);
 
 module.exports = router;
