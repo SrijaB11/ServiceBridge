@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../../middlewares/authMiddleware");
+const cancelBooking = require("../../controllers/cancelbooking/cancelBooking");
 
-const createOrder = require("../../controllers/payment/createOrder");
-
-router.post("/create", authMiddleware, createOrder);
+router.put("/cancel/:bookingId", authMiddleware, cancelBooking);
 
 module.exports = router;
