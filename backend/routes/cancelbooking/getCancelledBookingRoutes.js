@@ -2,10 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../../middlewares/authMiddleware");
+const getCancelledBookings = require("../../controllers/cancelbooking/getCancelledBookings");
 
-const gettotalWorkers = require("../../controllers/totalworkers/gettotalWorkers");
 
-
-router.get("/totalworkers", authMiddleware, gettotalWorkers);
+router.get("/cancelled", authMiddleware, getCancelledBookings);
 
 module.exports = router;
