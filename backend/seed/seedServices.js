@@ -18,12 +18,12 @@ const seedServices = async () => {
     // insert new services
     await Service.insertMany(services);
 
-    console.log("Services Seeded Successfully");
+    //console.log("Services Seeded Successfully");
 
     process.exit();
 
   } catch (error) {
-    console.log(error);
+    //console.log(error);
 
     process.exit(1);
   }
