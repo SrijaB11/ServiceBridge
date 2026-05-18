@@ -1,169 +1,122 @@
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import styles from "./index.module.css";
+import {
+  LayoutDashboard,
+  Users,
+  User,
+  ClipboardList,
+  CreditCard,
+  AlertCircle,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+
+const menu = [
+  { name: "Dashboard", path: "/admin", icon: <LayoutDashboard size={20} /> },
+  { name: "Customers", path: "/admin/users", icon: <User size={20} /> },
+  { name: "Workers", path: "/admin/workers", icon: <Users size={20} /> },
+  { name: "Recent Requests", path: "/admin/recent-requests", icon: <Users size={20} /> },
+  { name: "Customer Complaints", path: "/admin/customer-complaints", icon: <AlertCircle size={20} /> },
+  { name: "Worker Complaints", path: "/admin/worker-complaints", icon: <AlertCircle size={20} /> },
+  { name: "Certificate Verification", path: "/admin/workers/verification", icon: <Users size={20} /> },
+  { name: "Bookings", path: "/admin/bookings", icon: <ClipboardList size={20} /> },
+  { name: "Payments", path: "/admin/payments", icon: <CreditCard size={20} /> }
+];
 
 const AdminNavBar = () => {
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    localStorage.clear();
     navigate("/login");
   };
 
   return (
-    <nav className={styles["navbar-container1"]}>
-      <div className={styles["navbar-container2"]}>
-        <img
-          src="/images/service-bridge-logo.png"
-          alt="logo"
-          className={styles["webiste-logo"]}
-        />
-
-        <div>
-          <h1 className={styles["navbar-title"]}>Service Bridge</h1>
-          <p className={styles["navbar-prfile"]}>Admin</p>
-        </div>
+    <>
+      {/* Mobile Top Bar */}
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50">
+        <h1 className="font-bold text-green-600">Admin Panel</h1>
+        <button onClick={() => setOpen(true)}>
+          <Menu size={24} />
+        </button>
       </div>
 
-      <ul className={styles["navbar-list"]}>
-        <li className={styles["navbar-list-items"]}>
-          <NavLink
-            end
-            to="/admin"
-            className={({ isActive }) =>
-              isActive
-                ? `${styles["navbar-tabs-container"]} ${styles.active}`
-                : styles["navbar-tabs-container"]
-            }
-          >
-            <img
-              src="/images/dashboard.png"
-              alt="dashboard"
-              className={styles["navbar-logo"]}
-            />
+      {/* Mobile Overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
-            <p className={styles["tab-name"]}>Dashboard</p>
-          </NavLink>
-        </li>
+      {/* Sidebar - Full White Background */}
+      <aside
+        className={`
+          fixed md:static top-0 left-0 z-50 h-screen w-64
+          bg-white border-r shadow-xl flex flex-col
+          ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          transition-transform duration-300
+        `}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-6 border-b flex-shrink-0">
+          <h2 className="text-2xl font-bold text-green-600">Service Bridge</h2>
+          <button className="md:hidden" onClick={() => setOpen(false)}>
+            <X size={24} />
+          </button>
+        </div>
 
-        <li className={styles["navbar-list-items"]}>
-          <NavLink
-            to="/admin/users"
-            className={({ isActive }) =>
-              isActive
-                ? `${styles["navbar-tabs-container"]} ${styles.active}`
-                : styles["navbar-tabs-container"]
-            }
-          >
-            <img
-              src="/images/users.png"
-              alt="total users"
-              className={styles["navbar-logo"]}
-            />
+        {/* User Info */}
+        <div className="px-5 py-6 border-b flex items-center gap-3 flex-shrink-0">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            className="w-10 h-10 rounded-full"
+            alt="admin"
+          />
+          <div>
+            <h3 className="font-semibold">Admin</h3>
+            <p className="text-xs text-gray-500">System Admin</p>
+          </div>
+        </div>
 
-            <p className={styles["tab-name"]}>Users</p>
-          </NavLink>
-        </li>
+        {/* Menu Items - Scrollable */}
+        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+          {menu.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3.5 rounded-xl text-[15px] font-medium transition-all
+                ${isActive
+                  ? "bg-green-500 text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+                }`
+              }
+            >
+              {item.icon}
+              <span>{item.name}</span>
+            </NavLink>
+          ))}
+        </nav>
 
-        <li className={styles["navbar-list-items"]}>
-          <NavLink
-            to="/admin/workers"
-            className={({ isActive }) =>
-              isActive
-                ? `${styles["navbar-tabs-container"]} ${styles.active}`
-                : styles["navbar-tabs-container"]
-            }
-          >
-            <img
-              src="/images/workers.png"
-              alt="workers"
-              className={styles["navbar-logo"]}
-            />
-
-            <p className={styles["tab-name"]}>Workers</p>
-          </NavLink>
-        </li>
-
-        <li className={styles["navbar-list-items"]}>
-          <NavLink
-            to="/admin/recent-requests"
-            className={({ isActive }) =>
-              isActive
-                ? `${styles["navbar-tabs-container"]} ${styles.active}`
-                : styles["navbar-tabs-container"]
-            }
-          >
-            <img
-              src="/images/requests.png"
-              alt="requests"
-              className={styles["navbar-logo"]}
-            />
-
-            <p className={styles["tab-name"]}>Requests</p>
-          </NavLink>
-        </li>
-
-        <li className={styles["navbar-list-items"]}>
-          <NavLink
-            to="/admin/recent-complaints"
-            className={({ isActive }) =>
-              isActive
-                ? `${styles["navbar-tabs-container"]} ${styles.active}`
-                : styles["navbar-tabs-container"]
-            }
-          >
-            <img
-              src="/images/complaints.png"
-              alt="complaints"
-              className={styles["navbar-logo"]}
-            />
-
-            <p className={styles["tab-name"]}>Complaints</p>
-          </NavLink>
-        </li>
-
-        <li className={styles["navbar-list-items"]}>
+        {/* Logout - Now part of full white background */}
+        <div className="p-4 border-t mt-auto flex-shrink-0 bg-white">
           <button
             onClick={handleLogout}
-            className={`${styles["navbar-tabs-container"]} ${styles["logout-btn"]}`}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              width: "100%",
-              textAlign: "left",
-            }}
+            className="flex items-center justify-center gap-3 w-full 
+                       bg-red-500 hover:bg-red-600 text-white 
+                       py-3.5 rounded-xl transition font-medium"
           >
-            <img
-              src="/images/logout.png"
-              alt="logout"
-              className={styles["navbar-logo"]}
-            />
-
-            <p className={styles["tab-name"]}>Logout</p>
+            <LogOut size={20} />
+            <span>Logout</span>
           </button>
-        </li>
-
-        <li className={styles["navbar-list-items"]}>
-          <NavLink
-            to="/admin/workers/verification"
-            className={({ isActive }) =>
-              isActive
-                ? `${styles["navbar-tabs-container"]} ${styles.active}`
-                : styles["navbar-tabs-container"]
-            }
-          >
-            <img
-              src="/images/verification.png"
-              alt="verification"
-              className={styles["navbar-logo"]}
-            />
-
-            <p className={styles["tab-name"]}>Verification</p>
-          </NavLink>
-        </li>
-      </ul>
-    </nav>
+        </div>
+      </aside>
+    </>
   );
 };
 

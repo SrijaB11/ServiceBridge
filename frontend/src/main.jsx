@@ -5,7 +5,7 @@ import App from "./App.jsx";
 
 // Redux Imports
 import { Provider } from 'react-redux';
-import store from './redux/store';     // Make sure this path is correct
+import store from './redux/store.js';     // Make sure this path is correct
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

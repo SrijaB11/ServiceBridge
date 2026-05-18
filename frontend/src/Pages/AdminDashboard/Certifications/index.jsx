@@ -1,274 +1,214 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import styles from './index.module.css';
+import React, { useState, useEffect } from "react";
+import styles from "./index.module.css";
 
 const WorkerVerification = () => {
-  const [workers, setWorkers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [actionLoading, setActionLoading] = useState(null);
+  const [workersDetailsList, setWorkersDetailsList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetchWorkers();
+    getWorkerDetails();
   }, []);
 
-  const fetchWorkers = async () => {
+  const getWorkerDetails = async () => {
+    const jwtToken = localStorage.getItem("token");
+    if (!jwtToken) return;
+
     try {
-      setLoading(true);
+      const response = await fetch("http://localhost:5000/admin/workers", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      });
 
-      const response = await axios.get(
-        'http://localhost:5000/admin/workers',
-        {
-          data: {
-            email: "harshap3112@gmail.com",
-            password: "123456"
-          },
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const data = await response.json();
 
-      if (response.data.success) {
-        setWorkers(response.data.data || []);
+      if (response.ok) {
+        const updatedWorkersList = data.data.map((worker) => ({
+          workerId: worker._id,
+          workerName: worker.fullName || worker.WorkerName,
+          workerEmail: worker.email,
+          services: worker.services?.[0] || "N/A",
+          profilePicture: worker.profilePhoto,
+          skillCertificate: worker.documents?.skillDoc,
+          panCard: worker.panCard,
+          aadharCard: worker.aadharCard || worker.documents?.aadharCard,
+          workerVerificationStatus: worker.workerVerificationStatus,
+        }));
+
+        setWorkersDetailsList(updatedWorkersList);
       }
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        "Failed to load workers"
-      );
+    } catch (error) {
+      console.error("Error fetching workers:", error);
+    }
+  };
+
+  const hasAllDocuments = (worker) => {
+    return !!(worker.skillCertificate && worker.panCard && worker.aadharCard);
+  };
+
+  const updateWorkerStatus = async (workerId, status, workerName) => {
+    const jwtToken = localStorage.getItem("token");
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("http://localhost:5000/admin/verifyworkerskillcertificates", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify({
+          workerId: workerId,
+          status: status,
+        }),
+      });
+
+      if (response.ok) {
+        setMessage(
+          status === "approved"
+            ? `✅ ${workerName} verified successfully!`
+            : `🚫 ${workerName} has been rejected.`
+        );
+        setWorkersDetailsList((prevList) =>
+          prevList.map((w) =>
+            w.workerId === workerId ? { ...w, workerVerificationStatus: status } : w
+          )
+        );
+      } else {
+        setMessage(`❌ Failed to ${status} worker`);
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage(`❌ Error while ${status === "approved" ? "approving" : "rejecting"}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerify = async (workerId, action) => {
-    if (
-      !window.confirm(
-        `Are you sure you want to ${action} this worker?`
-      )
-    ) return;
+  const handleApprove = (workerId) => {
+    const worker = workersDetailsList.find((w) => w.workerId === workerId);
+    if (!worker) return;
 
-    try {
-      setActionLoading({ id: workerId, action });
-
-      await axios.put(
-        `http://localhost:5000/admin/workers/${workerId}/verify`,
-        {
-          status:
-            action === 'approve'
-              ? 'approved'
-              : 'rejected'
-        }
-      );
-
-      setWorkers((prev) =>
-        prev.map((worker) =>
-          worker._id === workerId
-            ? {
-                ...worker,
-                verificationStatus:
-                  action === 'approve'
-                    ? 'approved'
-                    : 'rejected'
-              }
-            : worker
-        )
-      );
-
-      alert(`Worker ${action}d successfully!`);
-    } catch (err) {
-      alert(
-        err.response?.data?.message ||
-        `Failed to ${action} worker`
-      );
-    } finally {
-      setActionLoading(null);
+    if (!hasAllDocuments(worker)) {
+      setMessage("❌ All documents must be uploaded before approval!");
+      return;
     }
+    updateWorkerStatus(workerId, "approved", worker.workerName);
   };
 
-  const filteredWorkers = workers.filter(
-    (worker) =>
-      worker.fullName
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      worker.services
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
-
-  if (loading) {
-    return (
-      <div className={styles["verification-loading"]}>
-        Loading verification requests...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles["verification-error"]}>
-        {error}
-      </div>
-    );
-  }
+  const handleReject = (workerId) => {
+    const worker = workersDetailsList.find((w) => w.workerId === workerId);
+    if (!worker) return;
+    updateWorkerStatus(workerId, "rejected", worker.workerName);
+  };
 
   return (
-    <div className={styles["verification-container"]}>
-      
-      <div className={styles["verification-header"]}>
-        <h1>Document Verification</h1>
-
-        <div className={styles["search-box"]}>
-          <input
-            type="text"
-            placeholder="Search by name or service..."
-            value={searchTerm}
-            onChange={(e) =>
-              setSearchTerm(e.target.value)
-            }
-            className={styles["search-input"]}
-          />
-
-          <button
-            onClick={fetchWorkers}
-            className={styles["refresh-btn"]}
-          >
-            Refresh
-          </button>
+    <div className={styles.container}>
+      {message && (
+        <div
+          style={{
+            padding: "12px 16px",
+            margin: "10px 0",
+            borderRadius: "6px",
+            background: message.includes("✅") ? "#d4edda" : "#f8d7da",
+            color: message.includes("✅") ? "#155724" : "#721c24",
+            fontWeight: "500",
+          }}
+        >
+          {message}
         </div>
-      </div>
+      )}
 
-      <div className={styles["verification-grid"]}>
-        {filteredWorkers.length === 0 ? (
-          <p className={styles["no-data"]}>
-            No workers pending for verification
-          </p>
-        ) : (
-          filteredWorkers.map((worker) => (
-            <div
-              key={worker._id}
-              className={styles["verification-card"]}
-            >
-              
-              <div className={styles["worker-header-info"]}>
-                <div className={styles.avatar}>
-                  <img src="" alt="" />
-                </div>
+      <ul className={styles["cards-container"]}>
+        {workersDetailsList.map((worker) => {
+          const status = worker.workerVerificationStatus;
+          const isApproved = status === "approved";
+          const isRejected = status === "rejected";
 
-                <div>
-                  <h3>{worker.fullName}</h3>
-
-                  <p>
-                    {worker.services}
-                    <img src="" alt="" />
-                    {worker.location}
-                  </p>
-                </div>
-              </div>
-
-              
-              <div className={styles["documents-section"]}>
-                <h4>Uploaded Documents</h4>
-
-                <div className={styles["document-list"]}>
-                  
-                  {worker.documents?.skillDoc && (
-                    <div className={styles["document-item"]}>
-                      <strong>Skill Certificate:</strong>
-
-                      <a
-                        href={worker.documents.skillDoc}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles["view-link"]}
-                      >
-                        View Document
-                        <img src="" alt="" />
-                      </a>
+          return (
+            <li key={worker.workerId} className={styles["worker-card"]}>
+              <div className={styles["worker-card-body"]}>
+                <div className={styles["worker-header"]}>
+                  {worker.profilePicture ? (
+                    <img
+                      src={`http://localhost:5000/${worker.profilePicture.replace(/\\/g, "/")}`}
+                      alt="Profile"
+                      className={styles["worker-avatar"]}
+                      onError={(e) => (e.target.style.display = "none")}
+                    />
+                  ) : (
+                    <div className={styles["worker-avatar"]}>
+                      {worker.workerName?.charAt(0)?.toUpperCase()}
                     </div>
                   )}
 
-                  
-                  {worker.documents?.panCard && (
-                    <div className={styles["document-item"]}>
-                      <strong>PAN Card:</strong>
+                  <div className={styles["worker-info"]}>
+                    <h3>{worker.workerName}</h3>
+                    <p>{worker.services}</p>
+                  </div>
+                </div>
 
-                      <a
-                        href={worker.documents.panCard}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles["view-link"]}
+                <div className={styles["certificates-section"]}>
+                  <p className={styles["certificates-title"]}>Certificates Uploaded</p>
+                  <div className={styles["certificates-list"]}>
+                    <span className={styles["certificate-badge"]}>Skill Certificate</span>
+                    <span className={styles["certificate-badge"]}>ID Documents</span>
+                    <span className={styles["certificate-badge"]}>Tax Info</span>
+                  </div>
+                </div>
+
+                <div className={styles["action-buttons"]}>
+                  {isApproved ? (
+                    <p style={{ color: "green", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
+                      <CheckIcon /> Verified Successfully
+                    </p>
+                  ) : isRejected ? (
+                    <p style={{ color: "red", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
+                      <XIcon /> Worker Rejected
+                    </p>
+                  ) : (
+                    <>
+                      <button
+                        className={`${styles.btn} ${styles["approve-btn"]}`}
+                        onClick={() => handleApprove(worker.workerId)}
+                        disabled={loading}
+                        style={{ display: "flex", alignItems: "center", gap: "8px" }}
                       >
-                        View Document
-                        <img src="" alt="" />
-                      </a>
-                    </div>
-                  )}
-
-                  
-                  {worker.documents?.profilePhoto && (
-                    <div className={styles["document-item"]}>
-                      <strong>Profile Photo:</strong>
-
-                      <a
-                        href={worker.documents.profilePhoto}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles["view-link"]}
+                        <CheckIcon /> Approve
+                      </button>
+                      <button
+                        className={`${styles.btn} ${styles["reject-btn"]}`}
+                        onClick={() => handleReject(worker.workerId)}
+                        disabled={loading}
+                        style={{ display: "flex", alignItems: "center", gap: "8px" }}
                       >
-                        View Photo
-                        <img src="" alt="" />
-                      </a>
-                    </div>
+                        <XIcon /> Reject
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
-
-              
-              <div className={styles["verification-actions"]}>
-                
-                <button
-                  className={styles["approve-btn"]}
-                  onClick={() =>
-                    handleVerify(
-                      worker._id,
-                      'approve'
-                    )
-                  }
-                  disabled={
-                    actionLoading?.id === worker._id
-                  }
-                >
-                  <img src="" alt="" />
-                  Approve Worker
-                </button>
-
-                
-                <button
-                  className={styles["reject-btn"]}
-                  onClick={() =>
-                    handleVerify(
-                      worker._id,
-                      'reject'
-                    )
-                  }
-                  disabled={
-                    actionLoading?.id === worker._id
-                  }
-                >
-                  <img src="" alt="" />
-                  Reject Worker
-                </button>
-
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
+
+// Internal SVG Components for clean UI
+const CheckIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+);
 
 export default WorkerVerification;
