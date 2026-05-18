@@ -1,6 +1,6 @@
 const Booking = require("../../models/BookingModel");
 
-const cancelBooking = async (req, res) => {
+const customercancelBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
 
@@ -47,4 +47,4 @@ const cancelBooking = async (req, res) => {
   }
 };
 
-module.exports = cancelBooking;
+module.exports = customercancelBooking;
