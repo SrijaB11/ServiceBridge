@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Mail, Lock, Eye, EyeOff, Shield, User, Clock } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -57,12 +58,12 @@ function Login() {
         password,
       });
 
-      const { token, role, user } = res.data;
+      const { token, role, name } = res.data;
 
       // token
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
-      localStorage.setItem("name", user?.fullName || email);
+      localStorage.setItem("name", name);
 
       //  Navigate based on role
       if (role === "customer") {
@@ -140,7 +141,25 @@ function Login() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex-1 bg-white px-6 py-10 sm:px-10 md:px-14 lg:px-16 flex flex-col justify-center">
+        <div className=" relative flex-1 bg-white px-6 py-10 sm:px-10 md:px-14 lg:px-16 flex flex-col justify-center">
+          {/* TOP RIGHT BACK BUTTON  */}
+          {/* <div className="flex justify-end mb-6">
+            <button
+              onClick={() => navigate("/")}
+              className="px-4 py-2 rounded-xl bg-green-50 text-green-600 font-medium border border-green-100 hover:bg-green-100 hover:text-green-700 transition-all duration-200"
+            >
+              ← Back to Home
+            </button>
+          </div> */}
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
+            <button
+              onClick={() => navigate("/")}
+              className="px-4 py-2 rounded-xl bg-green-50 text-green-600 font-medium border border-green-100 hover:bg-green-100 hover:text-green-700 shadow-sm transition-all duration-200"
+            >
+              ← Back to Home
+            </button>
+          </div>
+
           {/* TITLE */}
           <div className="mb-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
@@ -184,7 +203,6 @@ function Login() {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleLogin();

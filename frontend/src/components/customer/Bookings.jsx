@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
@@ -35,7 +36,38 @@ function Bookings() {
       setLoading(false);
     }
   };
+  const cancelBooking = async (bookingId) => {
+    try {
+      const token = localStorage.getItem("token");
 
+      const res = await axios.put(
+        `http://localhost:5000/booking/cancel/${bookingId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log(res.data);
+
+      // UPDATE UI INSTANTLY
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking._id === bookingId
+            ? { ...booking, status: "cancelled" }
+            : booking,
+        ),
+      );
+
+      toast.success("Booking cancelled successfully");
+    } catch (error) {
+      console.log(error);
+
+      toast.error("Failed to cancel booking");
+    }
+  };
   return (
     <div className="p-6">
       {/* TITLE */}
@@ -133,9 +165,66 @@ function Bookings() {
                   {dayjs(booking.createdAt).format("DD MMM YYYY")}
                 </span>
               </p>
-
+              {/* 
               <div className="flex gap-3">
                 <button
+                  disabled={booking.status !== "accepted"}
+                  onClick={() => navigate(`/complaint/${booking._id}`)} */}
+              {/* <div className="flex gap-3 flex-wrap">
+                {/* CANCEL BOOKING */}
+              {/* <button
+                  disabled={
+                    booking.status === "cancelled" ||
+                    booking.status === "completed"
+                  }
+                  onClick={() => cancelBooking(booking._id)}
+                  className={`px-5 py-2 rounded-xl text-white transition ${
+                    booking.status === "cancelled" ||
+                    booking.status === "completed"
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-red-500 hover:bg-red-600"
+                  }`}
+                >
+                  {booking.status === "cancelled"
+                    ? "Cancelled"
+                    : "Cancel Booking"}
+                </button> */}
+              {/* <div className="flex gap-3 flex-wrap"> */}
+              {/* CANCEL BOOKING */}
+              {/* <button
+                  disabled={
+                    booking.status === "cancelled" ||
+                    booking.status === "completed"
+                  }
+                  onClick={() => cancelBooking(booking._id)}
+                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
+                    booking.status === "cancelled" ||
+                    booking.status === "completed"
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-orange-500 hover:bg-orange-600"
+                  }`}
+                >
+                  {booking.status === "cancelled"
+                    ? "Cancelled"
+                    : "Cancel Booking"}
+                </button>
+
+                {/* RAISE COMPLAINT */}
+              {/* <button
+                  disabled={booking.status !== "accepted"}
+                  onClick={() => navigate(`/complaint/${booking._id}`)}
+                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
+                    booking.status === "accepted"
+                      ? "bg-indigo-500 hover:bg-indigo-600"
+                      : "bg-gray-300 cursor-not-allowed"
+                  }`}
+                >
+                  Raise Complaint
+                </button>
+              </div> */}
+
+              {/* COMPLAINT */}
+              {/* <button
                   disabled={booking.status !== "accepted"}
                   onClick={() => navigate(`/complaint/${booking._id}`)}
                   className={`px-5 py-2 rounded-xl text-white transition
@@ -146,6 +235,38 @@ function Bookings() {
       }`}
                 >
                   Raise Complaint
+                </button>
+              </div> */}
+              <div className="flex gap-3 flex-wrap">
+                {/* RAISE COMPLAINT */}
+                <button
+                  disabled={booking.status !== "accepted"}
+                  onClick={() => navigate(`/complaint/${booking._id}`)}
+                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
+                    booking.status === "accepted"
+                      ? "bg-amber-500 hover:bg-amber-600"
+                      : "bg-gray-300 cursor-not-allowed"
+                  }`}
+                >
+                  Raise Complaint
+                </button>
+                {/* CANCEL BOOKING */}
+                <button
+                  disabled={
+                    booking.status === "cancelled" ||
+                    booking.status === "completed"
+                  }
+                  onClick={() => cancelBooking(booking._id)}
+                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
+                    booking.status === "cancelled" ||
+                    booking.status === "completed"
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-red-500 hover:bg-red-600"
+                  }`}
+                >
+                  {booking.status === "cancelled"
+                    ? "Cancelled"
+                    : "Cancel Booking"}
                 </button>
               </div>
             </div>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Star } from "lucide-react";
 
 function DashboardStats() {
   const [stats, setStats] = useState({
     totalServices: 0,
     totalWorkers: 0,
     totalBookings: 0,
-    avgRating: 0,
+    avgRating: 4.8,
   });
 
   const [loading, setLoading] = useState(true);
@@ -17,11 +18,44 @@ function DashboardStats() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/dashboard/stats");
+      const token = localStorage.getItem("token");
 
-      setStats(res.data);
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      // Individual API calls with fallback
+      const servicesPromise = axios
+        .get("http://localhost:5000/service/totalServices", { headers })
+        .catch(() => ({
+          data: { totalServices: 0 },
+        }));
+
+      const bookingsPromise = axios
+        .get("http://localhost:5000/bookings/totalbookings", { headers })
+        .catch(() => ({
+          data: { totalBookings: 0 },
+        }));
+
+      // const workersPromise = axios
+      //   .get("http://localhost:5000/workers/totalworkers", { headers })
+      //   .catch(() => ({
+      //     data: { totalWorkers: 0 },
+      //   }));
+
+      const [servicesRes, bookingsRes] = await Promise.all([
+        servicesPromise,
+        bookingsPromise,
+      ]);
+
+      setStats({
+        totalServices: servicesRes.data.totalServices || 0,
+        totalBookings: bookingsRes.data.totalBookings || 0,
+        totalWorkers: 22,
+        avgRating: 4.8,
+      });
     } catch (error) {
-      console.log(error);
+      console.log("Dashboard stats error:", error);
     } finally {
       setLoading(false);
     }
@@ -54,9 +88,13 @@ function DashboardStats() {
       </div>
 
       {/* RATING */}
-      <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-        <h2 className="text-xl font-bold">{stats.avgRating}★</h2>
-        <p className="text-gray-500 text-sm">Rating</p>
+      <div className="bg-white p-4 rounded-xl shadow-sm text-center flex flex-col items-center">
+        <div className="flex items-center gap-1">
+          <h2 className="text-xl font-bold">{stats.avgRating}</h2>
+          <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+        </div>
+
+        <p className="text-gray-500 text-sm">Average Rating</p>
       </div>
     </div>
   );
