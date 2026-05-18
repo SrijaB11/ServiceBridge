@@ -1,4 +1,7 @@
 const User = require("../../models/UserModel");
+const Booking = require(
+  "../../models/BookingModel"
+);
 
 const getWorkerProfile = async (req, res) => {
   try {
@@ -58,9 +61,9 @@ const uploadWorkerDocs = async (
         ? req.files["panCard"][0].path
         : "";
 
-    const skillDoc =
-      req.files["skillDoc"]
-        ? req.files["skillDoc"][0]
+    const skillDocs =
+      req.files["skillDocs"]
+        ? req.files["skillDocs"][0]
             .path
         : "";
 
@@ -100,7 +103,194 @@ const uploadWorkerDocs = async (
   }
 };
 
+
+const getWorkerRequests = async (
+  req,
+  res
+) => {
+  try {
+    const workerId = req.user._id;
+
+    const requests =
+      await Booking.find({
+        worker: workerId,
+      })
+        .populate(
+          "customer",
+          "fullName email phone location documents"
+        )
+        .sort({
+          createdAt: -1,
+        });
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+const acceptRequest = async (
+  req,
+  res
+) => {
+  try {
+    const { requestId } =
+      req.params;
+
+    const updatedRequest =
+      await Booking.findByIdAndUpdate(
+        requestId,
+        {
+          status: "accepted",
+        },
+        {
+          new: true,
+        }
+      );
+
+    if (!updatedRequest) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Request not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message:
+        "Request Accepted Successfully",
+      data: updatedRequest,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+const rejectRequest = async (
+  req,
+  res
+) => {
+  try {
+    const { requestId } =
+      req.params;
+
+    const updatedRequest =
+      await Booking.findByIdAndUpdate(
+        requestId,
+        {
+          status: "rejected",
+        },
+        {
+          new: true,
+        }
+      );
+
+    if (!updatedRequest) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Request not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message:
+        "Request Rejected Successfully",
+      data: updatedRequest,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+const updateWorkerProfile = async (
+  req,
+  res
+) => {
+  try {
+    const workerId = req.user._id;
+
+    const { phone, services } = req.body;
+
+    const worker = await User.findById(
+      workerId
+    );
+
+    if (!worker) {
+      return res.status(404).json({
+        success: false,
+        message: "Worker not found",
+      });
+    }
+     if (phone) {
+      worker.phone = phone;
+    }
+
+    if (
+      services &&
+      Array.isArray(services)
+    ) {
+      worker.services = services;
+    }
+
+    await worker.save();
+
+    res.status(200).json({
+      success: true,
+      message:
+        "Profile updated successfully",
+      worker,
+    });
+     } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+
+
+
+
 module.exports = {
   getWorkerProfile,
   uploadWorkerDocs,
+  updateWorkerProfile,
+  getWorkerRequests,
+  acceptRequest,
+  rejectRequest,
 };

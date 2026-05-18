@@ -1,16 +1,45 @@
-const Booking = require("../../models/BookingModel");
+const Booking = require(
+  "../../models/BookingModel"
+);
 
-const getWorkerRequest = async (req, res) => {
+const getWorkerRequest = async (
+  req,
+  res
+) => {
   try {
-    const bookings = await Booking.find({
-      worker: req.user._id
-    }).populate("customer", "fullName phone");
 
-    res.json(bookings);
+    console.log(
+      "Logged Worker:",
+      req.user
+    );
+
+    const bookings =
+      await Booking.find({
+        worker: req.user._id,
+      }).populate(
+        "customer"
+      );
+
+    console.log(bookings);
+
+    res.status(200).json({
+      success: true,
+      data: bookings,
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+
+    console.log(
+      "REQUEST ERROR:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
-module.exports = getWorkerRequest;
+module.exports =
+  getWorkerRequest;
