@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import AdminRoutes from "./routes/AdminRoutes";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import Complaint from "./Pages/Customer/Complaint";
 import "./App.css";
@@ -33,11 +33,12 @@ const ServiceProviders = lazy(
    Worker Components
 ======================= */
 
-// import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import WorkerDashboard from "./Pages/WorkersDashboard/Dashboard/WorkerDashboard";
 // import History from "./Pages/WorkersDashboard/History";
-// import Requests from "./Pages/WorkersDashboard/Requests";
-// import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
-// import WorkerHeader from "./Pages/WorkersDashboard/Header";
+import Requests from "./Pages/WorkersDashboard/Requests/Requests";
+import WorkerNavBar from "./Pages/WorkersDashboard/Navbar/WorkerNavbar";
+import WorkerProfile from "./Pages/WorkersDashboard/Profile/WorkerProfile";
+import WorkerHeader from "./Pages/WorkersDashboard/Header/WorkerHeader";
 
 /* =======================
    Admin Components
@@ -60,6 +61,7 @@ import Bookings from "./components/customer/Bookings";
 import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
+import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
 
 /* =======================
    Loading Component
@@ -110,7 +112,6 @@ function AdminDashboardLayout() {
 }
 
 //admin//
-<AdminRoutes />;
 
 /* =======================
    Main App
@@ -200,19 +201,19 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            {/* <Route index element={<WorkersDashboard />} />
+            <Route index element={<WorkerDashboard />} />
 
             <Route path="requests" element={<Requests />} />
 
-            <Route path="history" element={<History />} />
+            <Route path="history" element={<WorkerHistory />} />
 
-            <Route path="earnings" element={<div>Earnings Page</div>} />
+            {/* <Route path="earnings" element={<div>Earnings Page</div>} /> */}
 
-            <Route path="reviews" element={<div>Reviews Page</div>} />
+            {/* <Route path="reviews" element={<div>Reviews Page</div>} /> */}
 
-            <Route path="profile" element={<div>Profile Page</div>} />
+            <Route path="profile" element={<WorkerProfile />} />
 
-            <Route path="logout" element={<div>Logging out...</div>} /> */}
+            {/* <Route path="logout" element={<div>Logging out...</div>} /> */}
           </Route>
 
           {/* --- Admin Routes --- */}
@@ -252,118 +253,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
-// import { lazy, Suspense } from "react";
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import { Toaster } from "react-hot-toast";
-
-// import ProtectedRoute from "./components/ProtectedRoute";
-// import AdminRoutes from "./routes/AdminRoutes";
-
-// import "./App.css";
-
-// /* =======================
-//    Lazy Loaded Public Pages
-// ======================= */
-
-// const Home = lazy(() => import("./Pages/Home"));
-// const Login = lazy(() => import("./Pages/Login"));
-
-// const CustomerRegister = lazy(
-//   () => import("./Pages/Register/CustomerRegister"),
-// );
-
-// const WorkerRegister = lazy(() => import("./Pages/Register/WorkerRegister"));
-
-// const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
-
-// /* =======================
-//    Customer Pages
-// ======================= */
-
-// const CustomerDashboard = lazy(
-//   () => import("./Pages/Customer/CustomerDashboard"),
-// );
-
-// const ServiceProviders = lazy(
-//   () => import("./components/customer/ServiceProviders"),
-// );
-
-// /* =======================
-//    Loader
-// ======================= */
-
-// function Loader() {
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-white">
-//       <div className="h-10 w-10 rounded-full border-4 border-green-500 border-t-transparent animate-spin" />
-//     </div>
-//   );
-// }
-
-// /* =======================
-//    APP
-// ======================= */
-
-// export default function App() {
-//   return (
-//     <BrowserRouter>
-//       <Toaster position="top-right" reverseOrder={false} />
-
-//       <Suspense fallback={<Loader />}>
-//         <Routes>
-//           {/* =======================
-//               PUBLIC ROUTES
-//           ======================= */}
-
-//           <Route path="/" element={<Home />} />
-//           <Route path="/login" element={<Login />} />
-//           <Route path="/customer-register" element={<CustomerRegister />} />
-//           <Route path="/worker-register" element={<WorkerRegister />} />
-//           <Route path="/forgot-password" element={<ForgotPassword />} />
-
-//           {/* =======================
-//               CUSTOMER ROUTES
-//           ======================= */}
-
-//           <Route
-//             path="/customer"
-//             element={
-//               <ProtectedRoute role="customer">
-//                 <CustomerDashboard />
-//               </ProtectedRoute>
-//             }
-//           />
-
-//           <Route
-//             path="/service/:id"
-//             element={
-//               <ProtectedRoute role="customer">
-//                 <ServiceProviders />
-//               </ProtectedRoute>
-//             }
-//           />
-
-//           {/* =======================
-//               ADMIN ROUTES (CLEAN SYSTEM)
-//           ======================= */}
-
-//           <Route
-//             path="/admin/*"
-//             element={
-//               <ProtectedRoute role="admin">
-//                 <AdminRoutes />
-//               </ProtectedRoute>
-//             }
-//           />
-
-//           {/* =======================
-//               FALLBACK
-//           ======================= */}
-
-//           <Route path="*" element={<div>404 - Page Not Found</div>} />
-//         </Routes>
-//       </Suspense>
-//     </BrowserRouter>
-//   );
-// }

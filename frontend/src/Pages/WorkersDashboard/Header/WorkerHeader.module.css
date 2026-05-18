@@ -1,0 +1,145 @@
+.header {
+  background: linear-gradient(
+    90deg,
+    #16a34a,
+    #22c55e
+  ) !important;
+
+  padding: 0 18px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 78px !important;
+}
+
+/* Left */
+
+.leftSection {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+
+  color: white;
+}
+
+/* Search */
+
+.searchContainer {
+  width: 420px;
+  height: 48px;
+
+  background-color: white;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 16px;
+}
+
+.searchIcon {
+  color: #6b7280;
+}
+
+.searchInput {
+  margin-left: 10px;
+  width: 100%;
+}
+
+/* Right */
+
+.rightSection {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+}
+
+/* Notification */
+
+.notificationButton {
+  color: white !important;
+}
+
+/* Profile */
+
+.profileSection {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  cursor: pointer;
+}
+
+.avatar {
+  width: 52px !important;
+  height: 52px !important;
+
+  border: 2px solid white;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  color: white;
+
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.userRole {
+  color: #dcfce7;
+
+  font-size: 0.85rem !important;
+}
+
+.dropdownIcon {
+  color: white;
+}
+
+/* Loader */
+
+.loaderContainer {
+  height: 78px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #16a34a;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 992px) {
+  .searchContainer {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .userInfo {
+    display: none;
+  }
+
+  .logo {
+    font-size: 1.5rem !important;
+  }
+
+  .toolbar {
+    padding: 0 !important;
+  }
+}

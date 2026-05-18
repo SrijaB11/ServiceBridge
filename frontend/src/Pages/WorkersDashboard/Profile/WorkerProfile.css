@@ -1,0 +1,163 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.profile-main-container {
+  min-height: 100vh;
+  background: #f4f7fb;
+  padding: 40px 20px;
+}
+
+.profile-heading {
+  text-align: center;
+  font-size: 36px;
+  color: #1e293b;
+  margin-bottom: 35px;
+  font-weight: 700;
+}
+
+.profile-card {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 35px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  margin-bottom: 35px;
+}
+
+.profile-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-image {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid #2563eb;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.worker-details {
+  flex: 2;
+}
+
+.worker-details p {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.worker-details strong {
+  color: #0f172a;
+}
+
+.upload-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 35px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.upload-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1e293b;
+  font-size: 30px;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.input-group input {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.input-group input:hover {
+  border-color: #2563eb;
+}
+
+.upload-button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.upload-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+
+@media screen and (max-width: 768px) {
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-image {
+    width: 180px;
+    height: 180px;
+  }
+
+  .worker-details p {
+    font-size: 16px;
+  }
+
+  .profile-heading {
+    font-size: 28px;
+  }
+
+  .upload-container h2 {
+    font-size: 24px;
+  }
+}
