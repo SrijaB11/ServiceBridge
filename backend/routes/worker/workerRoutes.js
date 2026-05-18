@@ -17,6 +17,8 @@ const {
   "../../controllers/worker/workerController"
 );
 
+const getWorkerVerificationStatusRoute = require("../../controllers/worker/getworkerVerificationStatus");
+
 router.get(
   "/profile",
   authMiddleware,
@@ -44,5 +46,7 @@ router.post(
   ]),
   uploadWorkerDocs
 );
+
+router.get("/workerverificationstatus",authMiddleware,getWorkerVerificationStatusRoute);
 
 module.exports = router;
