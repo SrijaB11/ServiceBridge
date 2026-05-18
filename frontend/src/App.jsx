@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -113,7 +112,7 @@ function AdminDashboardLayout() {
 }
 
 //admin//
-<AdminRoutes />;
+
 
 /* =======================
    Main App
@@ -207,7 +206,7 @@ export default function App() {
 
             <Route path="requests" element={<Requests />} />
 
-            <Route path="history" element={<WorkerHistory/>} /> 
+            <Route path="history" element={<WorkerHistory />} />
 
             {/* <Route path="earnings" element={<div>Earnings Page</div>} /> */}
 
