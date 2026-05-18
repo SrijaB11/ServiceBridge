@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// fake API call (replace with your backend later)
 export const fetchWorkers = createAsyncThunk(
   "workers/fetchWorkers",
   async () => {
-    const response = await fetch("http://localhost:8000/workers"); // adjust if needed
-    return await response.json();
+    const res = await fetch("http://localhost:5000/admin/workers");
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch workers");
+    }
+
+    return await res.json();
   },
 );
 
@@ -21,6 +25,7 @@ const workerSlice = createSlice({
     builder
       .addCase(fetchWorkers.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchWorkers.fulfilled, (state, action) => {
         state.loading = false;
