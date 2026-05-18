@@ -1,3 +1,4 @@
+
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -33,11 +34,12 @@ const ServiceProviders = lazy(
    Worker Components
 ======================= */
 
-// import WorkersDashboard from "./Pages/WorkersDashboard/Dashboard";
+import WorkerDashboard from "./Pages/WorkersDashboard/Dashboard/WorkerDashboard";
 // import History from "./Pages/WorkersDashboard/History";
-// import Requests from "./Pages/WorkersDashboard/Requests";
-// import WorkerNavBar from "./Pages/WorkersDashboard/Navbar";
-// import WorkerHeader from "./Pages/WorkersDashboard/Header";
+import Requests from "./Pages/WorkersDashboard/Requests/Requests";
+import WorkerNavBar from "./Pages/WorkersDashboard/Navbar/WorkerNavbar";
+import WorkerProfile from "./Pages/WorkersDashboard/Profile/WorkerProfile";
+import WorkerHeader from "./Pages/WorkersDashboard/Header/WorkerHeader";
 
 /* =======================
    Admin Components
@@ -60,6 +62,7 @@ import Bookings from "./components/customer/Bookings";
 import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
+import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
 
 /* =======================
    Loading Component
@@ -200,19 +203,19 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            {/* <Route index element={<WorkersDashboard />} />
+            <Route index element={<WorkerDashboard />} />
 
             <Route path="requests" element={<Requests />} />
 
-            <Route path="history" element={<History />} />
+            <Route path="history" element={<WorkerHistory/>} /> 
 
-            <Route path="earnings" element={<div>Earnings Page</div>} />
+            {/* <Route path="earnings" element={<div>Earnings Page</div>} /> */}
 
-            <Route path="reviews" element={<div>Reviews Page</div>} />
+            {/* <Route path="reviews" element={<div>Reviews Page</div>} /> */}
 
-            <Route path="profile" element={<div>Profile Page</div>} />
+            <Route path="profile" element={<WorkerProfile />} />
 
-            <Route path="logout" element={<div>Logging out...</div>} /> */}
+            {/* <Route path="logout" element={<div>Logging out...</div>} /> */}
           </Route>
 
           {/* --- Admin Routes --- */}
