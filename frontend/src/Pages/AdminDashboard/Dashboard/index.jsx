@@ -1,7 +1,7 @@
 import Users from "../Users"
 import Worker from "../Worker"
 import RecentRequests from "../RecentRequests"
-import RecentComplaints from "../RecentComplaints"
+import CustomerComplaints from "../CustomerComplaints"
 import WorkerVerification from "../Certifications"
 import styles from './index.module.css';
 
@@ -101,7 +101,7 @@ const AdminDashboard = () => {
                     </ul>
 
                     <RecentRequests />
-                    <RecentComplaints />
+                    <CustomerComplaints />
                     <WorkerVerification />
                     <Users />
                     <Worker />
