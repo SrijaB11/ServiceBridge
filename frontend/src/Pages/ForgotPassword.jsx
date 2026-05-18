@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -52,36 +53,6 @@ export default function ForgotPassword() {
       setMessage("Something went wrong");
     }
   };
-  // const handleSendOtp = async () => {
-  //   try {
-  //     if (!email) {
-  //       setMessage("Please enter your email");
-  //       return;
-  //     }
-
-  //     setLoading(true);
-
-  //     const response = await fetch("http://localhost:5000/forgotpassword", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email }),
-  //     });
-
-  //     const data = await response.json();
-
-  //     setLoading(false);
-  //     setMessage(data.message);
-
-  //     if (response.ok && data.message === "OTP has been sent") {
-  //       setStep(2);
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     setMessage("Something went wrong");
-  //   }
-  // };
 
   const handleVerifyOtp = async () => {
     if (!otp) {
@@ -93,38 +64,15 @@ export default function ForgotPassword() {
     setStep(3);
   };
 
-  // RESET PASSWORD
-  // const handleResetPassword = async () => {
-  //   if (!newPassword || !confirmPassword) {
-  //     setMessage("Please fill all fields");
-  //     return;
-  //   }
-
-  //   if (newPassword !== confirmPassword) {
-  //     setMessage("Passwords do not match");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     setMessage("Password reset successful");
-
-  //     setTimeout(() => {
-  //       navigate("/login");
-  //     }, 1500);
-  //   }, 1500);
-  // };
   const handleResetPassword = async () => {
     try {
       if (!newPassword || !confirmPassword) {
-        setMessage("Please fill all fields");
+        toast.error("Please fill all fields");
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        setMessage("Passwords do not match");
+        toast.error("Passwords do not match");
         return;
       }
 
@@ -144,17 +92,19 @@ export default function ForgotPassword() {
 
       const data = await response.json();
 
-      setLoading(false);
-      setMessage(data.message);
-
       if (response.ok) {
+        toast.success("Password reset successful");
+
         setTimeout(() => {
           navigate("/login");
         }, 1500);
+      } else {
+        toast.error(data.message || "Reset failed");
       }
     } catch (error) {
+      toast.error("Reset failed");
+    } finally {
       setLoading(false);
-      setMessage("Reset failed");
     }
   };
 

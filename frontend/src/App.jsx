@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -52,7 +51,7 @@ import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
 
-import Worker from "./Pages/AdminDashboard/Worker"
+import Worker from "./Pages/AdminDashboard/Worker";
 import Certifications from "./Pages/AdminDashboard/Certifications";
 
 import ComplaintPage from "./components/customer/ComplaintPage";
@@ -63,7 +62,6 @@ import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
 import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
-
 
 /* =======================
    Loading Component
@@ -112,6 +110,8 @@ function AdminDashboardLayout() {
     </>
   );
 }
+
+//admin//
 
 /* =======================
    Main App
@@ -205,7 +205,7 @@ export default function App() {
 
             <Route path="requests" element={<Requests />} />
 
-            <Route path="history" element={<WorkerHistory/>} /> 
+            <Route path="history" element={<WorkerHistory />} />
 
             {/* <Route path="earnings" element={<div>Earnings Page</div>} /> */}
 
@@ -234,7 +234,7 @@ export default function App() {
 
             <Route path="recent-complaints" element={<RecentComplaints />} />
 
-            <Route path="workers" element={<Worker/>} />
+            <Route path="workers" element={<Worker />} />
 
             <Route path="workers/verification" element={<Certifications />} />
 
