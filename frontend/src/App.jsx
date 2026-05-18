@@ -1,7 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import Complaint from "./Pages/Customer/Complaint";
 import "./App.css";
