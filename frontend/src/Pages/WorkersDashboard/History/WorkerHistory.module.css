@@ -1,0 +1,105 @@
+.historyWrapper {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.topSection {
+  margin-bottom: 28px;
+}
+
+.jobsGrid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(320px, 1fr)
+  );
+  gap: 24px;
+}
+
+.jobCard {
+  padding: 22px;
+  border-radius: 22px !important;
+  box-shadow: 0 4px 20px
+    rgba(0, 0, 0, 0.05) !important;
+  transition: 0.3s ease;
+}
+
+.jobCard:hover {
+  transform: translateY(-4px);
+}
+
+.jobTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.customerInfo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.jobDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #444;
+}
+
+.paymentBox {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emptyState {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+  text-align: center;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .jobTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .jobDetails {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .paymentBox {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

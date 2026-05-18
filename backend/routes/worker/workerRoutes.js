@@ -13,6 +13,10 @@ const authMiddleware = require(
 const {
   getWorkerProfile,
   uploadWorkerDocs,
+  getWorkerRequests,
+  acceptRequest,
+  rejectRequest,
+  updateWorkerProfile,
 } = require(
   "../../controllers/worker/workerController"
 );
@@ -40,11 +44,43 @@ router.post(
     },
 
     {
-      name: "skillDoc",
+      name: "skillDocs",
       maxCount: 5,
     },
   ]),
   uploadWorkerDocs
+);
+
+
+router.get(
+  "/requests",
+  authMiddleware,
+  getWorkerRequests
+);
+
+router.put(
+  "/request/accept/:requestId",
+  authMiddleware,
+  acceptRequest
+);
+
+router.put(
+  "/request/reject/:requestId",
+  authMiddleware,
+  rejectRequest
+);
+
+
+router.put(
+  "/update-profile",
+  authMiddleware,
+  updateWorkerProfile
+);
+
+
+router.post(
+  "/complaint/add",
+  authMiddleware,
 );
 
 router.get("/workerverificationstatus",authMiddleware,getWorkerVerificationStatusRoute);

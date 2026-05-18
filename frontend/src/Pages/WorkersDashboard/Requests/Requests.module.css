@@ -1,0 +1,204 @@
+.requestsContainer {
+  padding: 30px;
+  background-color: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* Heading */
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+
+  margin-bottom: 30px;
+}
+
+/* Grid */
+
+.requestsGrid {
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(350px, 1fr)
+  );
+
+  gap: 24px;
+}
+
+/* Card */
+
+.requestCard {
+  background-color: white;
+
+  border-radius: 24px;
+
+  padding: 24px;
+
+  box-shadow: 0 6px 20px
+    rgba(0, 0, 0, 0.08);
+
+  transition: 0.3s ease;
+}
+
+.requestCard:hover {
+  transform: translateY(-4px);
+}
+
+/* Customer Info */
+
+.customerSection {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.customerAvatar {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 3px solid #22c55e;
+}
+
+.customerName {
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.customerEmail {
+  font-size: 0.9rem;
+
+  color: #6b7280;
+
+  margin-top: 4px;
+}
+
+/* Service */
+
+.serviceTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  color: #16a34a;
+
+  margin-bottom: 10px;
+}
+
+/* Description */
+
+.description {
+  color: #4b5563;
+
+  line-height: 1.6;
+
+  margin-bottom: 18px;
+}
+
+/* Location */
+
+.location {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #374151;
+
+  margin-bottom: 20px;
+}
+
+/* Status */
+
+.statusContainer {
+  margin-bottom: 24px;
+}
+
+/* Buttons */
+
+.buttonGroup {
+  display: flex;
+  gap: 14px;
+}
+
+.acceptButton {
+  flex: 1;
+
+  background-color: #22c55e !important;
+
+  border-radius: 14px !important;
+
+  text-transform: none !important;
+
+  font-weight: 600 !important;
+
+  padding: 12px 0 !important;
+}
+
+.acceptButton:hover {
+  background-color: #16a34a !important;
+}
+
+.rejectButton {
+  flex: 1;
+
+  background-color: #ef4444 !important;
+
+  border-radius: 14px !important;
+
+  text-transform: none !important;
+
+  font-weight: 600 !important;
+
+  padding: 12px 0 !important;
+}
+
+.rejectButton:hover {
+  background-color: #dc2626 !important;
+}
+
+/* Empty State */
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 60vh;
+
+  font-size: 1.3rem;
+  font-weight: 600;
+
+  color: #6b7280;
+}
+
+/* Loader */
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 70vh;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 768px) {
+  .requestsContainer {
+    padding: 20px;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+  }
+}
