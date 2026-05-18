@@ -21,15 +21,31 @@ import TextField from "@mui/material/TextField";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
+// const servicesList = [
+//   "Plumber",
+//   "Electrician",
+//   "Painter",
+//   "Cleaner",
+//   "Carpenter",
+//   "AC Repair",
+//   "Appliance Repair",
+//   "Home Cleaning",
+// ];
 const servicesList = [
   "Plumber",
   "Electrician",
-  "Painter",
-  "Cleaner",
   "Carpenter",
   "AC Repair",
-  "Appliance Repair",
-  "Home Cleaning",
+  "Painting",
+  "Floor Cleaning",
+  "Washroom Cleaning",
+  "Washing Machine Repair",
+  "Refrigerator Repair",
+  "TV Repair",
+  "Pest Control",
+  "Water Purifier Repair",
+  "Stove & Microwave Repair",
+  "Salon Men and Women",
 ];
 
 export default function RegisterForm({
@@ -92,8 +108,6 @@ export default function RegisterForm({
   //   ];
   // }, []);
   const cityNames = [
-    "Hyderabad",
-    "Secunderabad",
     "Madhapur",
     "Hitech City",
     "Gachibowli",
@@ -247,7 +261,17 @@ export default function RegisterForm({
     "w-full h-12 border border-gray-200 rounded-xl bg-gray-50 px-4 text-sm transition-all duration-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent";
 
   return (
-    <div className="flex justify-center px-4 py-8 sm:px-6 lg:px-8">
+    <div className=" relative flex justify-center px-4 py-8 sm:px-6 lg:px-8">
+      {/* BACK BUTTON */}
+
+      <div className="absolute -top-4 -right-16 ">
+        <button
+          onClick={() => navigate("/")}
+          className="px-4 py-2 rounded-xl bg-green-50 text-green-600 font-medium border border-green-100 hover:bg-green-100 hover:text-green-700 shadow-sm transition-all duration-200"
+        >
+          ← Back to Home
+        </button>
+      </div>
       <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-gray-100">
         {/* HEADING */}
         <div className="mb-8 text-center">
@@ -333,21 +357,35 @@ export default function RegisterForm({
 
         {/* OTP */}
         {showOtpField && !emailVerified && (
-          <div className="flex flex-col sm:flex-row gap-3 mb-5">
-            <input
-              className={inputStyle}
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-            />
+          <div className="mb-5">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                className={inputStyle}
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
 
-            <button
-              onClick={handleVerifyOtp}
-              disabled={loading}
-              className="h-12 px-5 rounded-xl bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all duration-200"
-            >
-              Verify
-            </button>
+              <button
+                onClick={handleVerifyOtp}
+                disabled={loading}
+                className="h-12 px-5 rounded-xl bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all duration-200"
+              >
+                Verify
+              </button>
+            </div>
+
+            {/* RESEND OTP */}
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                onClick={handleSendOtp}
+                disabled={loading}
+                className="text-sm font-medium text-green-600 hover:text-green-700 hover:underline transition"
+              >
+                Resend OTP
+              </button>
+            </div>
           </div>
         )}
 
@@ -527,79 +565,6 @@ export default function RegisterForm({
             />
           </div>
         )}
-
-        {/* LOCATION */}
-        {/* <div className="mb-5 relative">
-          <MapPin
-            className="absolute left-4 top-4 text-gray-400 z-10"
-            size={18}
-          />
-
-          <Autocomplete
-            options={cityNames}
-            value={formData.location}
-            onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
-                location: newValue || "",
-              });
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Select Location"
-                fullWidth
-                error={!!errors.location}
-                helperText={errors.location}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "12px",
-                    backgroundColor: "#f9fafb",
-                    paddingLeft: "34px",
-                  },
-                }}
-              />
-            )}
-          />
-        </div> */}
-
-        {/* SERVICES */}
-        {/* {role === "worker" && (
-          <div className="mb-5 relative">
-            <Briefcase
-              className="absolute left-4 top-4 text-gray-400 z-10"
-              size={18}
-            />
-
-            <Autocomplete
-              multiple
-              options={servicesList}
-              value={formData.services}
-              onChange={(event, newValue) => {
-                setFormData({
-                  ...formData,
-                  services: newValue,
-                });
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Select Services"
-                  fullWidth
-                  error={!!errors.services}
-                  helperText={errors.services}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "12px",
-                      backgroundColor: "#f9fafb",
-                      paddingLeft: "34px",
-                    },
-                  }}
-                />
-              )}
-            />
-          </div>
-        )} */}
 
         {/* PHONE */}
         <div className="mb-6">

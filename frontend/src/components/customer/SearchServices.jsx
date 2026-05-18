@@ -1,5 +1,5 @@
 // import { Search } from "lucide-react";
-// import { useEffect, useMemo, useState } from "react";
+// import { useEffect, useState } from "react";
 
 // import axios from "axios";
 
@@ -7,9 +7,10 @@
 // import TextField from "@mui/material/TextField";
 
 // export default function SearchServices() {
+//   // SEARCH VALUE
 //   const [service, setService] = useState("");
 
-//   // SERVICES FROM DATABASE
+//   // SERVICES LIST
 //   const [servicesList, setServicesList] = useState([]);
 
 //   // WORKERS
@@ -18,6 +19,9 @@
 //   // LOADING
 //   const [loading, setLoading] = useState(false);
 
+//   // SEARCHED
+//   const [searched, setSearched] = useState(false);
+
 //   // FETCH SERVICES
 //   useEffect(() => {
 //     fetchServices();
@@ -25,9 +29,7 @@
 
 //   const fetchServices = async () => {
 //     try {
-//       const res = await axios.get(
-//         "http://localhost:5000/api/service/allServices",
-//       );
+//       const res = await axios.get("http://localhost:5000/service/allServices");
 
 //       console.log("SERVICES =>", res.data);
 
@@ -40,60 +42,29 @@
 //     }
 //   };
 
-//   // FILTER SERVICES
-//   const filteredServices = useMemo(() => {
-//     return servicesList.filter((item) =>
-//       item.toLowerCase().includes(service.toLowerCase()),
-//     );
-//   }, [service, servicesList]);
-
 //   // FETCH WORKERS
-//   //   const fetchWorkers = async (selectedService) => {
-//   //     try {
-//   //       setLoading(true);
-
-//   //       const token = localStorage.getItem("token");
-
-//   //       // NOT LOGGED IN
-//   //       if (!token) {
-//   //         alert("No authenticated");
-//   //         return;
-//   //       }
-
-//   //       const res = await axios.get(
-//   //         `http://localhost:5000/customer/workerslist/${id}`,
-//   //       );
-
-//   //       console.log("WORKERS =>", res.data);
-
-//   //       setWorkers(res.data.workers);
-//   //     } catch (error) {
-//   //       console.log(error);
-//   //     } finally {
-//   //       setLoading(false);
-//   //     }
-//   //   };
 //   const fetchWorkers = async (selectedService) => {
 //     try {
 //       setLoading(true);
 
 //       const token = localStorage.getItem("token");
 
-//       // NOT LOGGED IN
-//       if (!token) {
-//         alert("No authenticated");
-//         return;
-//       }
-
 //       const res = await axios.get(
-//         `http://localhost:5000/customer/workerslist/${selectedService}`,
+//         `http://localhost:5000/customer/workerslist/${encodeURIComponent(selectedService)}`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         },
 //       );
 
-//       console.log(res.data);
+//       console.log("WORKERS =>", res.data);
 
-//       setWorkers(res.data.workers);
+//       setWorkers(res.data || []);
 //     } catch (error) {
 //       console.log(error);
+
+//       setWorkers([]);
 //     } finally {
 //       setLoading(false);
 //     }
@@ -101,35 +72,35 @@
 
 //   return (
 //     <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
+//       {/* SEARCH BOX */}
 //       <Autocomplete
 //         freeSolo
-//         // OPTIONS
-//         options={filteredServices}
-//         // INPUT VALUE
+//         options={servicesList}
 //         inputValue={service}
-//         // TYPING
 //         onInputChange={(event, newInputValue) => {
 //           setService(newInputValue);
 //         }}
-//         // CLICK OPTION
 //         onChange={(event, newValue) => {
 //           if (!newValue) return;
 
-//           const selectedService = typeof newValue === "string" ? newValue : "";
+//           setService(newValue);
 
-//           setService(selectedService);
-
-//           // FETCH WORKERS
-//           fetchWorkers(selectedService);
+//           fetchWorkers(newValue);
+//         }}
+//         filterOptions={(options, state) => {
+//           return options.filter((option) =>
+//             option.toLowerCase().includes(state.inputValue.toLowerCase()),
+//           );
 //         }}
 //         renderInput={(params) => (
 //           <TextField
 //             {...params}
-//             placeholder="Select Service"
+//             placeholder="Search services..."
 //             fullWidth
-//             // ENTER KEY
 //             onKeyDown={(event) => {
 //               if (event.key === "Enter") {
+//                 event.preventDefault();
+
 //                 fetchWorkers(service);
 //               }
 //             }}
@@ -154,7 +125,6 @@
 //             }}
 //           />
 //         )}
-//         // CUSTOM DROPDOWN
 //         renderOption={(props, option) => (
 //           <li
 //             {...props}
@@ -180,18 +150,30 @@
 
 //       {/* WORKERS LIST */}
 //       <div className="mt-5 space-y-3">
-//         {!loading && workers.length === 0 && (
-//           <p className="text-gray-500 text-center">No workers found</p>
+//         {/* NO WORKERS */}
+//         {searched && !loading && workers.length === 0 && (
+//           <p className="text-center text-gray-500">No workers found</p>
 //         )}
 
+//         {/* WORKERS */}
 //         {workers.map((worker) => (
 //           <div
 //             key={worker._id}
 //             className="p-4 border rounded-xl hover:shadow-md transition"
 //           >
-//             <h3 className="font-semibold text-lg">{worker.name}</h3>
+//             <h3 className="font-semibold text-lg text-gray-800">
+//               {worker.fullName || worker.name}
+//             </h3>
 
-//             <p className="text-gray-500">{worker.service}</p>
+//             <p className="text-gray-500 mt-1">
+//               {Array.isArray(worker.services)
+//                 ? worker.services.join(", ")
+//                 : worker.service}
+//             </p>
+
+//             {worker.location && (
+//               <p className="text-sm text-gray-400 mt-1">{worker.location}</p>
+//             )}
 //           </div>
 //         ))}
 //       </div>
@@ -200,6 +182,7 @@
 // }
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -207,17 +190,14 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
 export default function SearchServices() {
+  // NAVIGATE
+  const navigate = useNavigate();
+
   // SEARCH VALUE
   const [service, setService] = useState("");
 
   // SERVICES LIST
   const [servicesList, setServicesList] = useState([]);
-
-  // WORKERS
-  const [workers, setWorkers] = useState([]);
-
-  // LOADING
-  const [loading, setLoading] = useState(false);
 
   // FETCH SERVICES
   useEffect(() => {
@@ -226,9 +206,7 @@ export default function SearchServices() {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/service/allServices",
-      );
+      const res = await axios.get("http://localhost:5000/service/allServices");
 
       console.log("SERVICES =>", res.data);
 
@@ -241,86 +219,25 @@ export default function SearchServices() {
     }
   };
 
-  // FETCH WORKERS
-  // const fetchWorkers = async (selectedService) => {
-  //   try {
-  //     setLoading(true);
-
-  //     const token = localStorage.getItem("token");
-
-  //     // NOT LOGGED IN
-  //     if (!token) {
-  //       alert("No authenticated");
-  //       return;
-  //     }
-
-  //     const res = await axios.get(
-  //       `http://localhost:5000/customer/workerslist/${selectedService}`,
-  //     );
-
-  //     console.log("WORKERS =>", res.data);
-
-  //     setWorkers(res.data.workers);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  const fetchWorkers = async (selectedService) => {
-    try {
-      setLoading(true);
-
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("Not authenticated");
-        return;
-      }
-
-      const res = await axios.get(
-        `http://localhost:5000/customer/workerslist/${encodeURIComponent(selectedService)}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      console.log("WORKERS =>", res.data);
-
-      setWorkers(res.data.workers || []);
-    } catch (error) {
-      console.log(error);
-
-      setWorkers([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
+    // <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
+    <div className="w-full ">
       {/* SEARCH BOX */}
       <Autocomplete
         freeSolo
-        // SERVICES
         options={servicesList}
-        // SEARCH VALUE
         inputValue={service}
         // TYPING
         onInputChange={(event, newInputValue) => {
           setService(newInputValue);
         }}
-        // CLICK OPTION
+        // SELECT SERVICE
         onChange={(event, newValue) => {
           if (!newValue) return;
 
-          setService(newValue);
-
-          fetchWorkers(newValue);
+          navigate(`/service/${encodeURIComponent(newValue)}`);
         }}
-        // CUSTOM FILTER
+        // FILTER
         filterOptions={(options, state) => {
           return options.filter((option) =>
             option.toLowerCase().includes(state.inputValue.toLowerCase()),
@@ -335,7 +252,11 @@ export default function SearchServices() {
             // ENTER KEY
             onKeyDown={(event) => {
               if (event.key === "Enter") {
-                fetchWorkers(service);
+                event.preventDefault();
+
+                if (!service.trim()) return;
+
+                navigate(`/service/${encodeURIComponent(service)}`);
               }
             }}
             sx={{
@@ -375,33 +296,6 @@ export default function SearchServices() {
         )}
         noOptionsText="No services found"
       />
-
-      {/* LOADING */}
-      {loading && (
-        <div className="flex justify-center mt-5">
-          <div className="h-8 w-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
-
-      {/* WORKERS LIST */}
-      <div className="mt-5 space-y-3">
-        {/* NO WORKERS */}
-        {!loading && workers.length === 0 && (
-          <p className="text-center text-gray-500">No workers found</p>
-        )}
-
-        {/* WORKERS */}
-        {workers.map((worker) => (
-          <div
-            key={worker._id}
-            className="p-4 border rounded-xl hover:shadow-md transition"
-          >
-            <h3 className="font-semibold text-lg">{worker.name}</h3>
-
-            <p className="text-gray-500">{worker.service}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
