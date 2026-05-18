@@ -1,92 +1,172 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchWorkers } from '../../../redux/slices/workerSlice';
+import { Component } from "react";
 import styles from "./index.module.css";
 
-const UsersTable = () => {
-    const dispatch = useDispatch();
+class Users extends Component {
+    state = { 
+        UserDetailsList: [],
+        loading: true,
+        searchTerm: "",
+        currentPage: 1,
+        itemsPerPage: 5
+    };
 
-    const { workers, loading, error } = useSelector(
-        (state) => state.workers
-    );
+    componentDidMount() {
+        this.GetCustomersData();
+    }
 
-    useEffect(() => {
-        dispatch(fetchWorkers());
-    }, [dispatch]);
+    GetCustomersData = async () => {
+        this.setState({ loading: true });
+        const JwtToken = localStorage.getItem("token");
+        try {
+            const UserDetails = await fetch("http://localhost:5000/admin/customers", {
+                method: "GET",
+                headers: { Authorization: `Bearer ${JwtToken}` }
+            });
+            const FetchedUserDetails = await UserDetails.json();
+            console.log(FetchedUserDetails)
+            if (UserDetails.ok === true && UserDetails.status === 200) {
+                const UpdatedUsersData = FetchedUserDetails["data"].map((User) => ({
+                    id: User.id,
+                    CustomerName: User.fullName,
+                    Email: User.email,
+                    Location: User.location,
+                    MobileNo: User.phone,
+                }));
+                this.setState({ UserDetailsList: UpdatedUsersData, loading: false });
+            } else {
+                this.setState({ loading: false });
+            }
+        } catch (error) {
+            console.error("Error fetching customers:", error);
+            this.setState({ loading: false });
+        }
+    };
 
-    console.log('Workers Data:', workers);
+    handleSearch = (event) => {
+        this.setState({ searchTerm: event.target.value, currentPage: 1 });
+    };
 
-    if (loading) {
+    handlePageChange = (newPage) => {
+        this.setState({ currentPage: newPage });
+    };
+
+    getStatusBadgeClass = (status) => {
+        switch(status) {
+            case 'Active': return styles.statusActive;
+            case 'Inactive': return styles.statusInactive;
+            case 'Blocked': return styles.statusBlocked;
+            default: return styles.statusActive;
+        }
+    };
+
+    render() {
+        const { UserDetailsList, loading, searchTerm, currentPage, itemsPerPage } = this.state;
+
+        // Filter users based on search term
+        const filteredUsers = UserDetailsList.filter(user =>
+            user.CustomerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.MobileNo?.includes(searchTerm)
+        );
+
+        // Pagination logic
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+        const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
         return (
-            <div className={styles.loading}>
-                Loading users...
+            <div className={styles.usersContainer}>
+                <div className={styles.header}>
+                    <h3 className={styles.title}>👥 Customer Directory</h3>
+                    <div className={styles.searchBox}>
+                        <input
+                            type="text"
+                            placeholder="🔍 Search by name, email or phone..."
+                            value={searchTerm}
+                            onChange={this.handleSearch}
+                            className={styles.searchInput}
+                        />
+                    </div>
+                </div>
+
+                {loading ? (
+                    <div className={styles.loading}>
+                        <div className={styles.spinner}></div>
+                        <p>Loading customers...</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className={styles.tableWrapper}>
+                            <table className={styles.usersTable}>
+                                <thead>
+                                    <tr>
+                                        <th>Customer Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile No</th>
+                                        <th>Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentUsers.length > 0 ? (
+                                        currentUsers.map((user) => (
+                                            <tr key={user.id}>
+                                                <td>
+                                                    <div className={styles.customerName}>
+                                                        <span className={styles.avatar}>
+                                                            {user.CustomerName?.charAt(0)}
+                                                        </span>
+                                                        {user.CustomerName}
+                                                    </div>
+                                                </td>
+                                                <td>{user.Email}</td>
+                                                <td>{user.MobileNo}</td>
+                                                <td>{user.Location}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="8" className={styles.noData}>
+                                                No customers found
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {totalPages > 1 && (
+                            <div className={styles.pagination}>
+                                <button
+                                    onClick={() => this.handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={styles.pageBtn}
+                                >
+                                    ← Previous
+                                </button>
+                                <span className={styles.pageInfo}>
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    onClick={() => this.handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className={styles.pageBtn}
+                                >
+                                    Next →
+                                </button>
+                            </div>
+                        )}
+
+                        <div className={styles.footer}>
+                            <span className={styles.totalCount}>
+                                Total Customers: {filteredUsers.length}
+                            </span>
+                        </div>
+                    </>
+                )}
             </div>
         );
     }
+}
 
-    if (error) {
-        return (
-            <div className={styles.error}>
-                Error: {error}
-            </div>
-        );
-    }
-
-    return (
-        <div className={styles["table-wrapper"]}>
-            <div className={styles["table-title"]}>
-                All Users ({workers.length})
-            </div>
-
-            {workers.length > 0 ? (
-                <table className={styles["user-table"]}>
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Location</th>
-                            <th>Role</th>
-                            <th>Services</th>
-                            <th>Address</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {workers.map((user, index) => (
-                            <tr
-                                key={user._id || user.id || index}
-                                className={styles["table-row"]}
-                            >
-                                <td>{index + 1}</td>
-                                <td>
-                                    {user.fullName ||
-                                     user.name ||
-                                     user.full_name ||
-                                     'N/A'}
-                                </td>
-                                <td>{user.email || 'N/A'}</td>
-                                <td>{user.phone || 'N/A'}</td>
-                                <td>{user.location || 'N/A'}</td>
-                                <td>
-                                    <span className={`${styles.badge} ${styles["badge-worker"]}`}>
-                                        Worker
-                                    </span>
-                                </td>
-                                <td>{user.services || user.service || 'N/A'}</td>
-                                <td>{user.address || 'N/A'}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            ) : (
-                <p className={styles["no-data"]}>
-                    No users found in database.
-                </p>
-            )}
-        </div>
-    );
-};
-
-export default UsersTable
+export default Users;
