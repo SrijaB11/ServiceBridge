@@ -1,62 +1,68 @@
-import { MapPin, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import SearchServices from "./customer/SearchServices";
 
 export default function Hero() {
   const navigate = useNavigate();
 
-  const [service, setService] = useState("");
-  const [location, setLocation] = useState("");
+  // const [service, setService] = useState("");
+  // const [location, setLocation] = useState("");
 
   // SERVICES
-  const servicesList = [
-    "Plumber",
-    "Electrician",
-    "Painter",
-    "Cleaner",
-    "Carpenter",
-    "AC Repair",
-    "Appliance Repair",
-    "Home Cleaning",
-  ];
+  // const servicesList = [
+  //   "Plumber",
+  //   "Electrician",
+  //   "Carpenter",
+  //   "AC Repair",
+  //   "Painting",
+  //   "Floor Cleaning",
+  //   "Washroom Cleaning",
+  //   "Washing Machine Repair",
+  //   "Refrigerator Repair",
+  //   "TV Repair",
+  //   "Pest Control",
+  //   "Water Purifier Repair",
+  //   "Stove & Microwave Repair",
+  //   "Salon Men and Women",
+  // ];
 
   // LOCATIONS
-  const cityNames = [
-    "Hyderabad",
-    "Secunderabad",
-    "Madhapur",
-    "Hitech City",
-    "Gachibowli",
-    "Kukatpally",
-    "Ameerpet",
-    "Banjara Hills",
-    "Jubilee Hills",
-    "Warangal",
-    "Karimnagar",
-    "Nizamabad",
-  ];
+  // const cityNames = [
+  //   "Hyderabad",
+  //   "Secunderabad",
+  //   "Madhapur",
+  //   "Hitech City",
+  //   "Gachibowli",
+  //   "Kukatpally",
+  //   "Ameerpet",
+  //   "Banjara Hills",
+  //   "Jubilee Hills",
+  //   "Warangal",
+  //   "Karimnagar",
+  //   "Nizamabad",
+  // ];
 
   // SEARCH
-  const handleSearch = () => {
-    const token = localStorage.getItem("token");
+  // const handleSearch = () => {
+  //   const token = localStorage.getItem("token");
 
-    // NOT LOGGED IN
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+  //   // NOT LOGGED IN
+  //   if (!token) {
+  //     navigate("/login");
+  //     return;
+  //   }
 
-    // LOGGED IN
-    if (!service) {
-      alert("Please select service");
-      return;
-    }
+  //   // LOGGED IN
+  //   if (!service) {
+  //     alert("Please select service");
+  //     return;
+  //   }
 
-    navigate(`/service/${service.toLowerCase()}?location=${location}`);
-  };
+  //   navigate(`/service/${service.toLowerCase()}`);
+  // };
 
   return (
     <section className="bg-gradient-to-br from-green-50 via-white to-purple-50 overflow-hidden">
@@ -83,12 +89,12 @@ export default function Hero() {
               Book trusted experts near you for plumbing, cleaning, electrical
               work and more.
             </p>
-
+            <SearchServices />
             {/* SEARCH BOX */}
-            <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
+            {/* <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
               <div className="flex flex-col lg:flex-row gap-3">
                 {/* SERVICE SEARCH */}
-                <div className="flex-1">
+            {/* <div className="flex-1">
                   <Autocomplete
                     options={servicesList}
                     value={service}
@@ -120,10 +126,10 @@ export default function Hero() {
                       />
                     )}
                   />
-                </div>
+                </div> */}
 
-                {/* LOCATION */}
-                <div className="flex-1 relative">
+            {/* LOCATION */}
+            {/* <div className="flex-1 relative">
                   <MapPin
                     size={18}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10"
@@ -161,18 +167,18 @@ export default function Hero() {
                       />
                     )}
                   />
-                </div>
+                </div> */}
 
-                {/* BUTTON */}
-                <button
+            {/* BUTTON */}
+            {/* <button
                   onClick={handleSearch}
                   className="h-14 lg:h-auto px-6 rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium flex items-center justify-center gap-2 transition"
                 >
                   <Search size={18} />
                   Find Experts
-                </button>
-              </div>
-            </div>
+                </button> */}
+            {/* </div>
+            </div> */}
 
             {/* STATS */}
             <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-6">
