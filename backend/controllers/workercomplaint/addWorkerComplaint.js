@@ -18,7 +18,8 @@ const addWorkerComplaint = async (req, res) => {
       worker: req.user._id,
       customer: booking.customer,
       booking: bookingId,
-      complaintText: message 
+      complaintText: message,
+       complaintBy: "worker",
     });
 
     res.status(201).json({ message: "Complaint submitted", complaint });
