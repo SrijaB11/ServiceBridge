@@ -5,8 +5,6 @@ const verifyWorkerSkillCertificate = async (req, res) => {
 
     const { workerId, status } = req.body;
 
-    // status = approved / rejected
-
     const worker = await User.findById(workerId);
 
     if (!worker) {
@@ -17,13 +15,16 @@ const verifyWorkerSkillCertificate = async (req, res) => {
     }
 
     if (status === "approved") {
-      worker.workerVerified = true;
       worker.workerVerificationStatus = "approved";
-    }
-
-    if (status === "rejected") {
-      worker.workerVerified = false;
+    } 
+    else if (status === "rejected") {
       worker.workerVerificationStatus = "rejected";
+    } 
+    else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
     }
 
     await worker.save();
