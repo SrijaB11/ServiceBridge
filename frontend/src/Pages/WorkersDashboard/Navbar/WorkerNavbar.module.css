@@ -1,0 +1,201 @@
+.sidebar {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
+  background-color: white;
+
+  border-right: 1px solid #e5e7eb;
+
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  transition: all 0.3s ease;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.expanded {
+  width: 260px;
+}
+
+.collapsed {
+  width: 85px;
+}
+
+/* Header */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 16px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+
+  color: #16a34a;
+}
+
+.toggleButton {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User */
+
+.userSection {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 22px 16px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.userImage {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+.userName {
+  font-size: 1rem;
+  font-weight: 600;
+
+  margin: 0;
+}
+
+.userRole {
+  font-size: 0.9rem;
+
+  color: #6b7280;
+
+  margin-top: 4px;
+}
+
+/* Menu */
+
+.menu {
+  list-style: none;
+
+  padding: 16px 12px;
+
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  flex: 1;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 14px 16px;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+
+  color: #4b5563;
+
+  font-weight: 500;
+}
+
+.menuItem:hover {
+  background-color: #f3f4f6;
+}
+
+.active {
+  background: linear-gradient(
+    90deg,
+    #16a34a,
+    #22c55e
+  );
+
+  color: white;
+
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+}
+
+/* Footer */
+
+.footer {
+  padding: 16px;
+}
+
+.logoutButton {
+  width: 100%;
+
+  background-color: #ef4444;
+
+  color: white;
+
+  border: none;
+
+  padding: 14px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  cursor: pointer;
+
+  font-size: 1rem;
+  font-weight: 500;
+
+  transition: 0.2s ease;
+}
+
+.logoutButton:hover {
+  background-color: #dc2626;
+}
+
+.logoutCollapsed {
+  width: 55px;
+
+  margin: auto;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    z-index: 999;
+  }
+
+  .expanded {
+    width: 240px;
+  }
+}
