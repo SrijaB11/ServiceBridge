@@ -62,6 +62,7 @@ import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
 import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
+import About from "./Pages/Customer/About";
 
 /* =======================
    Loading Component
@@ -134,6 +135,7 @@ export default function App() {
           <Route path="/worker-register" element={<WorkerRegister />} />
 
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/about" element={<About />} />
 
           {/* --- Customer Routes --- */}
 

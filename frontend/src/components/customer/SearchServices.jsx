@@ -204,18 +204,38 @@ export default function SearchServices() {
     fetchServices();
   }, []);
 
+  // const fetchServices = async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:5000/service/allServices");
+
+  //     console.log("SERVICES =>", res.data);
+
+  //     // ONLY SERVICE NAMES
+  //     const serviceNames = res.data.services.map((item) => item.name);
+
+  //     setServicesList(serviceNames);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const fetchServices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/service/allServices");
+      const token = localStorage.getItem("token");
 
-      console.log("SERVICES =>", res.data);
+      const res = await axios.get("http://localhost:5000/service/allServices", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      // ONLY SERVICE NAMES
       const serviceNames = res.data.services.map((item) => item.name);
-
       setServicesList(serviceNames);
     } catch (error) {
       console.log(error);
+
+      if (error.response?.status === 401) {
+        navigate("/login");
+      }
     }
   };
 
