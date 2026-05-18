@@ -7,6 +7,16 @@ const verifyWorkerSkillCertificate = async (req, res) => {
 
     // status = approved / rejected
 
+    if (
+      status !== "approved" &&
+      status !== "rejected"
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
+    }
+
     const worker = await User.findById(workerId);
 
     if (!worker) {
@@ -16,15 +26,8 @@ const verifyWorkerSkillCertificate = async (req, res) => {
       });
     }
 
-    if (status === "approved") {
-      worker.workerVerified = true;
-      worker.workerVerificationStatus = "approved";
-    }
-
-    if (status === "rejected") {
-      worker.workerVerified = false;
-      worker.workerVerificationStatus = "rejected";
-    }
+    // update verification status
+    worker.workerVerificationStatus = status;
 
     await worker.save();
 
@@ -35,10 +38,12 @@ const verifyWorkerSkillCertificate = async (req, res) => {
     });
 
   } catch (error) {
+
     res.status(500).json({
       success: false,
       message: error.message,
     });
+
   }
 };
 

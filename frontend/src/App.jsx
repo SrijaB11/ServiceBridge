@@ -1,7 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import Complaint from "./Pages/Customer/Complaint";
 import "./App.css";
@@ -49,7 +48,8 @@ import AdminHeader from "./Pages/AdminDashboard/Header";
 import AdminNavBar from "./Pages/AdminDashboard/Navbar";
 import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
-import RecentComplaints from "./Pages/AdminDashboard/RecentComplaints";
+import CustomerComplaints from "./Pages/AdminDashboard/CustomerComplaints";
+import WorkerComplaints from "./Pages/AdminDashboard/WorkerComplaints";
 
 import Worker from "./Pages/AdminDashboard/Worker";
 import Certifications from "./Pages/AdminDashboard/Certifications";
@@ -177,7 +177,7 @@ export default function App() {
             }
           />
           <Route
-            path="/complaints"
+            path="/customer-complaints"
             element={
               <ProtectedRoute role="customer">
                 <Complaint />
@@ -234,7 +234,9 @@ export default function App() {
 
             <Route path="recent-requests" element={<RecentRequests />} />
 
-            <Route path="recent-complaints" element={<RecentComplaints />} />
+            <Route path="customer-complaints" element={<CustomerComplaints />} />
+
+            <Route path="worker-complaints" element={<WorkerComplaints />} />
 
             <Route path="workers" element={<Worker />} />
 
