@@ -25,6 +25,8 @@ const paymentRoutes = require("./routes/payment/paymentRoutes");
 const adminPaymentRoutes = require("./routes/admin/adminPaymentRoutes");
 const historyRoutes = require("./routes/customer/customerHistoryRoutes");
 const adminskillCertificateRoutes = require("./routes/admin/skillCertificationRoutes");
+const payAdminToWorkerRoutes =require("./routes/payment/payAdminToWorkerRoutes");
+
 
 const app = express();
 
@@ -56,6 +58,7 @@ app.use("/payment", paymentRoutes);
 app.use( "/admin",adminPaymentRoutes);
 app.use("/customer", historyRoutes);
 app.use( "/admin",adminskillCertificateRoutes);
+app.use("/admin",payAdminToWorkerRoutes);
 
 
 app.listen(5000, () => {

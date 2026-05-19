@@ -13,8 +13,7 @@ const customerHistoryController = async (req, res) => {
         "fullName email phone location services documents"
       )
       .sort({ createdAt: -1 });
-
-      console.log(bookings);
+      //console.log(bookings);
 
     const history = [];
 
@@ -52,9 +51,6 @@ const customerHistoryController = async (req, res) => {
               services:
                 booking.worker.services || [],
 
-              profilePhoto:
-                booking.worker.documents
-                  ?.profilePhoto || "",
             }
           : {
               workerId: null,
@@ -63,7 +59,7 @@ const customerHistoryController = async (req, res) => {
               phone: "",
               location: "",
               services: [],
-              profilePhoto: "",
+            
             },
 
         payment: {
@@ -107,7 +103,7 @@ const customerHistoryController = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    //console.log(error);
 
     res.status(500).json({
       success: false,
