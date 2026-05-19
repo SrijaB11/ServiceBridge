@@ -63,6 +63,7 @@ import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
 import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
 import About from "./Pages/Customer/About";
+import PaymentPage from "./components/customer/PaymentPage";
 
 /* =======================
    Loading Component
@@ -185,6 +186,14 @@ export default function App() {
             }
           />
           <Route
+            path="/payment/:id"
+            element={
+              <ProtectedRoute role="customer">
+                <PaymentPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/book-worker/:workerId"
             element={
               <ProtectedRoute role="customer">
@@ -234,7 +243,10 @@ export default function App() {
 
             <Route path="recent-requests" element={<RecentRequests />} />
 
-            <Route path="customer-complaints" element={<CustomerComplaints />} />
+            <Route
+              path="customer-complaints"
+              element={<CustomerComplaints />}
+            />
 
             <Route path="worker-complaints" element={<WorkerComplaints />} />
 
