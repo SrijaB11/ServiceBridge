@@ -62,6 +62,7 @@ import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
 import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
+import PaymentPage from "./Pages/PaymentPage";
 
 /* =======================
    Loading Component
@@ -130,7 +131,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/customer-register" element={<CustomerRegister />} />
-
+0
           <Route path="/worker-register" element={<WorkerRegister />} />
 
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -150,6 +151,8 @@ export default function App() {
             <Route path="services" element={<CustomerServices />} />
 
             <Route path="bookings" element={<Bookings />} />
+            
+            <Route path="payment" element={<PaymentPage />} />
 
             <Route path="history" element={<History />} />
 
@@ -190,6 +193,8 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+           
+          
 
           {/* --- Worker Routes --- */}
 
@@ -200,6 +205,7 @@ export default function App() {
                 <WorkerDashboardLayout />
               </ProtectedRoute>
             }
+            
           >
             <Route index element={<WorkerDashboard />} />
 

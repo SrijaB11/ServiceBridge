@@ -25,9 +25,27 @@ const bookingSchema = new mongoose.Schema({
     enum: ["pending", "paid", "failed"],
     default: "pending"
   },
+  adminCommission: {
+  type: Number,
+  default: 0,
+   },
+
+workerAmount: {
+  type: Number,
+  default: 0,
+},
+
+workerPaid: {
+  type: Boolean,
+  default: false,
+},
   cancelledAt: {
     type: Date,
   },  
+   paymentEnabled: {
+      type: Boolean,
+      default: false,
+    },
   orderId: String,
   paymentId: String,
   amount: Number,
