@@ -34,6 +34,7 @@ const createBookingWorker = async (req, res) => {
       customer: req.user._id,
       worker: workerId,
       date: bookingDate,
+      amount: 499,
       status: "pending",
     });
 
