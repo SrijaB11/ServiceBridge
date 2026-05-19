@@ -21,6 +21,8 @@ const cancelcustomerBookingRoutes = require("./routes/cancelbooking/cancelcustom
 const customerCancelledBookingsRoutes = require("./routes/cancelbooking/customerCancelledBookingRoutes");
 const workerCancelledBookingRoutes = require("./routes/cancelbooking/workerCancelledBookingRoutes");
 const adminCancelledBookingRoutes =require("./routes/cancelbooking/adminCancelledBookingRoutes");
+const paymentRoutes = require("./routes/payment/paymentRoutes");
+const adminPaymentRoutes = require("./routes/admin/adminPaymentRoutes");
 
 const app = express();
 
@@ -48,6 +50,9 @@ app.use("/booking", cancelcustomerBookingRoutes);
 app.use("/booking", customerCancelledBookingsRoutes);
 app.use("/booking", workerCancelledBookingRoutes);
 app.use("/booking", adminCancelledBookingRoutes);
+app.use("/payment", paymentRoutes);
+app.use( "/admin",adminPaymentRoutes);
+
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
