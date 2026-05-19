@@ -131,11 +131,15 @@ function Bookings() {
             {/* WORKER INFO */}
             <div className="mt-6 flex items-center gap-4">
               <img
-                // src="https://i.pravatar.cc/150?img=12"
-                src=""
-                alt="worker"
-                className="w-16 h-16 rounded-full object-cover"
-              />
+  src={
+    booking.worker?.documents
+      ?.profilePhoto
+      ? `http://localhost:5000/${booking.worker.documents.profilePhoto}`
+      : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            }
+             alt="worker"
+             className="w-16 h-16 rounded-full object-cover"
+/>
 
               <div>
                 <h4 className="font-semibold text-lg text-gray-800">
@@ -165,110 +169,81 @@ function Bookings() {
                   {dayjs(booking.createdAt).format("DD MMM YYYY")}
                 </span>
               </p>
-              {/* 
-              <div className="flex gap-3">
-                <button
-                  disabled={booking.status !== "accepted"}
-                  onClick={() => navigate(`/complaint/${booking._id}`)} */}
-              {/* <div className="flex gap-3 flex-wrap">
-                {/* CANCEL BOOKING */}
-              {/* <button
-                  disabled={
-                    booking.status === "cancelled" ||
-                    booking.status === "completed"
-                  }
-                  onClick={() => cancelBooking(booking._id)}
-                  className={`px-5 py-2 rounded-xl text-white transition ${
-                    booking.status === "cancelled" ||
-                    booking.status === "completed"
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-red-500 hover:bg-red-600"
-                  }`}
-                >
-                  {booking.status === "cancelled"
-                    ? "Cancelled"
-                    : "Cancel Booking"}
-                </button> */}
-              {/* <div className="flex gap-3 flex-wrap"> */}
-              {/* CANCEL BOOKING */}
-              {/* <button
-                  disabled={
-                    booking.status === "cancelled" ||
-                    booking.status === "completed"
-                  }
-                  onClick={() => cancelBooking(booking._id)}
-                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
-                    booking.status === "cancelled" ||
-                    booking.status === "completed"
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-orange-500 hover:bg-orange-600"
-                  }`}
-                >
-                  {booking.status === "cancelled"
-                    ? "Cancelled"
-                    : "Cancel Booking"}
-                </button>
+             <div className="flex gap-3 flex-wrap">
 
-                {/* RAISE COMPLAINT */}
-              {/* <button
-                  disabled={booking.status !== "accepted"}
-                  onClick={() => navigate(`/complaint/${booking._id}`)}
-                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
-                    booking.status === "accepted"
-                      ? "bg-indigo-500 hover:bg-indigo-600"
-                      : "bg-gray-300 cursor-not-allowed"
-                  }`}
-                >
-                  Raise Complaint
-                </button>
-              </div> */}
+  {/* PAY NOW BUTTON */}
 
-              {/* COMPLAINT */}
-              {/* <button
-                  disabled={booking.status !== "accepted"}
-                  onClick={() => navigate(`/complaint/${booking._id}`)}
-                  className={`px-5 py-2 rounded-xl text-white transition
-      ${
-        booking.status === "accepted"
-          ? "bg-red-500 hover:bg-red-600"
-          : "bg-gray-300 cursor-not-allowed"
-      }`}
-                >
-                  Raise Complaint
-                </button>
-              </div> */}
-              <div className="flex gap-3 flex-wrap">
-                {/* RAISE COMPLAINT */}
-                <button
-                  disabled={booking.status !== "accepted"}
-                  onClick={() => navigate(`/complaint/${booking._id}`)}
-                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
-                    booking.status === "accepted"
-                      ? "bg-amber-500 hover:bg-amber-600"
-                      : "bg-gray-300 cursor-not-allowed"
-                  }`}
-                >
-                  Raise Complaint
-                </button>
-                {/* CANCEL BOOKING */}
-                <button
-                  disabled={
-                    booking.status === "cancelled" ||
-                    booking.status === "completed"
-                  }
-                  onClick={() => cancelBooking(booking._id)}
-                  className={`px-5 py-2 rounded-xl text-white font-medium transition ${
-                    booking.status === "cancelled" ||
-                    booking.status === "completed"
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-red-500 hover:bg-red-600"
-                  }`}
-                >
-                  {booking.status === "cancelled"
-                    ? "Cancelled"
-                    : "Cancel Booking"}
-                </button>
-              </div>
+  {booking.status === "completed" &&
+    booking.paymentStatus !== "paid" && (
+      <button
+        onClick={() =>
+          navigate("/customer/payment", {
+            state: {
+              worker: booking.worker,
+              date: booking.date,
+              service:
+                booking.worker?.services?.[0],
+              amount: booking.amount,
+              requestId: booking._id,
+            },
+          })
+        }
+        className="px-5 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium transition"
+      >
+        Pay Now
+      </button>
+    )}
+
+  {/* PAID STATUS */}
+
+  {booking.paymentStatus === "paid" && (
+    <button
+      disabled
+      className="px-5 py-2 rounded-xl bg-green-100 text-green-700 font-medium cursor-not-allowed"
+    >
+      Paid Successfully
+    </button>
+  )}
+
+  {/* RAISE COMPLAINT */}
+
+  <button
+    disabled={booking.status !== "accepted"}
+    onClick={() =>
+      navigate(`/complaint/${booking._id}`)
+    }
+    className={`px-5 py-2 rounded-xl text-white font-medium transition ${
+      booking.status === "accepted"
+        ? "bg-amber-500 hover:bg-amber-600"
+        : "bg-gray-300 cursor-not-allowed"
+    }`}
+  >
+    Raise Complaint
+  </button>
+
+  {/* CANCEL BOOKING */}
+
+  <button
+    disabled={
+      booking.status === "cancelled" ||
+      booking.status === "completed"
+    }
+    onClick={() =>
+      cancelBooking(booking._id)
+    }
+    className={`px-5 py-2 rounded-xl text-white font-medium transition ${
+      booking.status === "cancelled" ||
+      booking.status === "completed"
+        ? "bg-gray-300 cursor-not-allowed"
+        : "bg-red-500 hover:bg-red-600"
+    }`}
+  >
+    {booking.status === "cancelled"
+      ? "Cancelled"
+      : "Cancel Booking"}
+  </button>
+
+</div>
             </div>
           </div>
         ))}

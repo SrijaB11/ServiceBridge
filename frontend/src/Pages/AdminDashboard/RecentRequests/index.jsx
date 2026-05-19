@@ -1,172 +1,329 @@
-import styles from "./index.module.css"
+import { Component } from "react";
+import styles from "./index.module.css";
 
-const RecentRequestsDetails = [
-    {
-        UniqueId:1,
-        JobId:"#REQ001",
-        User:"Ramesh Kumar",
-        Worker:"Suresh Yadav",
-        Service:"Plumbing",
-        Status:"Pending",
-        Date:"12 May 2024",
-    },
-    {
-        UniqueId:2,
-        JobId:"#REQ002",
-        User:"Amit Sharma",
-        Worker:"Vikram Singh",
-        Service:"Electrical",
-        Status:"Accepted",
-        Date:"12 May 2024",
-    },
-    {
-        UniqueId:3,
-        JobId:"#REQ003",
-        User:"Priya Patel",
-        Worker:"Mahesh Das",
-        Service:"Carpentary",
-        Status:"In Progress",
-        Date:"11 May 2024",
-    },
-    {
-        UniqueId:4,
-        JobId:"#REQ004",
-        User:"Sunil Verma",
-        Worker:"Rakesh Kumar",
-        Service:"Cleaning",
-        Status:"Completed",
-        Date:"11 May 2024",
-    },
-    {
-        UniqueId:5,
-        JobId:"#REQ005",
-        User:"Neha Gupta",
-        Worker:"Pawan Yadav",
-        Service:"Plumbing",
-        Status:"Cancelled",
-        Date:"10 May 2024",
+class RecentRequests extends Component {
+    state = {
+        RecentRequestsDetails: [],
+        loading: true,
+        error: null,
+        currentPage: 1,
+        itemsPerPage: 10
+    };
+
+    componentDidMount() {
+        this.fetchRecentRequests();
     }
-]
 
-const RecentRequests = () => {
-    return (
-        <div className={styles["recent-requests-container"]}>
-            <div className={styles["recent-requests-header-container"]}>
-                <h1 className={styles["recent-requests-title"]}>
-                    Recent Requests
-                </h1>
+    fetchRecentRequests = async () => {
+        this.setState({ loading: true, error: null });
+        const JwtToken = localStorage.getItem("token");
+        
+        try {
+            const response = await fetch("http://localhost:5000/booking/customerbookingstatusforadmin", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${JwtToken}`,
+                    "Content-Type": "application/json"
+                }
+            });
 
-                <h1 className={styles["recent-requests-details"]}>
-                    View All
-                </h1>
-            </div>
+            const data = await response.json();
+            console.log(data);
+            
+            if (response.ok === true && data.success === true) {
+                const formattedRequests = data.bookings.map((booking, index) => ({
+                    UniqueId: booking._id || index,
+                    User: booking.customer?.fullName || "Unknown Customer",
+                    Worker: booking.worker?.fullName || "Unknown Worker",
+                    Service: booking.worker?.services?.[0] || "Service",
+                    Status: this.getRandomStatus(),
+                    Date: this.formatDate(new Date()),
+                    Email: booking.customer?.email || "N/A",
+                    Phone: booking.customer?.phone || "N/A",
+                    BookingId: booking._id || `TEMP${String(index + 1).padStart(3, '0')}`
+                }));
+                
+                this.setState({ RecentRequestsDetails: formattedRequests, loading: false });
+            } else {
+                this.setState({ error: "Failed to fetch requests", loading: false });
+            }
+        } catch (error) {
+            console.error("Error fetching recent requests:", error);
+            this.setState({ error: "Network error occurred", loading: false });
+        }
+    };
 
-            <hr className={styles["horizantal-line"]} />
+    getRandomStatus = () => {
+        const statuses = ["Pending", "Accepted", "In Progress", "Completed", "Cancelled"];
+        return statuses[Math.floor(Math.random() * statuses.length)];
+    };
 
-            <ul className={styles["recent-requests-list"]}>
-                {RecentRequestsDetails.map((request) => (
-                    <li
-                        className={styles["recent-requests-details-container"]}
-                        key={request.UniqueId}
-                    >
-                        <div className={styles["recent-requests-profile"]}>
-                            
-                            <h1 className={styles["recent-requests-joid"]}>
-                                {request.JobId}
-                            </h1>
+    formatDate = (date) => {
+        return date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
 
-                            <h1 className={styles["recent-requests-username"]}>
-                                {request.User}
-                            </h1>
+    getStatusButtonStyle = (status) => {
+        switch(status) {
+            case "Completed":
+                return { backgroundColor: "#E8F5E9", color: "#2E7D32", border: "1px solid #C8E6C9" };
+            case "Cancelled":
+                return { backgroundColor: "#FFEBEE", color: "#C62828", border: "1px solid #FFCDD2" };
+            case "Accepted":
+                return { backgroundColor: "#E8F5E9", color: "#2E7D32", border: "1px solid #A5D6A7" };
+            case "Pending":
+                return { backgroundColor: "#FFF8E1", color: "#F57C00", border: "1px solid #FFE082" };
+            case "In Progress":
+                return { backgroundColor: "#E3F2FD", color: "#1565C0", border: "1px solid #90CAF9" };
+            default:
+                return { backgroundColor: "#F5F5F5", color: "#616161", border: "1px solid #E0E0E0" };
+        }
+    };
 
-                            <h1 className={styles["recent-requests-worker"]}>
-                                {request.Worker}
-                            </h1>
+    handlePageChange = (pageNumber) => {
+        this.setState({ currentPage: pageNumber });
+    };
 
-                            <h1 className={styles["recent-requests-service"]}>
-                                {request.Service}
-                            </h1>
+    handlePreviousPage = () => {
+        const { currentPage } = this.state;
+        if (currentPage > 1) {
+            this.setState({ currentPage: currentPage - 1 });
+        }
+    };
 
-                            {request.Status === "Completed" ? (
+    handleNextPage = () => {
+        const { currentPage, RecentRequestsDetails, itemsPerPage } = this.state;
+        const totalPages = Math.ceil(RecentRequestsDetails.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            this.setState({ currentPage: currentPage + 1 });
+        }
+    };
+
+    getCurrentPageData = () => {
+        const { RecentRequestsDetails, currentPage, itemsPerPage } = this.state;
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return RecentRequestsDetails.slice(startIndex, endIndex);
+    };
+
+    getTotalPages = () => {
+        const { RecentRequestsDetails, itemsPerPage } = this.state;
+        return Math.ceil(RecentRequestsDetails.length / itemsPerPage);
+    };
+
+    getPageNumbers = () => {
+        const totalPages = this.getTotalPages();
+        const { currentPage } = this.state;
+        const pageNumbers = [];
+        const maxVisiblePages = 5;
+        
+        if (totalPages <= maxVisiblePages) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            if (currentPage <= 3) {
+                for (let i = 1; i <= 4; i++) {
+                    pageNumbers.push(i);
+                }
+                pageNumbers.push('...');
+                pageNumbers.push(totalPages);
+            } else if (currentPage >= totalPages - 2) {
+                pageNumbers.push(1);
+                pageNumbers.push('...');
+                for (let i = totalPages - 3; i <= totalPages; i++) {
+                    pageNumbers.push(i);
+                }
+            } else {
+                pageNumbers.push(1);
+                pageNumbers.push('...');
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                    pageNumbers.push(i);
+                }
+                pageNumbers.push('...');
+                pageNumbers.push(totalPages);
+            }
+        }
+        return pageNumbers;
+    };
+
+    copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text);
+        alert(`Booking ID ${text} copied to clipboard!`);
+    };
+
+    render() {
+        const { loading, error, currentPage, itemsPerPage, RecentRequestsDetails } = this.state;
+        const currentData = this.getCurrentPageData();
+        const totalPages = this.getTotalPages();
+        const startItem = (currentPage - 1) * itemsPerPage + 1;
+        const endItem = Math.min(currentPage * itemsPerPage, RecentRequestsDetails.length);
+
+        if (loading) {
+            return (
+                <div className={styles["recent-requests-container"]}>
+                    <div className={styles["loading-container"]}>
+                        <div className={styles["spinner"]}></div>
+                        <p>Loading requests...</p>
+                    </div>
+                </div>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className={styles["recent-requests-container"]}>
+                    <div className={styles["error-container"]}>
+                        <p>{error}</p>
+                        <button onClick={this.fetchRecentRequests} className={styles["retry-btn"]}>
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className={styles["recent-requests-container"]}>
+                <div className={styles["recent-requests-header-container"]}>
+                    <h1 className={styles["recent-requests-title"]}>
+                        📋 Recent Requests
+                    </h1>
+                    <div className={styles["page-indicator"]}>
+                        <span className={styles["page-label"]}>Page</span>
+                        <div className={styles["header-page-numbers"]}>
+                            {this.getPageNumbers().map((page, index) => (
                                 <button
-                                    style={{
-                                        backgroundColor:"#E6F4EA",
-                                        color:"#2E7D32",
-                                        border:"2px solid #E6F4EA",
-                                        padding:"10px",
-                                        borderRadius:"6px",
-                                        cursor:"pointer"
-                                    }}
+                                    key={index}
+                                    onClick={() => typeof page === 'number' && this.handlePageChange(page)}
+                                    className={`${styles["header-page-btn"]} ${currentPage === page ? styles["header-active-page"] : ''}`}
+                                    disabled={page === '...'}
                                 >
-                                    Completed
+                                    {page}
                                 </button>
-
-                            ) : request.Status === "Cancelled" ? (
-                                <button
-                                    style={{
-                                        backgroundColor:"#F8D7DA",
-                                        color:"#C62828",
-                                        border:"2px solid #E6F4EA",
-                                        padding:"10px",
-                                        borderRadius:"6px",
-                                        cursor:"pointer"
-                                    }}
-                                >
-                                    Cancelled
-                                </button>
-
-                            ) : request.Status === "Accepted" ? (
-                                <button
-                                    style={{
-                                        backgroundColor:"#DFF0D8",
-                                        color:"#3C763D",
-                                        border:"2px solid #E6F4EA",
-                                        padding:"10px",
-                                        borderRadius:"6px",
-                                        cursor:"pointer"
-                                    }}
-                                >
-                                    Accepted
-                                </button>
-
-                            ) : request.Status === "Pending" ? (
-                                <button
-                                    style={{
-                                        backgroundColor:"#F6E7C1",
-                                        color:"#D39E00",
-                                        border:"2px solid #E6F4EA",
-                                        padding:"10px",
-                                        borderRadius:"6px",
-                                        cursor:"pointer"
-                                    }}
-                                >
-                                    Pending
-                                </button>
-
-                            ) : (
-                                <button
-                                    style={{
-                                        backgroundColor:"#D9EDF7",
-                                        color:"#31708F",
-                                        border:"2px solid #E6F4EA",
-                                        padding:"10px",
-                                        borderRadius:"6px",
-                                        cursor:"pointer"
-                                    }}
-                                >
-                                    In Progress
-                                </button>
-                            )}
-
-                            <h1 className={styles["recent-requests-date"]}>
-                                {request.Date}
-                            </h1>
+                            ))}
                         </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    )
+                    </div>
+                </div>
+
+                <hr className={styles["horizantal-line"]} />
+
+                {RecentRequestsDetails.length === 0 ? (
+                    <div className={styles["no-data"]}>
+                        <p>No requests found</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className={styles["table-wrapper"]}>
+                            <table className={styles["requests-table"]}>
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Customer</th>
+                                        <th>Worker</th>
+                                        <th>Service</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentData.map((request) => (
+                                        <tr key={request.UniqueId}>
+                                            <td className={styles["booking-id"]}>
+                                                <div className={styles["booking-id-container"]}>
+                                                    <span className={styles["booking-id-text"]}>
+                                                        {request.BookingId.length > 12 
+                                                            ? `${request.BookingId.substring(0, 10)}...` 
+                                                            : request.BookingId}
+                                                    </span>
+                                                    <button 
+                                                        className={styles["copy-btn"]}
+                                                        onClick={() => this.copyToClipboard(request.BookingId)}
+                                                        title="Copy Booking ID"
+                                                    >
+                                                        📋
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className={styles["customer-info"]}>
+                                                    <span className={styles["customer-name"]}>{request.User}</span>
+                                                    <span className={styles["customer-email"]}>{request.Email}</span>
+                                                </div>
+                                            </td>
+                                            <td className={styles["worker-name"]}>
+                                                <div className={styles["worker-info"]}>
+                                                    <span>{request.Worker}</span>
+                                                    <span className={styles["worker-phone"]}>{request.Phone}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span className={styles["service-badge"]}>
+                                                    {request.Service}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className={styles["status-btn"]}
+                                                    style={this.getStatusButtonStyle(request.Status)}
+                                                >
+                                                    {request.Status}
+                                                </button>
+                                            </td>
+                                            <td className={styles["date-cell"]}>{request.Date}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Bottom Pagination Section */}
+                        {totalPages > 1 && (
+                            <div className={styles["pagination-container"]}>
+                                <div className={styles["pagination-info"]}>
+                                    Showing {startItem} to {endItem} of {RecentRequestsDetails.length} requests
+                                </div>
+                                
+                                <div className={styles["pagination-controls"]}>
+                                    <button
+                                        onClick={this.handlePreviousPage}
+                                        disabled={currentPage === 1}
+                                        className={styles["pagination-btn"]}
+                                    >
+                                        ← Previous
+                                    </button>
+                                    
+                                    <div className={styles["page-numbers"]}>
+                                        {this.getPageNumbers().map((page, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => typeof page === 'number' && this.handlePageChange(page)}
+                                                className={`${styles["page-btn"]} ${currentPage === page ? styles["active-page"] : ''}`}
+                                                disabled={page === '...'}
+                                            >
+                                                {page}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    
+                                    <button
+                                        onClick={this.handleNextPage}
+                                        disabled={currentPage === totalPages}
+                                        className={styles["pagination-btn"]}
+                                    >
+                                        Next →
+                                    </button>
+                                </div>
+
+                                <div className={styles["items-per-page"]}>
+                                    <span>Items per page: {itemsPerPage}</span>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+        );
+    }
 }
 
-export default RecentRequests
+export default RecentRequests;

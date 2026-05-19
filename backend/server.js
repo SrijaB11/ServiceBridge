@@ -15,12 +15,14 @@ const workerRegRoutes = require("./routes/register/workerRegRoutes");
 const serviceRoutes = require("./routes/service/serviceRoutes");
 const customerRoutes = require("./routes/customer/customerCrudRoutes");
 const workercomplaintRoutes = require("./routes/complaint/workercomplaintRoutes");
-const appRatingRoutes = require("./routes/apprating/appRating");
-const skillCertificationApprovalRoutes = require("./routes/admin/skillCertificationRoutes");
 const totalBookingRoutes = require("./routes/totalbookings/totalBookingRoutes");
 const totalWorkerRoutes = require("./routes/totalworkers/totalWorkerRoutes");
-const cancelBookingRoutes = require("./routes/cancelbooking/cancelBookingRoutes");
-const getCancelledBookings = require("./routes/cancelbooking/getCancelledBookingRoutes");
+const cancelcustomerBookingRoutes = require("./routes/cancelbooking/cancelcustomerBookingRoutes");
+const customerCancelledBookingsRoutes = require("./routes/cancelbooking/customerCancelledBookingRoutes");
+const workerCancelledBookingRoutes = require("./routes/cancelbooking/workerCancelledBookingRoutes");
+const adminCancelledBookingRoutes =require("./routes/cancelbooking/adminCancelledBookingRoutes");
+const paymentRoutes = require("./routes/payment/paymentRoutes");
+const adminPaymentRoutes = require("./routes/admin/adminPaymentRoutes");
 
 const app = express();
 
@@ -42,12 +44,15 @@ app.use("/complaint",customercomplaintRoutes);
 app.use("/service", serviceRoutes);
 app.use("/customer", customerRoutes);
 app.use("/complaint", workercomplaintRoutes);
-app.use("/apprating", appRatingRoutes);
-app.use("/admin", skillCertificationApprovalRoutes); 
 app.use("/bookings", totalBookingRoutes);
 app.use("/workers", totalWorkerRoutes);
-app.use("/booking", cancelBookingRoutes);
-app.use("/booking", getCancelledBookings);
+app.use("/booking", cancelcustomerBookingRoutes);
+app.use("/booking", customerCancelledBookingsRoutes);
+app.use("/booking", workerCancelledBookingRoutes);
+app.use("/booking", adminCancelledBookingRoutes);
+app.use("/payment", paymentRoutes);
+app.use( "/admin",adminPaymentRoutes);
+
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
