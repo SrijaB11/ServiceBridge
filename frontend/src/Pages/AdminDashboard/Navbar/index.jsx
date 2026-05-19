@@ -21,7 +21,7 @@ const menu = [
   { name: "Worker Complaints", path: "/admin/worker-complaints", icon: <AlertCircle size={20} /> },
   { name: "Certificate Verification", path: "/admin/workers/verification", icon: <Users size={20} /> },
   // { name: "Bookings", path: "/admin/bookings", icon: <ClipboardList size={20} /> },
-  { name: "Payments", path: "/admin/payments", icon: <CreditCard size={20} /> }
+  { name: "Incomming Payments", path: "/admin/customer-payments", icon: <CreditCard size={20} /> }
 ];
 
 const AdminNavBar = () => {

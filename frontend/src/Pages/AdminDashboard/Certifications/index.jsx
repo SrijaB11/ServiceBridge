@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 import styles from "./index.module.css";
 
 const WorkerVerification = () => {
@@ -76,11 +77,12 @@ const WorkerVerification = () => {
           )
         );
       } else {
-        setMessage(`❌ Failed to ${status} worker`);
+        // setMessage(` Failed to ${status} worker`);
+        toast.error(` Failed to ${status} worker`)
       }
     } catch (error) {
       console.error(error);
-      setMessage(`❌ Error while ${status === "approved" ? "approving" : "rejecting"}`);
+      setMessage(` Error while ${status === "approved" ? "approving" : "rejecting"}`);
     } finally {
       setLoading(false);
     }
@@ -91,7 +93,8 @@ const WorkerVerification = () => {
     if (!worker) return;
 
     if (!hasAllDocuments(worker)) {
-      setMessage("❌ All documents must be uploaded before approval!");
+      toast.error(" All documents must be uploaded before approval!")
+      // setMessage("❌ All documents must be uploaded before approval!");
       return;
     }
     updateWorkerStatus(workerId, "approved", worker.workerName);
@@ -104,96 +107,99 @@ const WorkerVerification = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {message && (
-        <div
-          style={{
-            padding: "12px 16px",
-            margin: "10px 0",
-            borderRadius: "6px",
-            background: message.includes("✅") ? "#d4edda" : "#f8d7da",
-            color: message.includes("✅") ? "#155724" : "#721c24",
-            fontWeight: "500",
-          }}
-        >
-          {message}
-        </div>
-      )}
+    <>
+    <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Certificate Verification</h1>
+      <div className={styles.container}>
+        {message && (
+          <div
+            style={{
+              padding: "12px 16px",
+              margin: "10px 0",
+              borderRadius: "6px",
+              background: message.includes("✅") ? "#d4edda" : "#f8d7da",
+              color: message.includes("✅") ? "#155724" : "#721c24",
+              fontWeight: "500",
+            }}
+          >
+            {message}
+          </div>
+        )}
 
-      <ul className={styles["cards-container"]}>
-        {workersDetailsList.map((worker) => {
-          const status = worker.workerVerificationStatus;
-          const isApproved = status === "approved";
-          const isRejected = status === "rejected";
+        <ul className={styles["cards-container"]}>
+          {workersDetailsList.map((worker) => {
+            const status = worker.workerVerificationStatus;
+            const isApproved = status === "approved";
+            const isRejected = status === "rejected";
 
-          return (
-            <li key={worker.workerId} className={styles["worker-card"]}>
-              <div className={styles["worker-card-body"]}>
-                <div className={styles["worker-header"]}>
-                  {worker.profilePicture ? (
-                    <img
-                      src={`http://localhost:5000/${worker.profilePicture.replace(/\\/g, "/")}`}
-                      alt="Profile"
-                      className={styles["worker-avatar"]}
-                      onError={(e) => (e.target.style.display = "none")}
-                    />
-                  ) : (
-                    <div className={styles["worker-avatar"]}>
-                      {worker.workerName?.charAt(0)?.toUpperCase()}
+            return (
+              <li key={worker.workerId} className={styles["worker-card"]}>
+                <div className={styles["worker-card-body"]}>
+                  <div className={styles["worker-header"]}>
+                    {worker.profilePicture ? (
+                      <img
+                        src={`http://localhost:5000/${worker.profilePicture.replace(/\\/g, "/")}`}
+                        alt="Profile"
+                        className={styles["worker-avatar"]}
+                        onError={(e) => (e.target.style.display = "none")}
+                      />
+                    ) : (
+                      <div className={styles["worker-avatar"]}>
+                        {worker.workerName?.charAt(0)?.toUpperCase()}
+                      </div>
+                    )}
+
+                    <div className={styles["worker-info"]}>
+                      <h3>{worker.workerName}</h3>
+                      <p>{worker.services}</p>
                     </div>
-                  )}
+                  </div>
 
-                  <div className={styles["worker-info"]}>
-                    <h3>{worker.workerName}</h3>
-                    <p>{worker.services}</p>
+                  <div className={styles["certificates-section"]}>
+                    <p className={styles["certificates-title"]}>Certificates Uploaded</p>
+                    <div className={styles["certificates-list"]}>
+                      <span className={styles["certificate-badge"]}>Skill Certificate</span>
+                      <span className={styles["certificate-badge"]}>Aadhar Card</span>
+                      <span className={styles["certificate-badge"]}>Pan Card</span>
+                    </div>
+                  </div>
+
+                  <div className={styles["action-buttons"]}>
+                    {isApproved ? (
+                      <p style={{ color: "green", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
+                        <CheckIcon /> Verified Successfully
+                      </p>
+                    ) : isRejected ? (
+                      <p style={{ color: "red", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
+                        <XIcon /> Worker Rejected
+                      </p>
+                    ) : (
+                      <>
+                        <button
+                          className={`${styles.btn} ${styles["approve-btn"]}`}
+                          onClick={() => handleApprove(worker.workerId)}
+                          disabled={loading}
+                          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                        >
+                          <CheckIcon /> Approve
+                        </button>
+                        <button
+                          className={`${styles.btn} ${styles["reject-btn"]}`}
+                          onClick={() => handleReject(worker.workerId)}
+                          disabled={loading}
+                          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                        >
+                          <XIcon /> Reject
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
-
-                <div className={styles["certificates-section"]}>
-                  <p className={styles["certificates-title"]}>Certificates Uploaded</p>
-                  <div className={styles["certificates-list"]}>
-                    <span className={styles["certificate-badge"]}>Skill Certificate</span>
-                    <span className={styles["certificate-badge"]}>ID Documents</span>
-                    <span className={styles["certificate-badge"]}>Tax Info</span>
-                  </div>
-                </div>
-
-                <div className={styles["action-buttons"]}>
-                  {isApproved ? (
-                    <p style={{ color: "green", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
-                      <CheckIcon /> Verified Successfully
-                    </p>
-                  ) : isRejected ? (
-                    <p style={{ color: "red", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
-                      <XIcon /> Worker Rejected
-                    </p>
-                  ) : (
-                    <>
-                      <button
-                        className={`${styles.btn} ${styles["approve-btn"]}`}
-                        onClick={() => handleApprove(worker.workerId)}
-                        disabled={loading}
-                        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                      >
-                        <CheckIcon /> Approve
-                      </button>
-                      <button
-                        className={`${styles.btn} ${styles["reject-btn"]}`}
-                        onClick={() => handleReject(worker.workerId)}
-                        disabled={loading}
-                        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                      >
-                        <XIcon /> Reject
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </>
   );
 };
 

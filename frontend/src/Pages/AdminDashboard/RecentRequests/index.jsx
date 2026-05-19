@@ -183,145 +183,148 @@ class RecentRequests extends Component {
         }
 
         return (
-            <div className={styles["recent-requests-container"]}>
-                <div className={styles["recent-requests-header-container"]}>
-                    <h1 className={styles["recent-requests-title"]}>
-                        📋 Recent Requests
-                    </h1>
-                    <div className={styles["page-indicator"]}>
-                        <span className={styles["page-label"]}>Page</span>
-                        <div className={styles["header-page-numbers"]}>
-                            {this.getPageNumbers().map((page, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => typeof page === 'number' && this.handlePageChange(page)}
-                                    className={`${styles["header-page-btn"]} ${currentPage === page ? styles["header-active-page"] : ''}`}
-                                    disabled={page === '...'}
-                                >
-                                    {page}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                <hr className={styles["horizantal-line"]} />
-
-                {RecentRequestsDetails.length === 0 ? (
-                    <div className={styles["no-data"]}>
-                        <p>No requests found</p>
-                    </div>
-                ) : (
-                    <>
-                        <div className={styles["table-wrapper"]}>
-                            <table className={styles["requests-table"]}>
-                                <thead>
-                                    <tr>
-                                        <th>Booking ID</th>
-                                        <th>Customer</th>
-                                        <th>Worker</th>
-                                        <th>Service</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentData.map((request) => (
-                                        <tr key={request.UniqueId}>
-                                            <td className={styles["booking-id"]}>
-                                                <div className={styles["booking-id-container"]}>
-                                                    <span className={styles["booking-id-text"]}>
-                                                        {request.BookingId.length > 12 
-                                                            ? `${request.BookingId.substring(0, 10)}...` 
-                                                            : request.BookingId}
-                                                    </span>
-                                                    <button 
-                                                        className={styles["copy-btn"]}
-                                                        onClick={() => this.copyToClipboard(request.BookingId)}
-                                                        title="Copy Booking ID"
-                                                    >
-                                                        📋
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className={styles["customer-info"]}>
-                                                    <span className={styles["customer-name"]}>{request.User}</span>
-                                                    <span className={styles["customer-email"]}>{request.Email}</span>
-                                                </div>
-                                            </td>
-                                            <td className={styles["worker-name"]}>
-                                                <div className={styles["worker-info"]}>
-                                                    <span>{request.Worker}</span>
-                                                    <span className={styles["worker-phone"]}>{request.Phone}</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className={styles["service-badge"]}>
-                                                    {request.Service}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    className={styles["status-btn"]}
-                                                    style={this.getStatusButtonStyle(request.Status)}
-                                                >
-                                                    {request.Status}
-                                                </button>
-                                            </td>
-                                            <td className={styles["date-cell"]}>{request.Date}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* Bottom Pagination Section */}
-                        {totalPages > 1 && (
-                            <div className={styles["pagination-container"]}>
-                                <div className={styles["pagination-info"]}>
-                                    Showing {startItem} to {endItem} of {RecentRequestsDetails.length} requests
-                                </div>
-                                
-                                <div className={styles["pagination-controls"]}>
+            <>
+                <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Recent Requests</h1>
+                <div className={styles["recent-requests-container"]}>
+                    <div className={styles["recent-requests-header-container"]}>
+                        <h1 className={styles["recent-requests-title"]}>
+                            Recent Requests
+                        </h1>
+                        <div className={styles["page-indicator"]}>
+                            <span className={styles["page-label"]}>Page</span>
+                            <div className={styles["header-page-numbers"]}>
+                                {this.getPageNumbers().map((page, index) => (
                                     <button
-                                        onClick={this.handlePreviousPage}
-                                        disabled={currentPage === 1}
-                                        className={styles["pagination-btn"]}
+                                        key={index}
+                                        onClick={() => typeof page === 'number' && this.handlePageChange(page)}
+                                        className={`${styles["header-page-btn"]} ${currentPage === page ? styles["header-active-page"] : ''}`}
+                                        disabled={page === '...'}
                                     >
-                                        ← Previous
+                                        {page}
                                     </button>
-                                    
-                                    <div className={styles["page-numbers"]}>
-                                        {this.getPageNumbers().map((page, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={() => typeof page === 'number' && this.handlePageChange(page)}
-                                                className={`${styles["page-btn"]} ${currentPage === page ? styles["active-page"] : ''}`}
-                                                disabled={page === '...'}
-                                            >
-                                                {page}
-                                            </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr className={styles["horizantal-line"]} />
+
+                    {RecentRequestsDetails.length === 0 ? (
+                        <div className={styles["no-data"]}>
+                            <p>No requests found</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className={styles["table-wrapper"]}>
+                                <table className={styles["requests-table"]}>
+                                    <thead>
+                                        <tr>
+                                            <th>Booking ID</th>
+                                            <th>Customer</th>
+                                            <th>Worker</th>
+                                            <th>Service</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentData.map((request) => (
+                                            <tr key={request.UniqueId}>
+                                                <td className={styles["booking-id"]}>
+                                                    <div className={styles["booking-id-container"]}>
+                                                        <span className={styles["booking-id-text"]}>
+                                                            {request.BookingId.length > 12 
+                                                                ? `${request.BookingId.substring(0, 10)}...` 
+                                                                : request.BookingId}
+                                                        </span>
+                                                        <button 
+                                                            className={styles["copy-btn"]}
+                                                            onClick={() => this.copyToClipboard(request.BookingId)}
+                                                            title="Copy Booking ID"
+                                                        >
+                                                            📋
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className={styles["customer-info"]}>
+                                                        <span className={styles["customer-name"]}>{request.User}</span>
+                                                        <span className={styles["customer-email"]}>{request.Email}</span>
+                                                    </div>
+                                                </td>
+                                                <td className={styles["worker-name"]}>
+                                                    <div className={styles["worker-info"]}>
+                                                        <span>{request.Worker}</span>
+                                                        <span className={styles["worker-phone"]}>{request.Phone}</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span className={styles["service-badge"]}>
+                                                        {request.Service}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className={styles["status-btn"]}
+                                                        style={this.getStatusButtonStyle(request.Status)}
+                                                    >
+                                                        {request.Status}
+                                                    </button>
+                                                </td>
+                                                <td className={styles["date-cell"]}>{request.Date}</td>
+                                            </tr>
                                         ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Bottom Pagination Section */}
+                            {totalPages > 1 && (
+                                <div className={styles["pagination-container"]}>
+                                    <div className={styles["pagination-info"]}>
+                                        Showing {startItem} to {endItem} of {RecentRequestsDetails.length} requests
                                     </div>
                                     
-                                    <button
-                                        onClick={this.handleNextPage}
-                                        disabled={currentPage === totalPages}
-                                        className={styles["pagination-btn"]}
-                                    >
-                                        Next →
-                                    </button>
-                                </div>
+                                    <div className={styles["pagination-controls"]}>
+                                        <button
+                                            onClick={this.handlePreviousPage}
+                                            disabled={currentPage === 1}
+                                            className={styles["pagination-btn"]}
+                                        >
+                                            ← Previous
+                                        </button>
+                                        
+                                        <div className={styles["page-numbers"]}>
+                                            {this.getPageNumbers().map((page, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => typeof page === 'number' && this.handlePageChange(page)}
+                                                    className={`${styles["page-btn"]} ${currentPage === page ? styles["active-page"] : ''}`}
+                                                    disabled={page === '...'}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        
+                                        <button
+                                            onClick={this.handleNextPage}
+                                            disabled={currentPage === totalPages}
+                                            className={styles["pagination-btn"]}
+                                        >
+                                            Next →
+                                        </button>
+                                    </div>
 
-                                <div className={styles["items-per-page"]}>
-                                    <span>Items per page: {itemsPerPage}</span>
+                                    <div className={styles["items-per-page"]}>
+                                        <span>Items per page: {itemsPerPage}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
+                            )}
+                        </>
+                    )}
+                </div>
+            </>
         );
     }
 }

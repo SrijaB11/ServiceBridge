@@ -111,117 +111,121 @@ const CustomerComplaints = () => {
     if (error) return <div className={styles["recent-complaints-container"]}>Error: {error}</div>;
 
     return (
-        <div className={styles["recent-complaints-container"]}>
-            <div className={styles["recent-complaints-header-container"]}>
-                <h1 className={styles["recent-complaints-title"]}>Customer Complaints</h1>
-                {totalPages > 1 && (
-                    <div className={styles["page-info"]}>
-                        Page <strong>{currentPage}</strong> of {totalPages}
-                    </div>
-                )}
-            </div>
-
-            <hr className={styles["horizantal-line"]} />
-
-            <ul className={styles["complaints-list"]}>
-                {currentComplaints.length > 0 ? (
-                    currentComplaints.map((complaint) => (
-                        <li key={complaint._id || complaint.id} className={styles["complaint-card"]}>
-                            <div className={styles["complaint-main"]}>
-                                <div className={styles["complaint-info"]}>
-                                    <div className={styles["customer-name"]}>
-                                        {complaint.customer?.fullName || "Unknown Customer"}
-                                    </div>
-                                    <div className={styles["against"]}>
-                                        Against: <strong>{complaint.worker?.fullName || "Unknown Worker"}</strong>
-                                    </div>
-                                </div>
-                                <div className={styles["complaint-content"]}>
-                                    <p className={styles["complaint-text"]}>
-                                        {complaint.complaintText || "No complaint text available"}
-                                    </p>
-                                    <div className={styles["complaint-date"]}>
-                                        {complaint.createdAt
-                                            ? new Date(complaint.createdAt).toLocaleDateString('en-IN')
-                                            : "N/A"}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles["complaint-actions"]}>
-                                {complaint.status?.toLowerCase() !== "resolved" ? (
-                                    <>
-                                        <button className={styles["status-pending"]}>Pending</button>
-                                        <button
-                                            className={styles["btn-resolve"]}
-                                            onClick={() => handleResolve(complaint._id)}
-                                        >
-                                            Resolve
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button className={styles["status-resolved"]}>Resolved</button>
-                                        <button className={styles["btn-view"]}>View</button>
-                                    </>
-                                )}
-                            </div>
-                        </li>
-                    ))
-                ) : (
-                    <li className={styles["no-complaints"]}>No complaints found</li>
-                )}
-            </ul>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-                <div className={styles.pagination}>
-                    <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-                        Previous
-                    </button>
-
-                    {getPageNumbers().map((page, index) => (
-                        page === "..." ? (
-                            <button
-                                key={index}
-                                className={styles.ellipsis}
-                                onClick={() => setShowJumpInput(true)}
-                            >
-                                ...
-                            </button>
-                        ) : (
-                            <button
-                                key={index}
-                                onClick={() => goToPage(page)}
-                                className={currentPage === page ? styles.activePage : ""}
-                            >
-                                {page}
-                            </button>
-                        )
-                    ))}
-
-                    <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                        Next
-                    </button>
-
-                    {/* Jump to Page */}
-                    {showJumpInput && (
-                        <div className={styles.jumpInputContainer}>
-                            <input
-                                type="number"
-                                value={jumpPage}
-                                onChange={(e) => setJumpPage(e.target.value)}
-                                placeholder="Page no."
-                                min="1"
-                                max={totalPages}
-                                onKeyDown={(e) => e.key === 'Enter' && handleJumpToPage()}
-                            />
-                            <button onClick={handleJumpToPage}>Go</button>
-                            <button onClick={() => setShowJumpInput(false)}>Cancel</button>
+        <>
+            <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Customer Complaints</h1>
+            <div className={styles.container}></div>
+            <div className={styles["recent-complaints-container"]}>
+                <div className={styles["recent-complaints-header-container"]}>
+                    <h1 className={styles["recent-complaints-title"]}>Customer Complaints</h1>
+                    {totalPages > 1 && (
+                        <div className={styles["page-info"]}>
+                            Page <strong>{currentPage}</strong> of {totalPages}
                         </div>
                     )}
                 </div>
-            )}
-        </div>
+
+                <hr className={styles["horizantal-line"]} />
+
+                <ul className={styles["complaints-list"]}>
+                    {currentComplaints.length > 0 ? (
+                        currentComplaints.map((complaint) => (
+                            <li key={complaint._id || complaint.id} className={styles["complaint-card"]}>
+                                <div className={styles["complaint-main"]}>
+                                    <div className={styles["complaint-info"]}>
+                                        <div className={styles["customer-name"]}>
+                                            {complaint.customer?.fullName || "Unknown Customer"}
+                                        </div>
+                                        <div className={styles["against"]}>
+                                            Against: <strong>{complaint.worker?.fullName || "Unknown Worker"}</strong>
+                                        </div>
+                                    </div>
+                                    <div className={styles["complaint-content"]}>
+                                        <p className={styles["complaint-text"]}>
+                                            {complaint.complaintText || "No complaint text available"}
+                                        </p>
+                                        <div className={styles["complaint-date"]}>
+                                            {complaint.createdAt
+                                                ? new Date(complaint.createdAt).toLocaleDateString('en-IN')
+                                                : "N/A"}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles["complaint-actions"]}>
+                                    {complaint.status?.toLowerCase() !== "resolved" ? (
+                                        <>
+                                            <button className={styles["status-pending"]}>Pending</button>
+                                            <button
+                                                className={styles["btn-resolve"]}
+                                                onClick={() => handleResolve(complaint._id)}
+                                            >
+                                                Resolve
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className={styles["status-resolved"]}>Resolved</button>
+                                            <button className={styles["btn-view"]}>View</button>
+                                        </>
+                                    )}
+                                </div>
+                            </li>
+                        ))
+                    ) : (
+                        <li className={styles["no-complaints"]}>No complaints found</li>
+                    )}
+                </ul>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                    <div className={styles.pagination}>
+                        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+                            Previous
+                        </button>
+
+                        {getPageNumbers().map((page, index) => (
+                            page === "..." ? (
+                                <button
+                                    key={index}
+                                    className={styles.ellipsis}
+                                    onClick={() => setShowJumpInput(true)}
+                                >
+                                    ...
+                                </button>
+                            ) : (
+                                <button
+                                    key={index}
+                                    onClick={() => goToPage(page)}
+                                    className={currentPage === page ? styles.activePage : ""}
+                                >
+                                    {page}
+                                </button>
+                            )
+                        ))}
+
+                        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                            Next
+                        </button>
+
+                        {/* Jump to Page */}
+                        {showJumpInput && (
+                            <div className={styles.jumpInputContainer}>
+                                <input
+                                    type="number"
+                                    value={jumpPage}
+                                    onChange={(e) => setJumpPage(e.target.value)}
+                                    placeholder="Page no."
+                                    min="1"
+                                    max={totalPages}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleJumpToPage()}
+                                />
+                                <button onClick={handleJumpToPage}>Go</button>
+                                <button onClick={() => setShowJumpInput(false)}>Cancel</button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </>
     );
 };
 
