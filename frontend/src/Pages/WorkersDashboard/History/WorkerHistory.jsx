@@ -28,7 +28,7 @@ const WorkerHistory = () => {
     useState(true);
 
   /* =========================
-     FETCH COMPLETED REQUESTS
+     FETCH COMPLETED JOBS
   ========================= */
 
   const fetchCompletedJobs =
@@ -98,7 +98,7 @@ const WorkerHistory = () => {
       }
     >
 
-      {/* TOP */}
+      {/* TOP SECTION */}
 
       <div className={styles.topSection}>
 
@@ -117,9 +117,10 @@ const WorkerHistory = () => {
           completed service
           requests.
         </Typography>
+
       </div>
 
-      {/* EMPTY */}
+      {/* EMPTY STATE */}
 
       {completedJobs.length ===
       0 ? (
@@ -128,6 +129,7 @@ const WorkerHistory = () => {
             styles.emptyState
           }
         >
+
           <AssignmentTurnedIn
             sx={{
               fontSize: 70,
@@ -147,6 +149,7 @@ const WorkerHistory = () => {
             Completed services
             will appear here.
           </Typography>
+
         </div>
       ) : (
         <div
@@ -180,18 +183,23 @@ const WorkerHistory = () => {
 
                     <Avatar
                       src={
-                        job
-                          .customer
+                        job?.customer
                           ?.documents
                           ?.profilePhoto
                           ? `http://localhost:5000/${job.customer.documents.profilePhoto}`
-                          : ""
+                          : undefined
                       }
                       sx={{
                         width: 55,
                         height: 55,
                       }}
-                    />
+                    >
+                      {!job?.customer
+                        ?.documents
+                        ?.profilePhoto &&
+                        job?.customer
+                          ?.fullName?.[0]}
+                    </Avatar>
 
                     <div>
 
@@ -213,6 +221,7 @@ const WorkerHistory = () => {
                             ?.location
                         }
                       </Typography>
+
                     </div>
                   </div>
 
@@ -220,6 +229,7 @@ const WorkerHistory = () => {
                     label="Completed"
                     color="success"
                   />
+
                 </div>
 
                 {/* DETAILS */}
@@ -229,6 +239,8 @@ const WorkerHistory = () => {
                     styles.jobDetails
                   }
                 >
+
+                  {/* TOTAL AMOUNT */}
 
                   <div
                     className={
@@ -241,12 +253,41 @@ const WorkerHistory = () => {
                     />
 
                     <Typography>
+                      Total:
+                      ₹
+                      {job.amount || 0}
+                    </Typography>
+
+                  </div>
+
+                  {/* WORKER EARNINGS */}
+
+                  <div
+                    className={
+                      styles.detailItem
+                    }
+                  >
+
+                    <CurrencyRupee
+                      fontSize="small"
+                    />
+
+                    <Typography
+                      className={
+                        styles.earningText
+                      }
+                    >
+                      You Earn:
                       ₹
                       {
-                        job.amount
+                        job.workerAmount ||
+                        0
                       }
                     </Typography>
+
                   </div>
+
+                  {/* DATE */}
 
                   <div
                     className={
@@ -263,10 +304,12 @@ const WorkerHistory = () => {
                         job.date
                       ).toLocaleDateString()}
                     </Typography>
+
                   </div>
+
                 </div>
 
-                {/* PAYMENT */}
+                {/* PAYMENT SECTION */}
 
                 <div
                   className={
@@ -274,25 +317,79 @@ const WorkerHistory = () => {
                   }
                 >
 
-                  <Typography fontWeight="bold">
-                    Payment Status
-                  </Typography>
+                  {/* PAYMENT STATUS */}
 
-                  <Chip
-                    label={
-                      job.paymentStatus
+                  <div
+                    className={
+                      styles.paymentRow
                     }
-                    color={
-                      job.paymentStatus ===
-                      "paid"
-                        ? "success"
-                        : "warning"
-                    }
-                  />
+                  >
+
+                    <Typography fontWeight="bold">
+                      Payment Status
+                    </Typography>
+
+                    <Chip
+                      label={
+                        job.paymentStatus ===
+                        "paid"
+                          ? "Customer Paid"
+                          : "Pending"
+                      }
+                      color={
+                        job.paymentStatus ===
+                        "paid"
+                          ? "success"
+                          : "warning"
+                      }
+                    />
+
+                  </div>
+
+                  {/* EARNINGS */}
+
+                  {job.paymentStatus ===
+                    "paid" && (
+                    <div
+                      className={
+                        styles.paymentRow
+                      }
+                    >
+
+                      <Typography
+                        className={
+                          styles.earningText
+                        }
+                      >
+                        Worker Earnings:
+                        ₹
+                        {
+                          job.workerAmount ||
+                          0
+                        }
+                      </Typography>
+
+                      {job.workerPaid ? (
+                        <Chip
+                          label="Paid by Admin"
+                          color="primary"
+                        />
+                      ) : (
+                        <Chip
+                          label="Awaiting Admin Payout"
+                          color="warning"
+                        />
+                      )}
+
+                    </div>
+                  )}
+
                 </div>
+
               </Card>
             )
           )}
+
         </div>
       )}
     </Box>

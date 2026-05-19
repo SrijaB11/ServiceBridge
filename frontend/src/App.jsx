@@ -62,8 +62,7 @@ import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
 import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
-import About from "./Pages/Customer/About";
-import PaymentPage from "./components/customer/PaymentPage";
+import PaymentPage from "./Pages/PaymentPage";
 
 /* =======================
    Loading Component
@@ -128,18 +127,13 @@ export default function App() {
         <Routes>
           {/* --- Public Routes --- */}
           <Route path="/" element={<Home />} />
-
           <Route path="/login" element={<Login />} />
-
           <Route path="/customer-register" element={<CustomerRegister />} />
-
+          0
           <Route path="/worker-register" element={<WorkerRegister />} />
-
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/about" element={<About />} />
-
           {/* --- Customer Routes --- */}
-
           <Route
             path="/customer"
             element={
@@ -154,13 +148,14 @@ export default function App() {
 
             <Route path="bookings" element={<Bookings />} />
 
+            <Route path="payment" element={<PaymentPage />} />
+
             <Route path="history" element={<History />} />
 
             <Route path="complaints" element={<Complaint />} />
 
             <Route path="profile" element={<Profile />} />
           </Route>
-
           <Route
             path="/service/:id"
             element={
@@ -185,14 +180,13 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* {/* <Route
             path="/payment/:id"
             element={
               <ProtectedRoute role="customer">
                 <PaymentPage />
               </ProtectedRoute>
-            }
-          />
+            }/> */}
           <Route
             path="/book-worker/:workerId"
             element={
@@ -201,9 +195,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-
           {/* --- Worker Routes --- */}
-
           <Route
             path="/worker"
             element={
@@ -226,9 +218,7 @@ export default function App() {
 
             {/* <Route path="logout" element={<div>Logging out...</div>} /> */}
           </Route>
-
           {/* --- Admin Routes --- */}
-
           <Route
             path="/admin"
             element={
@@ -260,9 +250,7 @@ export default function App() {
 
             <Route path="logout" element={<div>Logging out...</div>} />
           </Route>
-
           {/* --- Fallback --- */}
-
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
       </Suspense>

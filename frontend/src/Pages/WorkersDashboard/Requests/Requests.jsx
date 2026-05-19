@@ -28,9 +28,7 @@ const Requests = () => {
   const [loading, setLoading] =
     useState(true);
 
-  /* =========================
-     FETCH REQUESTS
-  ========================= */
+
 
   const fetchRequests = async () => {
     try {
@@ -70,9 +68,7 @@ setRequests(
     fetchRequests();
   }, []);
 
-  /* =========================
-     ACCEPT REQUEST
-  ========================= */
+  
 
   const handleAccept = async (
     requestId
@@ -107,9 +103,7 @@ setRequests(
     }
   };
 
-  /* =========================
-     REJECT REQUEST
-  ========================= */
+  
 
   const handleReject = async (
     requestId
@@ -144,46 +138,45 @@ setRequests(
     }
   };
 
-  /* =========================
-     COMPLETE REQUEST
-  ========================= */
+ 
 
-  const handleComplete = async (
-    requestId
-  ) => {
-    try {
-      const token =
-        localStorage.getItem("token");
+ const handleComplete = async (
+  requestId
+) => {
+  try {
+    const token =
+      localStorage.getItem("token");
 
-      await axios.put(
-        `http://localhost:5000/worker/request/complete/${requestId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    await axios.put(
+      `http://localhost:5000/worker/request/complete/${requestId}`,
+      {
+        status: "completed",
+        paymentEnabled: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      alert(
-        "Service marked as completed"
-      );
+    alert(
+      "Service marked as completed"
+    );
 
-      fetchRequests();
+    fetchRequests();
 
-    } catch (error) {
-      console.log(error);
+  } catch (error) {
+    console.log(error);
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to complete service"
-      );
-    }
-  };
+    alert(
+      error.response?.data?.message ||
+        "Failed to complete service"
+    );
+  }
+};
 
-  /* =========================
-     LOADING
-  ========================= */
+  
 
   if (loading) {
     return (
