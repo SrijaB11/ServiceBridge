@@ -28,6 +28,8 @@ const adminskillCertificateRoutes = require("./routes/admin/skillCertificationRo
 const payAdminToWorkerRoutes =require("./routes/payment/payAdminToWorkerRoutes");
 const dashboardRoutes = require("./routes/customer/dashboardRoutes");
 
+const workerRecievesPaymentFromAdminRoutes =require("./routes/payment/workerRecievesPaymentFromAdminRoutes");
+
 
 const app = express();
 
