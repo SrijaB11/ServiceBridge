@@ -33,11 +33,12 @@ const ServiceProviders = lazy(
 ======================= */
 
 import WorkerDashboard from "./Pages/WorkersDashboard/Dashboard/WorkerDashboard";
-// import History from "./Pages/WorkersDashboard/History";
+import WorkerEarnings from "./Pages/WorkersDashboard/Earnings/WorkerEarnings";
 import Requests from "./Pages/WorkersDashboard/Requests/Requests";
 import WorkerNavBar from "./Pages/WorkersDashboard/Navbar/WorkerNavbar";
 import WorkerProfile from "./Pages/WorkersDashboard/Profile/WorkerProfile";
 import WorkerHeader from "./Pages/WorkersDashboard/Header/WorkerHeader";
+import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
 
 /* =======================
    Admin Components
@@ -61,8 +62,8 @@ import Bookings from "./components/customer/Bookings";
 import History from "./components/customer/History";
 import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
-import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
 import PaymentPage from "./Pages/PaymentPage";
+import WorkerComplaintPage from "./Pages/WorkersDashboard/Complaints/WorkerComplaints";
 
 /* =======================
    Loading Component
@@ -213,13 +214,22 @@ export default function App() {
 
             <Route path="history" element={<WorkerHistory />} />
 
-            {/* <Route path="earnings" element={<div>Earnings Page</div>} /> */}
+            <Route path="earnings" element={<WorkerEarnings />} />
+
+            {/* <Route path="complaint/:bookingId" element={ <ProtectedRoute role="worker"> <WorkerComplaintPage /></ProtectedRoute>}/> */}
+            <Route
+  path="complaint/:bookingId"
+  element={
+    <WorkerComplaintPage />
+  }
+/>
 
             {/* <Route path="reviews" element={<div>Reviews Page</div>} /> */}
 
             <Route path="profile" element={<WorkerProfile />} />
 
-            {/* <Route path="logout" element={<div>Logging out...</div>} /> */}
+
+
           </Route>
 
           {/* --- Admin Routes --- */}
