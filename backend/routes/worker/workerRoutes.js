@@ -17,6 +17,7 @@ const {
   acceptRequest,
   rejectRequest,
   updateWorkerProfile,
+  completeRequest,
 } = require(
   "../../controllers/worker/workerController"
 );
@@ -75,6 +76,12 @@ router.put(
   "/update-profile",
   authMiddleware,
   updateWorkerProfile
+);
+
+router.put(
+  "/request/complete/:requestId",
+  authMiddleware,
+  completeRequest
 );
 
 
