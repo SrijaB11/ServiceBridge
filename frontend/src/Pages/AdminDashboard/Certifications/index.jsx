@@ -6,6 +6,7 @@ const WorkerVerification = () => {
   const [workersDetailsList, setWorkersDetailsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
   useEffect(() => {
     getWorkerDetails();
@@ -13,76 +14,79 @@ const WorkerVerification = () => {
 
   const getWorkerDetails = async () => {
     const jwtToken = localStorage.getItem("token");
-    if (!jwtToken) return;
+    if (!jwtToken) {
+      toast.error("Please login again");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:5000/admin/workers", {
         method: "GET",
         headers: { Authorization: `Bearer ${jwtToken}` },
       });
-
       const data = await response.json();
 
       if (response.ok) {
-        const updatedWorkersList = data.data.map((worker) => ({
+        const updatedWorkersList = data.data?.map((worker) => ({
           workerId: worker._id,
-          workerName: worker.fullName || worker.WorkerName,
-          workerEmail: worker.email,
+          workerName: worker.fullName || worker.WorkerName || "Unknown Worker",
           services: worker.services?.[0] || "N/A",
           profilePicture: worker.profilePhoto,
-          skillCertificate: worker.documents?.skillDoc,
+          skillCertificate: worker.documents?.skillDocs,
           panCard: worker.panCard,
           aadharCard: worker.aadharCard || worker.documents?.aadharCard,
           workerVerificationStatus: worker.workerVerificationStatus,
-        }));
-
+        })) || [];
         setWorkersDetailsList(updatedWorkersList);
+      } else {
+        toast.error(data.message || "Failed to fetch workers");
       }
     } catch (error) {
-      console.error("Error fetching workers:", error);
+      toast.error("Error loading worker data");
     }
-  };
-
-  const hasAllDocuments = (worker) => {
-    return !!(worker.skillCertificate && worker.panCard && worker.aadharCard);
   };
 
   const updateWorkerStatus = async (workerId, status, workerName) => {
     const jwtToken = localStorage.getItem("token");
+    if (!jwtToken) return;
+
     setLoading(true);
     setMessage("");
+    setMessageType("");
 
     try {
-      const response = await fetch("http://localhost:5000/admin/verifyworkerskillcertificates", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify({
-          workerId: workerId,
-          status: status,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/admin/verifyworkerskillcertificates",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`,
+          },
+          body: JSON.stringify({ workerId, status }),
+        }
+      );
 
-      if (response.ok) {
-        setMessage(
-          status === "approved"
-            ? `✅ ${workerName} verified successfully!`
-            : `🚫 ${workerName} has been rejected.`
-        );
+      const responseData = await response.json().catch(() => ({}));
+
+      if (response.ok || responseData.success) {  
+        const successMessage =
+        setMessageType("success");
+        setMessage(successMessage);
+
         setWorkersDetailsList((prevList) =>
           prevList.map((w) =>
             w.workerId === workerId ? { ...w, workerVerificationStatus: status } : w
           )
         );
+
+        toast.success(successMessage);
       } else {
-        // setMessage(` Failed to ${status} worker`);
-        toast.error(` Failed to ${status} worker`)
+        const errorMsg = responseData?.message || `Failed to ${status} worker`;
+        toast.error(errorMsg);
       }
     } catch (error) {
-      console.error(error);
-      setMessage(` Error while ${status === "approved" ? "approving" : "rejecting"}`);
+      toast.error("Network error. Check console.");
     } finally {
       setLoading(false);
     }
@@ -92,23 +96,32 @@ const WorkerVerification = () => {
     const worker = workersDetailsList.find((w) => w.workerId === workerId);
     if (!worker) return;
 
-    if (!hasAllDocuments(worker)) {
-      toast.error(" All documents must be uploaded before approval!")
-      // setMessage("❌ All documents must be uploaded before approval!");
+    if (!worker.skillCertificate || !worker.panCard || !worker.aadharCard) {
+      toast.error("All documents must be uploaded before approval!");
       return;
     }
+
     updateWorkerStatus(workerId, "approved", worker.workerName);
   };
 
   const handleReject = (workerId) => {
     const worker = workersDetailsList.find((w) => w.workerId === workerId);
-    if (!worker) return;
-    updateWorkerStatus(workerId, "rejected", worker.workerName);
+    if (!worker) {
+      toast.error("Worker not found");
+      return;
+    }
+
+    if (window.confirm(`Reject ${worker.workerName}?`)) {
+      updateWorkerStatus(workerId, "rejected", worker.workerName);
+    }
   };
 
   return (
     <>
-    <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Certificate Verification</h1>
+      <h1 style={{ marginTop: "10px", marginBottom: "20px", marginLeft: "10px", fontSize: "28px", color: "#10b981" }}>
+        Certificate Verification
+      </h1>
+
       <div className={styles.container}>
         {message && (
           <div
@@ -116,8 +129,8 @@ const WorkerVerification = () => {
               padding: "12px 16px",
               margin: "10px 0",
               borderRadius: "6px",
-              background: message.includes("✅") ? "#d4edda" : "#f8d7da",
-              color: message.includes("✅") ? "#155724" : "#721c24",
+              background: messageType === "success" ? "#d4edda" : "#f8d7da",
+              color: messageType === "success" ? "#155724" : "#721c24",
               fontWeight: "500",
             }}
           >
@@ -151,6 +164,9 @@ const WorkerVerification = () => {
                     <div className={styles["worker-info"]}>
                       <h3>{worker.workerName}</h3>
                       <p>{worker.services}</p>
+                      <p style={{ fontSize: "14px", color: "#666" }}>
+                        Status: <strong>{status || "Pending"}</strong>
+                      </p>
                     </div>
                   </div>
 
@@ -178,7 +194,6 @@ const WorkerVerification = () => {
                           className={`${styles.btn} ${styles["approve-btn"]}`}
                           onClick={() => handleApprove(worker.workerId)}
                           disabled={loading}
-                          style={{ display: "flex", alignItems: "center", gap: "8px" }}
                         >
                           <CheckIcon /> Approve
                         </button>
@@ -186,7 +201,6 @@ const WorkerVerification = () => {
                           className={`${styles.btn} ${styles["reject-btn"]}`}
                           onClick={() => handleReject(worker.workerId)}
                           disabled={loading}
-                          style={{ display: "flex", alignItems: "center", gap: "8px" }}
                         >
                           <XIcon /> Reject
                         </button>
@@ -203,17 +217,17 @@ const WorkerVerification = () => {
   );
 };
 
-// Internal SVG Components for clean UI
+// Icons
 const CheckIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12"></polyline>
+    <polyline points="20 6 9 17 4 12" />
   </svg>
 );
 
 const XIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 

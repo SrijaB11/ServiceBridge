@@ -35,7 +35,7 @@ const AdminNavBar = () => {
 
   return (
     <>
-      {/* Mobile Top Bar */}
+    
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50">
         <h1 className="font-bold text-green-600">Admin Panel</h1>
         <button onClick={() => setOpen(true)}>
@@ -43,7 +43,7 @@ const AdminNavBar = () => {
         </button>
       </div>
 
-      {/* Mobile Overlay */}
+      
       {open && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -51,7 +51,7 @@ const AdminNavBar = () => {
         />
       )}
 
-      {/* Sidebar - Full White Background */}
+      
       <aside
         className={`
           fixed md:static top-0 left-0 z-50 h-screen w-64
@@ -60,7 +60,7 @@ const AdminNavBar = () => {
           transition-transform duration-300
         `}
       >
-        {/* Header */}
+        
         <div className="flex items-center justify-between px-5 py-6 border-b flex-shrink-0">
           <h2 className="text-2xl font-bold text-green-600">Service Bridge</h2>
           <button className="md:hidden" onClick={() => setOpen(false)}>
@@ -68,7 +68,7 @@ const AdminNavBar = () => {
           </button>
         </div>
 
-        {/* User Info */}
+        
         <div className="px-5 py-6 border-b flex items-center gap-3 flex-shrink-0">
           <img
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -81,7 +81,7 @@ const AdminNavBar = () => {
           </div>
         </div>
 
-        {/* Menu Items - Scrollable */}
+        
         <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
           {menu.map((item) => (
             <NavLink
@@ -103,7 +103,7 @@ const AdminNavBar = () => {
           ))}
         </nav>
 
-        {/* Logout - Now part of full white background */}
+        
         <div className="p-4 border-t mt-auto flex-shrink-0 bg-white">
           <button
             onClick={handleLogout}

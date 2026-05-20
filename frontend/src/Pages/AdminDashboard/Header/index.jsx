@@ -17,7 +17,6 @@ const Topbar = () => {
   return (
     <div className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white shadow-md">
       <div className="flex items-center justify-between px-4 md:px-6 py-3">
-        {/* LOGO / TITLE */}
         <h1
           onClick={() => navigate("/admin")}
           className="font-bold text-lg cursor-pointer"
@@ -25,7 +24,6 @@ const Topbar = () => {
           Service Bridge Admin
         </h1>
 
-        {/* SEARCH */}
         <div className="hidden md:flex items-center bg-white/20 px-3 py-1 rounded-lg w-1/3">
           <Search size={18} />
           <input
@@ -34,7 +32,6 @@ const Topbar = () => {
           />
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="flex items-center gap-4 relative">
           {/* NOTIFICATIONS */}
           <div className="relative cursor-pointer">
@@ -45,7 +42,6 @@ const Topbar = () => {
             </span>
           </div>
 
-          {/* PROFILE */}
           <div
             onClick={() => setOpenMenu(!openMenu)}
             className="flex items-center gap-2 cursor-pointer bg-white/10 px-3 py-1 rounded-lg"
@@ -54,7 +50,6 @@ const Topbar = () => {
             <span className="hidden md:block">{username}</span>
           </div>
 
-          {/* DROPDOWN */}
           {openMenu && (
             <div className="absolute right-0 top-12 bg-white text-black shadow-lg rounded-lg w-40 overflow-hidden">
               <button

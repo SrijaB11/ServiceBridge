@@ -23,7 +23,6 @@ class Users extends Component {
                 headers: { Authorization: `Bearer ${JwtToken}` }
             });
             const FetchedUserDetails = await UserDetails.json();
-            console.log(FetchedUserDetails)
             if (UserDetails.ok === true && UserDetails.status === 200) {
                 const UpdatedUsersData = FetchedUserDetails["data"].map((User) => ({
                     id: User.id,
@@ -154,7 +153,7 @@ class Users extends Component {
                                         disabled={currentPage === totalPages}
                                         className={styles.pageBtn}
                                     >
-                                        Next →
+                                        Next 
                                     </button>
                                 </div>
                             )}

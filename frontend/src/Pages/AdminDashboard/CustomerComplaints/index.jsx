@@ -10,9 +10,8 @@ const CustomerComplaints = () => {
     const [showJumpInput, setShowJumpInput] = useState(false);
     const [jumpPage, setJumpPage] = useState("");
 
-    const itemsPerPage = 5;   // ← Changed to 5
+    const itemsPerPage = 5; 
 
-    // Fetch complaints
     useEffect(() => {
         const JwtToken = localStorage.getItem("token");
         const fetchComplaints = async () => {
