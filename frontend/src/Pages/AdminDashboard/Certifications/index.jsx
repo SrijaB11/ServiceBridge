@@ -25,7 +25,6 @@ const WorkerVerification = () => {
         headers: { Authorization: `Bearer ${jwtToken}` },
       });
       const data = await response.json();
-
       if (response.ok) {
         const updatedWorkersList = data.data?.map((worker) => ({
           workerId: worker._id,
@@ -37,6 +36,7 @@ const WorkerVerification = () => {
           aadharCard: worker.aadharCard || worker.documents?.aadharCard,
           workerVerificationStatus: worker.workerVerificationStatus,
         })) || [];
+        
         setWorkersDetailsList(updatedWorkersList);
       } else {
         toast.error(data.message || "Failed to fetch workers");

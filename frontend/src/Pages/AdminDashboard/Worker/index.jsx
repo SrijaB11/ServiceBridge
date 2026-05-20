@@ -57,8 +57,7 @@ const Worker = () => {
     setFormData({
       fullName: workers.fullName || "",
       location: workers.location || "",
-      address: workers.address || "",
-      services: workers.services || "",
+      services: workers.services || ""
     });
 
     setIsEditModalOpen(true);
@@ -360,17 +359,6 @@ const Worker = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                </div>
-
-                <div className={styles["form-field"]}>
-                  <label>Detailed Address</label>
-
-                  <textarea
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    rows="3"
-                  />
                 </div>
 
                 <button
