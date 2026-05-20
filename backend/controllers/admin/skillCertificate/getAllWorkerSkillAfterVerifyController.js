@@ -32,7 +32,7 @@ const getAllWorkersVerificationDetails = async (req, res) => {
       documents: {
         profilePhoto: worker.documents.profilePhoto,
         panCard: worker.documents.panCard,
-        skillDoc: worker.documents.skillDoc,
+        skillDocs: worker.documents.skillDocs,
       },
 
       verification: {

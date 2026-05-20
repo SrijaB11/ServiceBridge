@@ -5,47 +5,47 @@ const complaintSchema = new mongoose.Schema(
     customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true
+      required: true,
     },
     worker: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true
+      required: true,
     },
     booking: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Booking",
-      required: true
+      required: true,
     },
     complaintText: {
       type: String,
-      required: true
+      required: true,
     },
-     complaintBy: {
-        type: String,
-        enum: [
-          "customer",
-          "worker",
-        ],
-        required: true,
-      },
+    //  complaintBy: {
+    //     type: String,
+    //     enum: [
+    //       "customer",
+    //       "worker",
+    //     ],
+    //     required: true,
+    //   },
     status: {
       type: String,
       enum: ["pending", "in_review", "resolved"],
-      default: "pending"
+      default: "pending",
     },
     adminResponse: {
-      type: String
+      type: String,
     },
     resolvedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users"
+      ref: "users",
     },
     resolvedAt: {
-      type: Date
-    }
+      type: Date,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Complaint", complaintSchema);
