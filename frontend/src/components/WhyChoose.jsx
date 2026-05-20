@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import CardActionArea from "@mui/material/CardActionArea";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
 
 function WhyChoose() {
   const features = [
@@ -30,7 +31,7 @@ function WhyChoose() {
       image: "/images/customersupport.jpg",
     },
   ];
-
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -145,6 +146,7 @@ function WhyChoose() {
                   <Button
                     variant="contained"
                     size="large"
+                    onClick={() => navigate("/about")}
                     sx={{
                       width: "fit-content",
                       borderRadius: "14px",

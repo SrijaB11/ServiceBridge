@@ -11,6 +11,7 @@ import "./App.css";
 
 const Login = lazy(() => import("./Pages/Login"));
 const Home = lazy(() => import("./Pages/Home"));
+const About = lazy(() => import("./Pages/Customer/About"));
 
 const CustomerRegister = lazy(
   () => import("./Pages/Register/CustomerRegister"),
@@ -127,17 +128,13 @@ export default function App() {
         <Routes>
           {/* --- Public Routes --- */}
           <Route path="/" element={<Home />} />
-
           <Route path="/login" element={<Login />} />
-
           <Route path="/customer-register" element={<CustomerRegister />} />
-0
+
           <Route path="/worker-register" element={<WorkerRegister />} />
-
           <Route path="/forgot-password" element={<ForgotPassword />} />
-
+          <Route path="/about" element={<About />} />
           {/* --- Customer Routes --- */}
-
           <Route
             path="/customer"
             element={
@@ -151,7 +148,7 @@ export default function App() {
             <Route path="services" element={<CustomerServices />} />
 
             <Route path="bookings" element={<Bookings />} />
-            
+
             <Route path="payment" element={<PaymentPage />} />
 
             <Route path="history" element={<History />} />
@@ -160,7 +157,6 @@ export default function App() {
 
             <Route path="profile" element={<Profile />} />
           </Route>
-
           <Route
             path="/service/:id"
             element={
@@ -185,6 +181,13 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          {/* {/* <Route
+            path="/payment/:id"
+            element={
+              <ProtectedRoute role="customer">
+                <PaymentPage />
+              </ProtectedRoute>
+            }/> */}
           <Route
             path="/book-worker/:workerId"
             element={
@@ -193,11 +196,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-           
-          
-
           {/* --- Worker Routes --- */}
-
           <Route
             path="/worker"
             element={
@@ -205,7 +204,6 @@ export default function App() {
                 <WorkerDashboardLayout />
               </ProtectedRoute>
             }
-            
           >
             <Route index element={<WorkerDashboard />} />
 
@@ -221,9 +219,7 @@ export default function App() {
 
             {/* <Route path="logout" element={<div>Logging out...</div>} /> */}
           </Route>
-
           {/* --- Admin Routes --- */}
-
           <Route
             path="/admin"
             element={
@@ -238,7 +234,10 @@ export default function App() {
 
             <Route path="recent-requests" element={<RecentRequests />} />
 
-            <Route path="customer-complaints" element={<CustomerComplaints />} />
+            <Route
+              path="customer-complaints"
+              element={<CustomerComplaints />}
+            />
 
             <Route path="worker-complaints" element={<WorkerComplaints />} />
 
@@ -252,9 +251,7 @@ export default function App() {
 
             <Route path="logout" element={<div>Logging out...</div>} />
           </Route>
-
           {/* --- Fallback --- */}
-
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
       </Suspense>
