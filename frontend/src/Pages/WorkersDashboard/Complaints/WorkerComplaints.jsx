@@ -6,7 +6,14 @@ import axios from "axios";
 
 import { toast } from "react-hot-toast";
 
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  AlertTriangle,
+  Send,
+} from "lucide-react";
 
 function WorkerComplaintPage() {
 
@@ -15,6 +22,9 @@ function WorkerComplaintPage() {
 
   const navigate =
     useNavigate();
+
+  const [loading, setLoading] =
+    useState(false);
 
   const [formData, setFormData] =
     useState({
@@ -50,6 +60,7 @@ function WorkerComplaintPage() {
     if (
       !formData.subject.trim()
     ) {
+
       toast.error(
         "Subject is required"
       );
@@ -61,6 +72,7 @@ function WorkerComplaintPage() {
       formData.subject.trim()
         .length < 5
     ) {
+
       toast.error(
         "Subject must be at least 5 characters"
       );
@@ -71,6 +83,7 @@ function WorkerComplaintPage() {
     if (
       !formData.message.trim()
     ) {
+
       toast.error(
         "Complaint details are required"
       );
@@ -82,6 +95,7 @@ function WorkerComplaintPage() {
       formData.message.trim()
         .length < 10
     ) {
+
       toast.error(
         "Please explain complaint properly"
       );
@@ -91,24 +105,21 @@ function WorkerComplaintPage() {
 
     try {
 
+      setLoading(true);
+
       const token =
         localStorage.getItem(
           "token"
         );
 
       await axios.post(
-        "http://localhost:5000/worker/complaint/add",
-        {
-          bookingId,
+        "http://localhost:5000/worker/complaint/addworker",
+         {
+           bookingId,
 
-          complaintText: `${formData.subject} - ${formData.message}`,
-
-          complaintType:
-            "worker",
-
-          against:
-            "customer",
-        },
+          message:
+      `${formData.subject} - ${formData.message}`,
+  },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -138,23 +149,58 @@ function WorkerComplaintPage() {
           ?.message ||
           "Failed to submit complaint"
       );
+
+    } finally {
+
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-100 flex items-center justify-center px-4 py-10">
 
-      <div className="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-6 sm:p-8">
+      <div className="w-full max-w-2xl bg-white/80 backdrop-blur-xl rounded-[32px] shadow-2xl border border-white/40 p-8">
 
         {/* HEADER */}
 
-        <h2 className="text-3xl font-bold text-red-500">
-          Report Customer
-        </h2>
+        <div className="flex items-center gap-4">
 
-        <p className="text-gray-500 mt-2">
-          Booking ID: {bookingId}
-        </p>
+          <div className="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center">
+
+            <AlertTriangle
+              size={28}
+              className="text-red-500"
+            />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-3xl font-bold text-gray-800">
+              Report Customer
+            </h2>
+
+            <p className="text-gray-500 mt-1">
+              Booking ID:
+              {" "}
+              {bookingId}
+            </p>
+
+          </div>
+        </div>
+
+        {/* INFO BOX */}
+
+        <div className="mt-6 bg-red-50 border border-red-100 rounded-2xl p-4">
+
+          <p className="text-sm text-red-600 leading-relaxed">
+
+            Please provide accurate complaint details.
+            False complaints may affect your worker account.
+
+          </p>
+
+        </div>
 
         {/* FORM */}
 
@@ -162,7 +208,7 @@ function WorkerComplaintPage() {
           onSubmit={
             handleSubmit
           }
-          className="mt-6 space-y-5"
+          className="mt-8 space-y-6"
         >
 
           {/* SUBJECT */}
@@ -184,11 +230,22 @@ function WorkerComplaintPage() {
                 handleChange
               }
               placeholder="Customer unavailable / Wrong address / Payment issue"
-              className="w-full mt-2 border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-red-400"
+              className="w-full mt-3 border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:ring-4 focus:ring-red-200 transition bg-white"
             />
+
+            <div className="text-right text-sm text-gray-400 mt-2">
+
+              {
+                formData.subject
+                  .length
+              }
+              /60
+
+            </div>
+
           </div>
 
-          {/* DETAILS */}
+          {/* MESSAGE */}
 
           <div>
 
@@ -197,7 +254,7 @@ function WorkerComplaintPage() {
             </label>
 
             <textarea
-              rows="5"
+              rows="6"
               name="message"
               maxLength={500}
               value={
@@ -207,18 +264,44 @@ function WorkerComplaintPage() {
                 handleChange
               }
               placeholder="Explain the issue with customer..."
-              className="w-full mt-2 border rounded-xl px-4 py-3 resize-none outline-none focus:ring-2 focus:ring-red-400"
+              className="w-full mt-3 border border-gray-200 rounded-2xl px-5 py-4 resize-none outline-none focus:ring-4 focus:ring-red-200 transition bg-white"
             />
+
+            <div className="text-right text-sm text-gray-400 mt-2">
+
+              {
+                formData.message
+                  .length
+              }
+              /500
+
+            </div>
+
           </div>
 
-          {/* SUBMIT BUTTON */}
+          {/* BUTTON */}
 
           <button
             type="submit"
-            className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition"
+            disabled={loading}
+            className={`w-full py-4 rounded-2xl font-semibold text-white transition-all duration-300 flex items-center justify-center gap-3 ${
+              loading
+                ? "bg-red-300 cursor-not-allowed"
+                : "bg-red-500 hover:bg-red-600 hover:scale-[1.01] shadow-lg"
+            }`}
           >
-            Submit Complaint
+
+            {loading ? (
+              "Submitting..."
+            ) : (
+              <>
+                <Send size={20} />
+                Submit Complaint
+              </>
+            )}
+
           </button>
+
         </form>
       </div>
     </div>

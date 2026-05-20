@@ -70,7 +70,15 @@ export default function Navbar() {
           </Link>
 
           <button
-            onClick={() => scrollToSection("services")}
+            onClick={() => {
+              const token = localStorage.getItem("token");
+
+              if (!token) {
+                navigate("/login");
+              } else {
+                navigate("/customer/services");
+              }
+            }}
             className="px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-xl font-medium shadow-md transition"
           >
             Book a Service
@@ -111,7 +119,8 @@ export default function Navbar() {
             </Link>
 
             <button
-              onClick={() => scrollToSection("services")}
+              //onClick={() => scrollToSection("services")}
+              onClick={() => navigate("/login")}
               className="w-full py-3 bg-green-500 text-white rounded-xl"
             >
               Book a Service
