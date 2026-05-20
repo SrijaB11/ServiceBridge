@@ -11,6 +11,7 @@ import "./App.css";
 
 const Login = lazy(() => import("./Pages/Login"));
 const Home = lazy(() => import("./Pages/Home"));
+const About = lazy(() => import("./Pages/Customer/About"));
 
 const CustomerRegister = lazy(
   () => import("./Pages/Register/CustomerRegister"),
@@ -129,7 +130,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/customer-register" element={<CustomerRegister />} />
-          0
+
           <Route path="/worker-register" element={<WorkerRegister />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/about" element={<About />} />
