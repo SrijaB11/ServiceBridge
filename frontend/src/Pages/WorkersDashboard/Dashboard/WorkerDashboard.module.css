@@ -1,269 +1,520 @@
-.dashboardWrapper {
-  padding: 24px;
-  background: #f5f7fb;
-  min-height: 100vh;
+/* =============================================
+   WORKER DASHBOARD — CSS MODULE
+   Reference: Service Bridge (screenshot)
+   Palette: White bg · Green primary #16a34a
+   Font: Nunito (rounded, friendly, clean)
+============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+/* ── Root Variables ──────────────────────── */
+
+:root {
+  --green-primary:   #16a34a;
+  --green-dark:      #15803d;
+  --green-light:     #dcfce7;
+  --green-muted:     #bbf7d0;
+  --green-icon-bg:   #f0fdf4;
+
+  --blue-icon-bg:    #eff6ff;
+  --blue-icon:       #3b82f6;
+  --yellow-icon-bg:  #fefce8;
+  --yellow-icon:     #eab308;
+  --purple-icon-bg:  #faf5ff;
+  --purple-icon:     #a855f7;
+
+  --text-primary:    #111827;
+  --text-secondary:  #6b7280;
+  --text-muted:      #9ca3af;
+
+  --surface:         #ffffff;
+  --bg-page:         #f9fafb;
+  --border:          #e5e7eb;
+  --border-light:    #f3f4f6;
+
+  --radius-card:     16px;
+  --radius-btn:      10px;
+  --shadow-card:     0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-hover:    0 6px 24px rgba(0,0,0,0.10);
 }
 
-.loaderContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
+/* ── Wrapper ─────────────────────────────── */
+
+.dashboardWrapper {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding: 36px 40px 64px;
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-primary);
+  box-sizing: border-box;
 }
+
+/* ── Top Section ─────────────────────────── */
 
 .topSection {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  animation: fadeDown 0.4s ease both;
 }
+
+.topSection h4 {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.topSection .MuiTypography-body1 {
+  font-size: 0.92rem !important;
+  color: var(--text-secondary) !important;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ── Stats Grid ──────────────────────────── */
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(220px, 1fr)
-  );
-  gap: 20px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
 }
 
+@media (max-width: 1100px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .statsGrid { grid-template-columns: 1fr; }
+  .dashboardWrapper { padding: 20px 16px 48px; }
+}
+
+/* ── Stat Card ───────────────────────────── */
+
 .statCard {
-  padding: 24px;
-  border-radius: 22px !important;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  box-shadow: 0 4px 20px
-    rgba(0, 0, 0, 0.05) !important;
-  transition: 0.3s ease;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
+  padding: 24px 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  animation: fadeUp 0.45s ease both;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green-primary), #22c55e);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .statCard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover) !important;
 }
+
+.statCard:hover::after {
+  opacity: 1;
+}
+
+.statCard:nth-child(1) { animation-delay: 0.05s; }
+.statCard:nth-child(2) { animation-delay: 0.10s; }
+.statCard:nth-child(3) { animation-delay: 0.15s; }
+.statCard:nth-child(4) { animation-delay: 0.20s; }
+
+.statCard .MuiTypography-h4 {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+  line-height: 1;
+}
+
+.statCard .MuiTypography-body1 {
+  font-size: 0.82rem !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+/* ── Stat Icons ──────────────────────────── */
 
 .statIconGreen,
 .statIconBlue,
 .statIconYellow,
 .statIconPurple {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.statIconGreen {
-  background: #e8f8ee;
-  color: #22c55e;
+.statIconGreen  { background: var(--green-icon-bg);   color: var(--green-primary); }
+.statIconBlue   { background: var(--blue-icon-bg);    color: var(--blue-icon); }
+.statIconYellow { background: var(--yellow-icon-bg);  color: var(--yellow-icon); }
+.statIconPurple { background: var(--purple-icon-bg);  color: var(--purple-icon); }
+
+.statIconGreen svg,
+.statIconBlue svg,
+.statIconYellow svg,
+.statIconPurple svg {
+  font-size: 1.6rem !important;
 }
 
-.statIconBlue {
-  background: #e8f1ff;
-  color: #3b82f6;
-}
-
-.statIconYellow {
-  background: #fff7dd;
-  color: #facc15;
-}
-
-.statIconPurple {
-  background: #f3e8ff;
-  color: #a855f7;
-}
+/* ── Main Grid ───────────────────────────── */
 
 .mainGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .mainGrid { grid-template-columns: 1fr; }
 }
 
 .leftSection,
 .rightSection {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
+
+/* ── Shared Card ─────────────────────────── */
 
 .jobsCard,
 .profileCard,
-.servicesCard,
-.growCard {
-  padding: 24px;
-  border-radius: 22px !important;
-  box-shadow: 0 4px 20px
-    rgba(0, 0, 0, 0.05) !important;
+.servicesCard {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
+  box-shadow: var(--shadow-card) !important;
+  overflow: hidden !important;
+  animation: fadeUp 0.5s ease both;
 }
+
+.jobsCard     { animation-delay: 0.25s; }
+.profileCard  { animation-delay: 0.30s; }
+.servicesCard { animation-delay: 0.35s; }
+
+/* ── Card Header ─────────────────────────── */
 
 .cardHeader {
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-light);
 }
 
-.jobsList {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.cardHeader .MuiTypography-h6 {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.01em;
 }
+
+/* ── Jobs List ───────────────────────────── */
+
+.jobsList {
+  padding: 4px 0;
+}
+
+/* ── Job Item ────────────────────────────── */
 
 .jobItem {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.15s ease;
+  gap: 16px;
 }
+
+.jobItem:last-child { border-bottom: none; }
+
+.jobItem:hover { background: #f9fafb; }
+
+/* ── Job Left ────────────────────────────── */
 
 .jobLeft {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
 }
+
+.jobLeft .MuiTypography-root:first-child {
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jobLeft .MuiTypography-body2 {
+  font-size: 0.78rem !important;
+  color: var(--text-muted) !important;
+  font-weight: 500;
+}
+
+/* Amount row */
+.jobLeft .MuiTypography-body2[mt] {
+  color: var(--green-primary) !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+}
+
+/* ── Job Right ───────────────────────────── */
 
 .jobRight {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
 }
+
+/* ── MUI Chip overrides ──────────────────── */
+
+.jobRight .MuiChip-root {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  height: 26px !important;
+  border-radius: 8px !important;
+  letter-spacing: 0.02em;
+}
+
+.jobRight .MuiChip-colorWarning {
+  background-color: #fef3c7 !important;
+  color: #d97706 !important;
+}
+
+.jobRight .MuiChip-colorPrimary {
+  background-color: #dbeafe !important;
+  color: #2563eb !important;
+}
+
+.jobRight .MuiChip-colorSuccess {
+  background-color: var(--green-light) !important;
+  color: var(--green-dark) !important;
+}
+
+.jobRight .MuiChip-colorError {
+  background-color: #fee2e2 !important;
+  color: #dc2626 !important;
+}
+
+/* ── Action Buttons ──────────────────────── */
 
 .actionButtons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .acceptBtn,
 .rejectBtn,
 .completeBtn,
 .complaintBtn {
+  padding: 7px 16px;
+  border-radius: var(--radius-btn);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
   border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  color: white;
   cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .acceptBtn {
-  background: #16a34a;
+  background: var(--green-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
 }
-
 .acceptBtn:hover {
-  background: #15803d;
+  background: var(--green-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.4);
 }
 
 .rejectBtn {
-  background: #dc2626;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
-
 .rejectBtn:hover {
-  background: #b91c1c;
+  background: #fecaca;
+  transform: translateY(-1px);
 }
 
 .completeBtn {
-  background: #2563eb;
+  background: var(--green-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
 }
-
 .completeBtn:hover {
-  background: #1d4ed8;
+  background: var(--green-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.4);
 }
 
 .complaintBtn {
-  background: #ea580c;
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+.complaintBtn:hover {
+  background: #fde68a;
+  transform: translateY(-1px);
 }
 
-.complaintBtn:hover {
-  background: #c2410c;
-}
+/* ── Profile Card ────────────────────────── */
 
 .profileTop {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
+  padding: 20px 24px;
+  gap: 14px;
 }
 
+.profileTop .MuiTypography-h6 {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+}
+
+.profileTop .MuiTypography-root[color='text.secondary'] {
+  font-size: 0.82rem !important;
+  color: var(--text-secondary) !important;
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.profileTop .MuiAvatar-root {
+  border: 3px solid var(--green-muted) !important;
+  width: 72px !important;
+  height: 72px !important;
+  flex-shrink: 0;
+}
+
+.profileTop .MuiChip-colorSuccess {
+  background-color: var(--green-light) !important;
+  color: var(--green-dark) !important;
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  height: 24px !important;
+  border-radius: 7px !important;
+}
+
+.profileTop .MuiChip-colorWarning {
+  background-color: #fef3c7 !important;
+  color: #d97706 !important;
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  height: 24px !important;
+  border-radius: 7px !important;
+}
+
+/* ── Profile Info ────────────────────────── */
+
 .profileInfo {
-  margin-top: 20px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
 }
+
+.profileInfo .MuiTypography-root {
+  font-size: 0.84rem !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+/* ── Services Card ───────────────────────── */
 
 .serviceItem {
   display: flex;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.growCard {
-  background: linear-gradient(
-    135deg,
-    #eaf9ee,
-    #d7fbe8
-  ) !important;
-
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.15s ease;
 }
 
-.updateBtn {
-  margin-top: 18px;
-  background: #16a34a;
-  color: white;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 12px;
-  cursor: pointer;
+.serviceItem:last-child { border-bottom: none; }
+
+.serviceItem:hover { background: #f9fafb; }
+
+.serviceItem .MuiTypography-root:first-child {
+  font-size: 0.87rem !important;
+  color: var(--text-primary) !important;
   font-weight: 600;
-  transition: 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.updateBtn:hover {
-  background: #15803d;
+.serviceItem .MuiTypography-root:last-child {
+  font-size: 0.87rem !important;
+  color: var(--green-primary) !important;
+  font-weight: 700;
 }
 
-.growImage {
-  width: 120px;
-  object-fit: contain;
+/* ── Loader ──────────────────────────────── */
+
+.loaderContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-page);
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 1100px) {
-  .mainGrid {
-    grid-template-columns: 1fr;
-  }
+.loaderContainer .MuiCircularProgress-root {
+  color: var(--green-primary) !important;
 }
 
-@media (max-width: 768px) {
-  .jobItem {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
+/* ── Animations ──────────────────────────── */
 
-  .jobRight {
-    align-items: flex-start;
-  }
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  .profileTop {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .growCard {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-  }
-
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .actionButtons {
-    flex-wrap: wrap;
-  }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
