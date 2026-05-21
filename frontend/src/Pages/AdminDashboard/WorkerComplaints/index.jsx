@@ -12,7 +12,6 @@ const WorkerComplaints = () => {
 
     const itemsPerPage = 10;
 
-    // Fetch Worker Complaints
     useEffect(() => {
         fetchWorkerComplaints();
     }, []);
@@ -22,7 +21,6 @@ const WorkerComplaints = () => {
         setError(null);
         
         const JwtToken = localStorage.getItem("token");
-        console.log("Token exists:", !!JwtToken);
         
         if (!JwtToken) {
             setError("Authentication token not found. Please login again.");
@@ -32,7 +30,7 @@ const WorkerComplaints = () => {
 
         try {
             const endpoint = "http://localhost:5000/complaint/admin";
-            console.log(`Fetching from endpoint: ${endpoint}`);
+            
             
             const response = await fetch(endpoint, {
                 method: "GET",
@@ -42,13 +40,11 @@ const WorkerComplaints = () => {
                 }
             });
 
-            console.log(`Response status:`, response.status);
+            
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`Data from API:`, data);
                 
-                // Handle different response structures
                 let allComplaints = [];
                 if (Array.isArray(data)) {
                     allComplaints = data;
@@ -58,11 +54,9 @@ const WorkerComplaints = () => {
                     allComplaints = data.data;
                 }
                 
-                // Filter only worker complaints
-                // Adjust the filter condition based on your API response structure
+                
                 const workerComplaints = allComplaints.filter(complaint => {
-                    // Check if complaint is against worker
-                    // You may need to adjust this condition based on your data structure
+                    
                     return complaint.complaintType === "worker" || 
                            complaint.against === "worker" ||
                            complaint.type === "worker" ||
@@ -70,23 +64,23 @@ const WorkerComplaints = () => {
                            (complaint.workerId && complaint.workerId !== null);
                 });
                 
-                console.log("Filtered worker complaints:", workerComplaints);
+                
                 setComplaints(workerComplaints);
                 setLoading(false);
             } else {
                 const errorData = await response.json().catch(() => ({}));
-                console.log(`Failed to fetch:`, errorData);
+                
                 setError(`API returned ${response.status}: ${response.statusText || "Failed to fetch complaints"}`);
                 setLoading(false);
             }
         } catch (err) {
-            console.log(`Error fetching complaints:`, err.message);
+            
             setError(`Failed to fetch worker complaints. ${err.message || "Please check your network connection."}`);
             setLoading(false);
         }
     };
 
-    // Handle Resolve Complaint
+    
     const handleResolve = async (id) => {
         const JwtToken = localStorage.getItem("token");
         try {
@@ -100,7 +94,7 @@ const WorkerComplaints = () => {
 
             if (response.ok) {
                 alert("Worker complaint resolved successfully!");
-                // Update local state instead of reloading
+                
                 setComplaints(complaints.map(complaint => 
                     complaint._id === id ? { ...complaint, status: "Resolved" } : complaint
                 ));
@@ -114,7 +108,7 @@ const WorkerComplaints = () => {
         }
     };
 
-    // Pagination functions
+    
     const totalPages = Math.ceil(complaints.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -298,7 +292,7 @@ const WorkerComplaints = () => {
                             ))}
                         </ul>
 
-                        {/* Pagination */}
+                        
                         {totalPages > 1 && (
                             <div className={styles.pagination}>
                                 <button 

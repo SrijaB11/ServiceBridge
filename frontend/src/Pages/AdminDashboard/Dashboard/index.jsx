@@ -92,26 +92,9 @@ const AdminDashboard = () => {
                     </ul>
 
                     <div className={styles["two-column-layout"]}>
-                        {/* Left Column */}
                         <div className={styles["left-column"]}>
                             <div className={styles["component-wrapper"]}>
                                 <RecentRequests />
-                            </div>
-                            <div className={styles["component-wrapper"]}>
-                                <WorkerVerification />
-                            </div>
-                            <div className={styles["component-wrapper"]}>
-                                <Users />
-                            </div>
-                        </div>
-
-                        {/* Right Column */}
-                        <div className={styles["right-column"]}>
-                            <div className={styles["component-wrapper"]}>
-                                <CustomerComplaints />
-                            </div>
-                            <div className={styles["component-wrapper"]}>
-                                <Worker />
                             </div>
                         </div>
                     </div>

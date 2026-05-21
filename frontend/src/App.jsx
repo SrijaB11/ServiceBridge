@@ -256,7 +256,6 @@ export default function App() {
 
             <Route path="workers/verification" element={<Certifications />} />
 
-            <Route path="reviews" element={<div>Companies/Reviews View</div>} />
 
             <Route path="customer-payments" element={<CustomerPayments/>} />
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, Search, User, LogOut, Settings } from "lucide-react";
+import { Search, User, LogOut, Settings } from "lucide-react";
 
 const Topbar = () => {
   const navigate = useNavigate();
@@ -33,14 +33,13 @@ const Topbar = () => {
         </div>
 
         <div className="flex items-center gap-4 relative">
-          {/* NOTIFICATIONS */}
-          <div className="relative cursor-pointer">
+          {/* <div className="relative cursor-pointer">
             <Bell />
 
             <span className="absolute -top-1 -right-1 bg-red-500 text-xs px-1 rounded-full">
               3
             </span>
-          </div>
+          </div> */}
 
           <div
             onClick={() => setOpenMenu(!openMenu)}

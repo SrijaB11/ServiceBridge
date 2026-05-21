@@ -1,174 +1,224 @@
-import { Component } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
 
-class Users extends Component {
-    state = { 
-        UserDetailsList: [],
-        loading: true,
-        searchTerm: "",
-        currentPage: 1,
-        itemsPerPage: 5
-    };
+const Users = () => {
+    // State management
+    const [userDetailsList, setUserDetailsList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5); // Constant, so no setter needed
+    const [editingId, setEditingId] = useState(null);
+    const [editForm, setEditForm] = useState({});
 
-    componentDidMount() {
-        this.GetCustomersData();
-    }
+    // Fetch data on mount
+    useEffect(() => {
+        getCustomersData();
+    }, []);
 
-    GetCustomersData = async () => {
-        this.setState({ loading: true });
-        const JwtToken = localStorage.getItem("token");
+    const getCustomersData = async () => {
+        setLoading(true);
+        const token = localStorage.getItem("token");
         try {
-            const UserDetails = await fetch("http://localhost:5000/admin/customers", {
-                method: "GET",
-                headers: { Authorization: `Bearer ${JwtToken}` }
+            const res = await fetch("http://localhost:5000/admin/customers", {
+                headers: { Authorization: `Bearer ${token}` }
             });
-            const FetchedUserDetails = await UserDetails.json();
-            if (UserDetails.ok === true && UserDetails.status === 200) {
-                const UpdatedUsersData = FetchedUserDetails["data"].map((User) => ({
-                    id: User.id,
-                    CustomerName: User.fullName,
-                    Email: User.email,
-                    Location: User.location,
-                    MobileNo: User.phone,
+            const data = await res.json();
+            if (res.ok) {
+                const list = (data.data || data).map(user => ({
+                    id: user.id || user._id,
+                    fullName: user.fullName,
+                    email: user.email,
+                    phone: user.phone,
+                    location: user.location
                 }));
-                this.setState({ UserDetailsList: UpdatedUsersData, loading: false });
-            } else {
-                this.setState({ loading: false });
+                setUserDetailsList(list);
             }
-        } catch (error) {
-            console.error("Error fetching customers:", error);
-            this.setState({ loading: false });
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
-    handleSearch = (event) => {
-        this.setState({ searchTerm: event.target.value, currentPage: 1 });
+    const startEditing = (user) => {
+        setEditingId(user.id);
+        setEditForm({ ...user });
     };
 
-    handlePageChange = (newPage) => {
-        this.setState({ currentPage: newPage });
+    const cancelEditing = () => {
+        setEditingId(null);
+        setEditForm({});
     };
 
-    getStatusBadgeClass = (status) => {
-        switch(status) {
-            case 'Active': return styles.statusActive;
-            case 'Inactive': return styles.statusInactive;
-            case 'Blocked': return styles.statusBlocked;
-            default: return styles.statusActive;
+    const handleEditChange = (e) => {
+        setEditForm({
+            ...editForm,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const saveEdit = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const res = await fetch(`http://localhost:5000/admin/customers/${editingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(editForm)
+            });
+
+            if (res.ok) {
+                setEditingId(null);
+                setEditForm({});
+                getCustomersData(); 
+                alert("Updated successfully!");
+            } else {
+                alert("Failed to update");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error updating customer");
         }
     };
 
-    render() {
-        const { UserDetailsList, loading, searchTerm, currentPage, itemsPerPage } = this.state;
+    const handleDelete = async (id) => {
+        if (!window.confirm("Delete this customer?")) return;
 
-        // Filter users based on search term
-        const filteredUsers = UserDetailsList.filter(user =>
-            user.CustomerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.MobileNo?.includes(searchTerm)
-        );
+        const token = localStorage.getItem("token");
+        try {
+            const res = await fetch(`http://localhost:5000/admin/customers/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-        // Pagination logic
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
-        const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+            if (res.ok) {
+                setUserDetailsList(prev => prev.filter(u => String(u.id) !== String(id)));
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-        return (
-            <>
-                <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Customer Details</h1>
-                <div className={styles.usersContainer}>
-                    <div className={styles.header}>
-                        <h3 className={styles.title}>👥 Customer Directory</h3>
-                        <div className={styles.searchBox}>
-                            <input
-                                type="text"
-                                placeholder="🔍 Search by name, email or phone..."
-                                value={searchTerm}
-                                onChange={this.handleSearch}
-                                className={styles.searchInput}
-                            />
-                        </div>
-                    </div>
+    // Logic for filtering and pagination
+    const filteredUsers = userDetailsList.filter(user =>
+        (user.fullName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.email || "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-                    {loading ? (
-                        <div className={styles.loading}>
-                            <div className={styles.spinner}></div>
-                            <p>Loading customers...</p>
-                        </div>
-                    ) : (
-                        <>
-                            <div className={styles.tableWrapper}>
-                                <table className={styles.usersTable}>
-                                    <thead>
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <th>Email</th>
-                                            <th>Mobile No</th>
-                                            <th>Location</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentUsers.length > 0 ? (
-                                            currentUsers.map((user) => (
-                                                <tr key={user.id}>
-                                                    <td>
-                                                        <div className={styles.customerName}>
-                                                            <span className={styles.avatar}>
-                                                                {user.CustomerName?.charAt(0)}
-                                                            </span>
-                                                            {user.CustomerName}
-                                                        </div>
-                                                    </td>
-                                                    <td>{user.Email}</td>
-                                                    <td>{user.MobileNo}</td>
-                                                    <td>{user.Location}</td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="8" className={styles.noData}>
-                                                    No customers found
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
+    const currentUsers = filteredUsers.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
-                            {totalPages > 1 && (
-                                <div className={styles.pagination}>
-                                    <button
-                                        onClick={() => this.handlePageChange(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                        className={styles.pageBtn}
-                                    >
-                                        ← Previous
-                                    </button>
-                                    <span className={styles.pageInfo}>
-                                        Page {currentPage} of {totalPages}
-                                    </span>
-                                    <button
-                                        onClick={() => this.handlePageChange(currentPage + 1)}
-                                        disabled={currentPage === totalPages}
-                                        className={styles.pageBtn}
-                                    >
-                                        Next 
-                                    </button>
-                                </div>
-                            )}
+    return (
+        <>
+            <h1 style={{ marginTop: "10px", marginBottom: "20px", marginLeft: "10px", fontSize: "28px", color: "#10b981" }}>
+                Customer Details
+            </h1>
 
-                            <div className={styles.footer}>
-                                <span className={styles.totalCount}>
-                                    Total Customers: {filteredUsers.length}
-                                </span>
-                            </div>
-                        </>
-                    )}
+            <div className={styles.usersContainer}>
+                <div className={styles.header}>
+                    <h3 className={styles.title}>👥 Customer Directory</h3>
+                    <input
+                        type="text"
+                        placeholder="🔍 Search by name or email..."
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        className={styles.searchInput}
+                    />
                 </div>
-            </>
-        );
-    }
-}
+
+                {loading ? <p>Loading...</p> : (
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.usersTable}>
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile No</th>
+                                    <th>Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentUsers.map((user) => (
+                                    <tr key={user.id}>
+                                        <td>
+                                            {editingId === user.id ? (
+                                                <input
+                                                    name="fullName"
+                                                    value={editForm.fullName}
+                                                    onChange={handleEditChange}
+                                                    className={styles.inlineInput}
+                                                />
+                                            ) : (
+                                                user.fullName
+                                            )}
+                                        </td>
+                                        <td>
+                                            {editingId === user.id ? (
+                                                <input
+                                                    name="email"
+                                                    value={editForm.email}
+                                                    onChange={handleEditChange}
+                                                    className={styles.inlineInput}
+                                                />
+                                            ) : (
+                                                user.email
+                                            )}
+                                        </td>
+                                        <td>
+                                            {editingId === user.id ? (
+                                                <input
+                                                    name="phone"
+                                                    value={editForm.phone}
+                                                    onChange={handleEditChange}
+                                                    className={styles.inlineInput}
+                                                />
+                                            ) : (
+                                                user.phone
+                                            )}
+                                        </td>
+                                        <td>
+                                            {editingId === user.id ? (
+                                                <input
+                                                    name="location"
+                                                    value={editForm.location}
+                                                    onChange={handleEditChange}
+                                                    className={styles.inlineInput}
+                                                />
+                                            ) : (
+                                                user.location
+                                            )}
+                                        </td>
+                                        <td style={{ display: "flex", gap: "30px", cursor: "pointer" }}>
+                                            {editingId === user.id ? (
+                                                <>
+                                                    <button onClick={saveEdit} className={styles.saveBtn}>Save</button>
+                                                    <button onClick={cancelEditing} className={styles.cancelBtn}>Cancel</button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button onClick={() => startEditing(user)} className={styles.editBtn}>Edit</button>
+                                                    <button onClick={() => handleDelete(user.id)} className={styles.deleteBtn}>Delete</button>
+                                                </>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+        </>
+    );
+};
 
 export default Users;
