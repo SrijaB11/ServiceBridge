@@ -50,7 +50,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/complaint",customercomplaintRoutes);
 app.use("/service", serviceRoutes);
 app.use("/customer", customerRoutes);
-app.use("/complaint", workercomplaintRoutes);
+app.use("/worker/complaint", workercomplaintRoutes);
 app.use("/bookings", totalBookingRoutes);
 app.use("/workers", totalWorkerRoutes);
 app.use("/booking", cancelcustomerBookingRoutes);

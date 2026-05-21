@@ -520,7 +520,7 @@ const totalEarnings =
             Your documents were
             uploaded successfully.
             Please wait until admin
-            approves your verification.
+            approves your verification request.
           </Typography>
         </>
       )}
