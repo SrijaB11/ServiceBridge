@@ -84,7 +84,9 @@ const WorkerDashboard = () => {
                     "completed"
                    );
 
-setRequests(activeRequests);
+setRequests(
+  requestsResponse.data.data
+);
 
       } catch (error) {
 
@@ -213,32 +215,34 @@ setRequests(activeRequests);
   ========================= */
 
   const completedJobs =
-    requests.filter(
-      (req) =>
-        req.status ===
-        "completed"
-    ).length;
+  requests.filter(
+    (req) =>
+      req.status?.toLowerCase() ===
+      "completed"
+  ).length;
 
-  const activeJobs =
-    requests.filter(
-      (req) =>
-        req.status ===
-        "accepted"
-    ).length;
+const activeJobs =
+  requests.filter(
+    (req) =>
+      req.status?.toLowerCase() ===
+      "accepted"
+  ).length;
 
-  const totalEarnings =
-    requests
-      .filter(
-        (req) =>
-          req.paymentStatus ===
-          "paid"
-      )
-      .reduce(
-        (total, req) =>
-          total +
-          (req.amount || 0),
-        0
-      );
+const totalEarnings =
+  requests
+    .filter(
+      (req) =>
+        req.paymentStatus?.toLowerCase() ===
+        "paid"
+    )
+    .reduce(
+      (total, req) =>
+        total +
+        Number(
+          req.workerAmount || 0
+        ),
+      0
+    );
 
   return (
     <Box
@@ -354,7 +358,7 @@ setRequests(activeRequests);
             </Typography>
 
             <Typography>
-              Ratings
+              App Rating
             </Typography>
           </div>
         </Card>
@@ -381,7 +385,7 @@ setRequests(activeRequests);
             >
               ₹
               {
-                totalEarnings
+                totalEarnings.toFixed(2)
               }
             </Typography>
 
@@ -406,199 +410,310 @@ setRequests(activeRequests);
 
           {/* REQUESTS */}
 
-          <Card
+              {/* REQUESTS / VERIFICATION SECTION */}
+
+{workerData?.workerVerificationStatus !==
+"approved" ? (
+
+  <Card
+    className={
+      styles.jobsCard
+    }
+  >
+    <div
+      className={
+        styles.pendingSection
+      }
+    >
+
+      {/* NO DOCUMENTS */}
+
+      {!workerData?.documents
+        ?.profilePhoto ? (
+        <>
+
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+            alt="verification"
             className={
-              styles.jobsCard
+              styles.pendingImage
+            }
+          />
+
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+          >
+            Complete Your Profile
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            className={
+              styles.pendingText
             }
           >
+            Upload your required
+            documents to start
+            receiving service
+            requests.
+          </Typography>
 
-            <div
-              className={
-                styles.cardHeader
-              }
-            >
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-              >
-                Service Requests
-              </Typography>
-            </div>
+          <button
+            className={
+              styles.completeProfileBtn
+            }
+            onClick={() =>
+              navigate(
+                "/worker/profile"
+              )
+            }
+          >
+            Complete Profile
+          </button>
+        </>
+      ) : (
+        <>
+          {/* WAITING FOR APPROVAL */}
 
-            <div
-              className={
-                styles.jobsList
-              }
-            >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/190/190411.png"
+            alt="approval"
+            className={
+              styles.pendingImage
+            }
+          />
 
-              {requests.length ===
-              0 ? (
-                <Typography>
-                  No requests
-                  available
-                </Typography>
-              ) : (
-                requests
-                  .slice(0, 5)
-                  .map(
-                    (
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+          >
+            Waiting for Approval
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            className={
+              styles.pendingText
+            }
+          >
+            Your documents were
+            uploaded successfully.
+            Please wait until admin
+            approves your verification.
+          </Typography>
+        </>
+      )}
+    </div>
+  </Card>
+
+) : (
+
+  <Card
+    className={
+      styles.jobsCard
+    }
+  >
+
+    {/* HEADER */}
+
+    <div
+      className={
+        styles.cardHeader
+      }
+    >
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+      >
+        Service Requests
+      </Typography>
+    </div>
+
+    {/* LIST */}
+
+    <div
+  className={
+    styles.jobsList
+  }
+>
+
+  {requests.length === 0 ? (
+
+    <Typography>
+      No requests available
+    </Typography>
+
+  ) : (
+
+    requests
+      .sort(
+        (a, b) =>
+          new Date(
+            b.createdAt
+          ) -
+          new Date(
+            a.createdAt
+          )
+      )
+      .slice(0, 5)
+      .map((request) => (
+        <div
+          key={
+            request._id
+          }
+          className={
+            styles.jobItem
+          }
+        >
+
+                {/* LEFT */}
+
+                <div
+                  className={
+                    styles.jobLeft
+                  }
+                >
+
+                  <Typography fontWeight="bold">
+                    {
                       request
-                    ) => (
-                      <div
-                        key={
-                          request._id
-                        }
+                        .customer
+                        ?.fullName
+                    }
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                  >
+                    {
+                      request
+                        .customer
+                        ?.location
+                    }
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    mt={1}
+                  >
+                    ₹
+                    {
+                      request.amount
+                    }
+                  </Typography>
+                </div>
+
+                {/* RIGHT */}
+
+                <div
+                  className={
+                    styles.jobRight
+                  }
+                >
+
+                  <Chip
+                    label={
+                      request.status
+                    }
+                    color={
+                      request.status ===
+                      "completed"
+                        ? "success"
+                        : request.status ===
+                            "accepted"
+                          ? "primary"
+                          : request.status ===
+                              "rejected"
+                            ? "error"
+                            : "warning"
+                    }
+                  />
+
+                  {/* PENDING */}
+
+                  {request.status ===
+                    "pending" && (
+                    <div
+                      className={
+                        styles.actionButtons
+                      }
+                    >
+
+                      <button
                         className={
-                          styles.jobItem
+                          styles.acceptBtn
+                        }
+                        onClick={() =>
+                          handleAccept(
+                            request._id
+                          )
                         }
                       >
+                        Accept
+                      </button>
 
-                        {/* LEFT */}
+                      <button
+                        className={
+                          styles.rejectBtn
+                        }
+                        onClick={() =>
+                          handleReject(
+                            request._id
+                          )
+                        }
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
 
-                        <div
-                          className={
-                            styles.jobLeft
-                          }
-                        >
+                  {/* ACCEPTED */}
 
-                          <Typography fontWeight="bold">
-                            {
-                              request
-                                .customer
-                                ?.fullName
-                            }
-                          </Typography>
+                  {request.status ===
+                    "accepted" && (
+                    <div
+                      className={
+                        styles.actionButtons
+                      }
+                    >
 
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                          >
-                            {
-                              request
-                                .customer
-                                ?.location
-                            }
-                          </Typography>
+                      <button
+                        className={
+                          styles.completeBtn
+                        }
+                        onClick={() =>
+                          handleComplete(
+                            request._id
+                          )
+                        }
+                      >
+                        Completed
+                      </button>
 
-                          <Typography
-                            variant="body2"
-                            mt={1}
-                          >
-                            ₹
-                            {
-                              request.amount
-                            }
-                          </Typography>
-                        </div>
-
-                        {/* RIGHT */}
-
-                        <div
-                          className={
-                            styles.jobRight
-                          }
-                        >
-
-                          <Chip
-                            label={
-                              request.status
-                            }
-                            color={
-                              request.status ===
-                              "completed"
-                                ? "success"
-                                : request.status ===
-                                    "accepted"
-                                  ? "primary"
-                                  : request.status ===
-                                      "rejected"
-                                    ? "error"
-                                    : "warning"
-                            }
-                          />
-
-                          {/* PENDING */}
-
-                          {request.status ===
-                            "pending" && (
-                            <div
-                              className={
-                                styles.actionButtons
-                              }
-                            >
-
-                              <button
-                                className={
-                                  styles.acceptBtn
-                                }
-                                onClick={() =>
-                                  handleAccept(
-                                    request._id
-                                  )
-                                }
-                              >
-                                Accept
-                              </button>
-
-                              <button
-                                className={
-                                  styles.rejectBtn
-                                }
-                                onClick={() =>
-                                  handleReject(
-                                    request._id
-                                  )
-                                }
-                              >
-                                Reject
-                              </button>
-                            </div>
-                          )}
-
-                          {/* ACCEPTED */}
-
-                          {request.status ===
-                            "accepted" && (
-                            <div
-                              className={
-                                styles.actionButtons
-                              }
-                            >
-
-                              <button
-                                className={
-                                  styles.completeBtn
-                                }
-                                onClick={() =>
-                                  handleComplete(
-                                    request._id
-                                  )
-                                }
-                              >
-                                Completed
-                              </button>
-
-                              <button
-                                className={
-                                  styles.complaintBtn
-                                }
-                                onClick={() =>
-                                  navigate(
-                                    `/worker/complaint/${request._id}`
-                                  )
-                                }
-                              >
-                                Complaint
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  )
-              )}
-            </div>
-          </Card>
+                      <button
+                        className={
+                          styles.complaintBtn
+                        }
+                        onClick={() =>
+                          navigate(
+                            `/worker/complaint/${request._id}`
+                          )
+                        }
+                      >
+                        Complaint
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          )
+      )}
+    </div>
+  </Card>
+)}
 
         
         </div>
@@ -753,7 +868,7 @@ setRequests(activeRequests);
                     </Typography>
 
                     <Typography>
-                      ₹500
+                      ₹499
                     </Typography>
                   </div>
                 )
