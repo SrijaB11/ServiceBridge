@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../../middlewares/authMiddleware");
+const customerMiddleware = require("../../middlewares/customerMiddleware");
 
 const workerBookingController = require("../../controllers/booking/workerBookingController");
 const workerAvailabilityController = require("../../controllers/booking/workerAvailabilityController");
@@ -12,10 +13,10 @@ const getCustomerBookings = require("../../controllers/booking/workerBookinggetC
 const admingetAllBookings = require("../../controllers/booking/adminGetsBookingstatusController");
 
 // Customer books
-router.post("/book", authMiddleware, workerBookingController);
+router.post("/book", authMiddleware,customerMiddleware, workerBookingController);
 
 // Get available dates
-router.get("/availability/:workerId", workerAvailabilityController);
+router.get("/availability/:workerId",authMiddleware,customerMiddleware, workerAvailabilityController);
 
 // Worker sees request
 router.get("/worker", authMiddleware, getWorkerRequest);
@@ -24,7 +25,7 @@ router.get("/worker", authMiddleware, getWorkerRequest);
 router.put("/:id", authMiddleware, updateBookingStatus);
 
 // Customer sees booking status
-router.get("/customerbookingstatus", authMiddleware, getCustomerBookings);
+router.get("/customerbookingstatus", authMiddleware,customerMiddleware, getCustomerBookings);
 
 // Admin gets Customer sees booking status
 router.get("/customerbookingstatusforadmin", authMiddleware, admingetAllBookings);

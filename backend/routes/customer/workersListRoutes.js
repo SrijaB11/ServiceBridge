@@ -3,9 +3,11 @@ const getWorkersByService = require("../../controllers/customer/workersListContr
 
 const router = express.Router();
 
+const authMiddleware = require("../../middlewares/authMiddleware");
+const customerMiddleware = require("../../middlewares/customerMiddleware");
 
 // GET/workers/byService
-router.get("/workerslist/:service", getWorkersByService);
+router.get("/workerslist/:service",authMiddleware,customerMiddleware, getWorkersByService);
 
 module.exports = router;
 

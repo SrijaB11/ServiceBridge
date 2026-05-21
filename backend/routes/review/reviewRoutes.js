@@ -5,6 +5,7 @@ const createReviewCustomerController = require("../../controllers/review/createR
 const getMyReviewWorkerController = require("../../controllers/review/getMyReviewWorkerController");
 const getMyReviewCustomerController = require("../../controllers/review/getMyReviewCustomerController");
 
+const customerMiddleware = require("../../middlewares/customerMiddleware");
 const authMiddleware = require("../../middlewares/authMiddleware");
 router.post(
   "/add",
@@ -12,7 +13,7 @@ router.post(
     console.log("POST /review/add reached");
     next();
   },
-  authMiddleware,
+  authMiddleware,customerMiddleware,
   createReviewCustomerController,
 );
 // Customer gives review
@@ -22,6 +23,6 @@ router.post(
 router.get("/myReview", authMiddleware, getMyReviewWorkerController);
 
 // Customer views his own given review
-router.get("/mygivenReviews", authMiddleware, getMyReviewCustomerController);
+router.get("/mygivenReviews", authMiddleware,customerMiddleware, getMyReviewCustomerController);
 
 module.exports = router;

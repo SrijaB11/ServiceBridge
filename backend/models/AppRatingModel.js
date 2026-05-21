@@ -15,8 +15,17 @@ const appRatingSchema = new mongoose.Schema(
       min: 1,
       max: 5,
     },
+
+    review: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+      default: "",
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-module.exports = mongoose.model("AppRating", appRatingSchema);
+module.exports = mongoose.model("AppRating",appRatingSchema);
