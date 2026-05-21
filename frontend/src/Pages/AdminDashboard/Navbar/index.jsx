@@ -21,7 +21,7 @@ const menu = [
   { name: "Worker Complaints", path: "/admin/worker-complaints", icon: <AlertCircle size={20} /> },
   { name: "Certificate Verification", path: "/admin/workers/verification", icon: <Users size={20} /> },
   // { name: "Bookings", path: "/admin/bookings", icon: <ClipboardList size={20} /> },
-  { name: "Payments", path: "/admin/payments", icon: <CreditCard size={20} /> }
+  { name: "Incomming Payments", path: "/admin/customer-payments", icon: <CreditCard size={20} /> }
 ];
 
 const AdminNavBar = () => {
@@ -35,7 +35,7 @@ const AdminNavBar = () => {
 
   return (
     <>
-      {/* Mobile Top Bar */}
+      {/* Mobile Top App Bar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50">
         <h1 className="font-bold text-green-600">Admin Panel</h1>
         <button onClick={() => setOpen(true)}>
@@ -43,7 +43,7 @@ const AdminNavBar = () => {
         </button>
       </div>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Sidebar Overlay Backdrop */}
       {open && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -51,16 +51,22 @@ const AdminNavBar = () => {
         />
       )}
 
-      {/* Sidebar - Full White Background */}
+      {/* --- SMART STICKY DESKTOP SIDEBAR ---
+        - md:sticky: Keeps the sidebar in its natural position below your top header initially.
+        - md:top-0: As soon as the user scrolls past the top green header, it locks ("sticks") perfectly to the top window viewport.
+        - h-screen: Ensures that even when stuck, it expands to 100% of the screen height.
+        - flex-shrink-0: Prevents wide content tables from squishing the navigation panel width.
+      */}
       <aside
         className={`
-          fixed md:static top-0 left-0 z-50 h-screen w-64
-          bg-white border-r shadow-xl flex flex-col
+          fixed md:sticky top-0 left-0 z-30 h-screen w-64
+          bg-white border-r shadow-xl flex flex-col flex-shrink-0
           ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
           transition-transform duration-300
         `}
       >
-        {/* Header */}
+        
+        {/* Header Block */}
         <div className="flex items-center justify-between px-5 py-6 border-b flex-shrink-0">
           <h2 className="text-2xl font-bold text-green-600">Service Bridge</h2>
           <button className="md:hidden" onClick={() => setOpen(false)}>
@@ -68,7 +74,7 @@ const AdminNavBar = () => {
           </button>
         </div>
 
-        {/* User Info */}
+        {/* Profile Block */}
         <div className="px-5 py-6 border-b flex items-center gap-3 flex-shrink-0">
           <img
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -81,7 +87,7 @@ const AdminNavBar = () => {
           </div>
         </div>
 
-        {/* Menu Items - Scrollable */}
+        {/* Navigation List Container */}
         <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
           {menu.map((item) => (
             <NavLink
@@ -103,7 +109,7 @@ const AdminNavBar = () => {
           ))}
         </nav>
 
-        {/* Logout - Now part of full white background */}
+        {/* Footer Action Logout Block */}
         <div className="p-4 border-t mt-auto flex-shrink-0 bg-white">
           <button
             onClick={handleLogout}

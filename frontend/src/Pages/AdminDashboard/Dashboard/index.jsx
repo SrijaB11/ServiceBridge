@@ -45,8 +45,7 @@ const AdminDashboard = () => {
         <div className={styles["app-layout"]}>
             <div className={styles["main-content"]}>
                 <div className={styles.main}>
-                    {/* Stats Cards Grid */}
-                    {/* <ul className={styles["admin-dashboard-container1"]}>
+                    <ul className={styles["admin-dashboard-container1"]}>
                         {AdminDetails.map((detail) => (
                             <li
                                 className={styles["admin-dashboard-container2"]}
@@ -90,30 +89,12 @@ const AdminDashboard = () => {
                                 </div>
                             </li>
                         ))}
-                    </ul> */}
+                    </ul>
 
-                    {/* Two Column Layout */}
                     <div className={styles["two-column-layout"]}>
-                        {/* Left Column */}
                         <div className={styles["left-column"]}>
                             <div className={styles["component-wrapper"]}>
                                 <RecentRequests />
-                            </div>
-                            <div className={styles["component-wrapper"]}>
-                                <WorkerVerification />
-                            </div>
-                            <div className={styles["component-wrapper"]}>
-                                <Users />
-                            </div>
-                        </div>
-
-                        {/* Right Column */}
-                        <div className={styles["right-column"]}>
-                            <div className={styles["component-wrapper"]}>
-                                <CustomerComplaints />
-                            </div>
-                            <div className={styles["component-wrapper"]}>
-                                <Worker />
                             </div>
                         </div>
                     </div>

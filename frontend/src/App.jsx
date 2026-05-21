@@ -53,6 +53,7 @@ import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import CustomerComplaints from "./Pages/AdminDashboard/CustomerComplaints";
 import WorkerComplaints from "./Pages/AdminDashboard/WorkerComplaints";
+import CustomerPayments from "./Pages/AdminDashboard/CustomerPayments"
 
 import Worker from "./Pages/AdminDashboard/Worker";
 import Certifications from "./Pages/AdminDashboard/Certifications";
@@ -253,9 +254,8 @@ export default function App() {
 
             <Route path="workers/verification" element={<Certifications />} />
 
-            <Route path="reviews" element={<div>Companies/Reviews View</div>} />
 
-            <Route path="profile" element={<div>Admin Payments/Profile</div>} />
+            <Route path="customer-payments" element={<CustomerPayments/>} />
 
             <Route path="logout" element={<div>Logging out...</div>} />
           </Route>

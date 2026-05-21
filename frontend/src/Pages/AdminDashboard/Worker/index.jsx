@@ -57,8 +57,7 @@ const Worker = () => {
     setFormData({
       fullName: workers.fullName || "",
       location: workers.location || "",
-      address: workers.address || "",
-      services: workers.services || "",
+      services: workers.services || ""
     });
 
     setIsEditModalOpen(true);
@@ -175,216 +174,208 @@ const Worker = () => {
   }
 
   return (
-    <div className={styles["dashboard-container"]}>
-      <header className={styles["dashboard-header"]}>
-        <div className={styles.brand}>
-          <h1>Professional Directory</h1>
+    <>
+    <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Worker Professional Details</h1>
+      <div className={styles["dashboard-container"]}>
+        <header className={styles["dashboard-header"]}>
+          <div className={styles.brand}>
+            <h1>Worker Directory</h1>
 
-          <span className={styles["stats-badge"]}>
-            {workers.length} Total Workers
-          </span>
-        </div>
-
-        <div className={styles["header-actions"]}>
-          <div className={styles["search-pill"]}>
-            <Search
-              size={18}
-              className={styles["search-icon"]}
-            />
-
-            <input
-              type="text"
-              placeholder="Search by name, email, or role..."
-              value={searchTerm}
-              onChange={(e) =>
-                setSearchTerm(e.target.value)
-              }
-            />
+            <span className={styles["stats-badge"]}>
+              {workers.length} Total Workers
+            </span>
           </div>
 
-          <button
-            onClick={fetchWorkers}
-            className={styles["icon-action-btn"]}
-            title="Refresh"
-          >
-            <RefreshCw size={18} />
-          </button>
-        </div>
-      </header>
+          <div className={styles["header-actions"]}>
+            <div className={styles["search-pill"]}>
+              <Search
+                size={18}
+                className={styles["search-icon"]}
+              />
 
-      <main className={styles["grid-layout"]}>
-        {filteredWorkers.length === 0 ? (
-          <div className={styles["empty-state"]}>
-            <div className={styles["empty-icon-box"]}>
-              <Search size={40} />
+              <input
+                type="text"
+                placeholder="Search by name, email, or role..."
+                value={searchTerm}
+                onChange={(e) =>
+                  setSearchTerm(e.target.value)
+                }
+              />
             </div>
-
-            <h2>No matching workers found</h2>
-
-            <p>
-              Try adjusting your search terms or filters.
-            </p>
 
             <button
-              onClick={() => setSearchTerm("")}
-              className={styles["clear-btn"]}
+              onClick={fetchWorkers}
+              className={styles["icon-action-btn"]}
+              title="Refresh"
             >
-              Clear Search
+              <RefreshCw size={18} />
             </button>
           </div>
-        ) : (
-          filteredWorkers.map((worker) => (
-            <div
-              key={worker._id}
-              className={styles["worker-card"]}
-            >
-              <div className={styles["card-inner"]}>
-                <div className={styles["card-header"]}>
-                  <div className={styles["avatar-wrapper"]}>
-                    {worker.fullName?.charAt(0) || (
-                      <UserCheck size={20} />
-                    )}
-                  </div>
+        </header>
 
-                  <div className={styles["title-box"]}>
-                    <h3>{worker.fullName}</h3>
-
-                    <p className={styles["role-label"]}>
-                      {worker.role || 'Professional'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className={styles["info-grid"]}>
-                  <div className={styles["info-row"]}>
-                    <Mail size={14} />
-                    <span>{worker.email}</span>
-                  </div>
-
-                  <div className={styles["info-row"]}>
-                    <MapPin size={14} />
-                    <span>
-                      {worker.location || 'Not Specified'}
-                    </span>
-                  </div>
-
-                  <div className={styles["info-row"]}>
-                    <Briefcase size={14} />
-                    <span>
-                      {worker.services || 'General Service'}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles["card-footer"]}>
-                  <button
-                    className={styles["edit-link"]}
-                    onClick={() => openEditModal(worker)}
-                  >
-                    <Edit2 size={14} />
-                    Edit Profile
-                  </button>
-
-                  <button
-                    className={styles["delete-link"]}
-                    onClick={() =>
-                      handleDelete(
-                        worker._id,
-                        worker.fullName
-                      )
-                    }
-                    disabled={deletingId === worker._id}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+        <main className={styles["grid-layout"]}>
+          {filteredWorkers.length === 0 ? (
+            <div className={styles["empty-state"]}>
+              <div className={styles["empty-icon-box"]}>
+                <Search size={40} />
               </div>
-            </div>
-          ))
-        )}
-      </main>
 
-      {isEditModalOpen && (
-        <div className={styles["modal-overlay"]}>
-          <div className={styles["modal-box"]}>
-            <div className={styles["modal-header"]}>
-              <h2>Update Information</h2>
+              <h2>No matching workers found</h2>
+
+              <p>
+                Try adjusting your search terms or filters.
+              </p>
 
               <button
-                onClick={() =>
-                  setIsEditModalOpen(false)
-                }
-                className={styles["close-x"]}
+                onClick={() => setSearchTerm("")}
+                className={styles["clear-btn"]}
               >
-                <X />
+                Clear Search
               </button>
             </div>
+          ) : (
+            filteredWorkers.map((worker) => (
+              <div
+                key={worker._id}
+                className={styles["worker-card"]}
+              >
+                <div className={styles["card-inner"]}>
+                  <div className={styles["card-header"]}>
+                    <div className={styles["avatar-wrapper"]}>
+                      {worker.fullName?.charAt(0) || (
+                        <UserCheck size={20} />
+                      )}
+                    </div>
 
-            <form
-              onSubmit={handleUpdate}
-              className={styles["modal-form"]}
-            >
-              <div className={styles["form-field"]}>
-                <label>Full Name</label>
+                    <div className={styles["title-box"]}>
+                      <h3>{worker.fullName}</h3>
 
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  required
-                />
+                      <p className={styles["role-label"]}>
+                        {worker.role || 'Professional'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles["info-grid"]}>
+                    <div className={styles["info-row"]}>
+                      <Mail size={14} />
+                      <span>{worker.email}</span>
+                    </div>
+
+                    <div className={styles["info-row"]}>
+                      <MapPin size={14} />
+                      <span>
+                        {worker.location || 'Not Specified'}
+                      </span>
+                    </div>
+
+                    <div className={styles["info-row"]}>
+                      <Briefcase size={14} />
+                      <span>
+                        {worker.services || 'General Service'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles["card-footer"]}>
+                    <button
+                      className={styles["edit-link"]}
+                      onClick={() => openEditModal(worker)}
+                    >
+                      <Edit2 size={14} />
+                      Edit Profile
+                    </button>
+
+                    <button
+                      className={styles["delete-link"]}
+                      onClick={() =>
+                        handleDelete(
+                          worker._id,
+                          worker.fullName
+                        )
+                      }
+                      disabled={deletingId === worker._id}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </main>
+
+        {isEditModalOpen && (
+          <div className={styles["modal-overlay"]}>
+            <div className={styles["modal-box"]}>
+              <div className={styles["modal-header"]}>
+                <h2>Update Information</h2>
+
+                <button
+                  onClick={() =>
+                    setIsEditModalOpen(false)
+                  }
+                  className={styles["close-x"]}
+                >
+                  <X />
+                </button>
               </div>
 
-              <div className={styles["form-row"]}>
+              <form
+                onSubmit={handleUpdate}
+                className={styles["modal-form"]}
+              >
                 <div className={styles["form-field"]}>
-                  <label>Location</label>
+                  <label>Full Name</label>
 
                   <input
                     type="text"
-                    name="location"
-                    value={formData.location}
+                    name="fullName"
+                    value={formData.fullName}
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
 
-                <div className={styles["form-field"]}>
-                  <label>Services</label>
+                <div className={styles["form-row"]}>
+                  <div className={styles["form-field"]}>
+                    <label>Location</label>
 
-                  <input
-                    type="text"
-                    name="services"
-                    value={formData.services}
-                    onChange={handleInputChange}
-                  />
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+
+                  <div className={styles["form-field"]}>
+                    <label>Services</label>
+
+                    <input
+                      type="text"
+                      name="services"
+                      value={formData.services}
+                      onChange={handleInputChange}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles["form-field"]}>
-                <label>Detailed Address</label>
-
-                <textarea
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  rows="3"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className={styles["save-button"]}
-                disabled={updating}
-              >
-                {updating
-                  ? "Updating..."
-                  : "Save Changes"}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className={styles["save-button"]}
+                  disabled={updating}
+                >
+                  {updating
+                    ? "Updating..."
+                    : "Save Changes"}
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 
