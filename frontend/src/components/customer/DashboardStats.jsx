@@ -32,7 +32,7 @@ export default function CustomerStats() {
         totalServices: data.totalServices || 0,
         totalWorkers: data.totalWorkers || 0,
         totalBookings: data.totalBookings || 0,
-        avgerageRating: data.averageRating || 0,
+        averageRating: data.averageRating || 0,
       });
     } catch (err) {
       console.error("Stats error:", err);

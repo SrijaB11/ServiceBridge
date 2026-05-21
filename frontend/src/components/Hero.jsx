@@ -36,7 +36,7 @@ export default function Hero() {
             <SearchServices />
 
             {/* STATS */}
-            <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-6">
+            {/* <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-6">
               <div>
                 <h3 className="text-2xl font-bold text-gray-800">500+</h3>
 
@@ -54,7 +54,7 @@ export default function Hero() {
 
                 <p className="text-gray-500 text-sm">Customer Support</p>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT IMAGE */}
