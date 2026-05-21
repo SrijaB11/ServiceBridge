@@ -60,8 +60,8 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
     skillDocs: {
-      type: [String],
-      default: [],
+      type: String,
+      default: "",
     },
   }
   }
