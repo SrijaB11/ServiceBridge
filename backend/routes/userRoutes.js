@@ -6,6 +6,7 @@ const regSendOtpController = require("../controllers/regOTP/regSendOtpController
 const regVerifyOtpController = require("../controllers/regOTP/regVerifyOtpController");
 
 const forgotPasswordController = require("../controllers/forgetPassword/forgetPasswordController");
+const verifyResetOtpController = require("../controllers/forgetPassword/verifyResetOtpController");
 const resetPasswordController = require("../controllers/forgetPassword/resetPasswordController");
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.post("/login", loginController);
 
 // Forgot Password
 router.post("/forgotpassword", forgotPasswordController);
+router.post("/verifyresetpassword", verifyResetOtpController);
 router.post("/resetpassword", resetPasswordController);
 
 module.exports = router;
