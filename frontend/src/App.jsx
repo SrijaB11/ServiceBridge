@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Complaint from "./Pages/Customer/Complaint";
+import Review from "./pages/Customer/Review";
 import "./App.css";
 
 /* =======================
@@ -136,6 +137,7 @@ export default function App() {
           <Route path="/worker-register" element={<WorkerRegister />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/about" element={<About />} />
+
           {/* --- Customer Routes --- */}
           <Route
             path="/customer"
@@ -158,6 +160,7 @@ export default function App() {
             <Route path="complaints" element={<Complaint />} />
 
             <Route path="profile" element={<Profile />} />
+            <Route path="review" element={<Review />} />
           </Route>
           <Route
             path="/service/:id"
@@ -217,18 +220,13 @@ export default function App() {
 
             {/* <Route path="complaint/:bookingId" element={ <ProtectedRoute role="worker"> <WorkerComplaintPage /></ProtectedRoute>}/> */}
             <Route
-  path="complaint/:bookingId"
-  element={
-    <WorkerComplaintPage />
-  }
-/>
+              path="complaint/:bookingId"
+              element={<WorkerComplaintPage />}
+            />
 
             {/* <Route path="reviews" element={<div>Reviews Page</div>} /> */}
 
             <Route path="profile" element={<WorkerProfile />} />
-
-
-
           </Route>
           {/* --- Admin Routes --- */}
           <Route

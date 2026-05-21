@@ -161,14 +161,14 @@ function Profile() {
     <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-6 sm:p-8 mt-6">
       {/* PROFILE HEADER */}
       <div className="flex flex-col items-center">
-        <img
+        {/* <img
           src={
             profile.documents?.profilePhoto ||
             "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
           }
           alt="profile"
           className="w-28 h-28 rounded-full border-4 border-green-500 object-cover"
-        />
+        /> */}
 
         {isEditing ? (
           <input
