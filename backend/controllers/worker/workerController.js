@@ -75,7 +75,7 @@ const uploadWorkerDocs = async (
           documents: {
             profilePhoto,
             panCard,
-            skillDoc,
+            skillDocs,
           },
         },
         { new: true }
