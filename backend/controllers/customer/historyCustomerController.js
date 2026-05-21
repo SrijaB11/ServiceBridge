@@ -8,17 +8,13 @@ const customerHistoryController = async (req, res) => {
     const bookings = await Booking.find({
       customer: customerId,
     })
-      .populate(
-        "worker",
-        "fullName email phone location services documents"
-      )
+      .populate("worker", "fullName email phone location services documents")
       .sort({ createdAt: -1 });
-      //console.log(bookings);
+    //console.log(bookings);
 
     const history = [];
 
     for (const booking of bookings) {
-
       const review = await Review.findOne({
         booking: booking._id,
         customer: customerId,
@@ -33,24 +29,17 @@ const customerHistoryController = async (req, res) => {
 
         worker: booking.worker
           ? {
-              workerId:
-                booking.worker._id || null,
+              workerId: booking.worker._id || null,
 
-              name:
-                booking.worker.fullName || "",
+              name: booking.worker.fullName || "",
 
-              email:
-                booking.worker.email || "",
+              email: booking.worker.email || "",
 
-              phone:
-                booking.worker.phone || "",
+              phone: booking.worker.phone || "",
 
-              location:
-                booking.worker.location || "",
+              location: booking.worker.location || "",
 
-              services:
-                booking.worker.services || [],
-
+              services: booking.worker.services || [],
             }
           : {
               workerId: null,
@@ -59,38 +48,29 @@ const customerHistoryController = async (req, res) => {
               phone: "",
               location: "",
               services: [],
-            
             },
 
         payment: {
-          amount:
-            booking.amount || 0,
+          amount: booking.amount || 0,
 
-          paymentStatus:
-            booking.paymentStatus || "pending",
+          paymentStatus: booking.paymentStatus || "pending",
 
-          paymentId:
-            booking.paymentId || "",
+          paymentId: booking.paymentId || "",
 
-          orderId:
-            booking.orderId || "",
+          orderId: booking.orderId || "",
 
-          adminCommission:
-            booking.adminCommission || 0,
+          adminCommission: booking.adminCommission || 0,
 
-          workerAmount:
-            booking.workerAmount || 0,
+          workerAmount: booking.workerAmount || 0,
 
-          workerPaid:
-            booking.workerPaid || false,
+          workerPaid: booking.workerPaid || false,
         },
 
         review: review
           ? {
               rating: review.rating,
               comment: review.comment,
-              reviewDate:
-                review.createdAt,
+              reviewDate: review.createdAt,
             }
           : null,
       });
@@ -101,7 +81,6 @@ const customerHistoryController = async (req, res) => {
       total: history.length,
       history,
     });
-
   } catch (error) {
     //console.log(error);
 
