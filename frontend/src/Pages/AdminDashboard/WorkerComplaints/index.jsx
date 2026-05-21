@@ -12,7 +12,6 @@ const WorkerComplaints = () => {
 
     const itemsPerPage = 10;
 
-    // Fetch Worker Complaints
     useEffect(() => {
         fetchWorkerComplaints();
     }, []);
@@ -22,7 +21,6 @@ const WorkerComplaints = () => {
         setError(null);
         
         const JwtToken = localStorage.getItem("token");
-        console.log("Token exists:", !!JwtToken);
         
         if (!JwtToken) {
             setError("Authentication token not found. Please login again.");
@@ -32,7 +30,7 @@ const WorkerComplaints = () => {
 
         try {
             const endpoint = "http://localhost:5000/complaint/admin";
-            console.log(`Fetching from endpoint: ${endpoint}`);
+            
             
             const response = await fetch(endpoint, {
                 method: "GET",
@@ -42,13 +40,11 @@ const WorkerComplaints = () => {
                 }
             });
 
-            console.log(`Response status:`, response.status);
+            
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`Data from API:`, data);
                 
-                // Handle different response structures
                 let allComplaints = [];
                 if (Array.isArray(data)) {
                     allComplaints = data;
@@ -58,11 +54,9 @@ const WorkerComplaints = () => {
                     allComplaints = data.data;
                 }
                 
-                // Filter only worker complaints
-                // Adjust the filter condition based on your API response structure
+                
                 const workerComplaints = allComplaints.filter(complaint => {
-                    // Check if complaint is against worker
-                    // You may need to adjust this condition based on your data structure
+                    
                     return complaint.complaintType === "worker" || 
                            complaint.against === "worker" ||
                            complaint.type === "worker" ||
@@ -70,23 +64,23 @@ const WorkerComplaints = () => {
                            (complaint.workerId && complaint.workerId !== null);
                 });
                 
-                console.log("Filtered worker complaints:", workerComplaints);
+                
                 setComplaints(workerComplaints);
                 setLoading(false);
             } else {
                 const errorData = await response.json().catch(() => ({}));
-                console.log(`Failed to fetch:`, errorData);
+                
                 setError(`API returned ${response.status}: ${response.statusText || "Failed to fetch complaints"}`);
                 setLoading(false);
             }
         } catch (err) {
-            console.log(`Error fetching complaints:`, err.message);
+            
             setError(`Failed to fetch worker complaints. ${err.message || "Please check your network connection."}`);
             setLoading(false);
         }
     };
 
-    // Handle Resolve Complaint
+    
     const handleResolve = async (id) => {
         const JwtToken = localStorage.getItem("token");
         try {
@@ -100,7 +94,7 @@ const WorkerComplaints = () => {
 
             if (response.ok) {
                 alert("Worker complaint resolved successfully!");
-                // Update local state instead of reloading
+                
                 setComplaints(complaints.map(complaint => 
                     complaint._id === id ? { ...complaint, status: "Resolved" } : complaint
                 ));
@@ -114,7 +108,7 @@ const WorkerComplaints = () => {
         }
     };
 
-    // Pagination functions
+    
     const totalPages = Math.ceil(complaints.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -196,167 +190,170 @@ const WorkerComplaints = () => {
     }
 
     return (
-        <div className={styles["worker-complaints-container"]}>
-            <div className={styles["worker-complaints-header-container"]}>
-                <h1 className={styles["worker-complaints-title"]}>
-                    👷 Worker Complaints
-                </h1>
-                {totalPages > 1 && (
-                    <div className={styles["page-info"]}>
-                        Page <strong>{currentPage}</strong> of {totalPages}
-                    </div>
-                )}
-            </div>
-
-            <hr className={styles["horizantal-line"]} />
-
-            {complaints.length === 0 ? (
-                <div className={styles["no-complaints"]}>
-                    <p>✨ No worker complaints found</p>
-                    <button onClick={fetchWorkerComplaints} className={styles["refresh-btn"]}>
-                        🔄 Refresh
-                    </button>
-                </div>
-            ) : (
-                <>
-                    <ul className={styles["complaints-list"]}>
-                        {currentComplaints.map((complaint) => (
-                            <li key={complaint._id || complaint.id} className={styles["complaint-card"]}>
-                                <div className={styles["complaint-main"]}>
-                                    <div className={styles["complaint-info"]}>
-                                        <div className={styles["worker-name"]}>
-                                            <span className={styles["worker-icon"]}>👨‍🔧</span>
-                                            {complaint.worker?.fullName || 
-                                             complaint.worker?.name || 
-                                             complaint.workerName || 
-                                             "Unknown Worker"}
-                                        </div>
-                                        <div className={styles["against"]}>
-                                            Against Customer: <strong>
-                                                {complaint.customer?.fullName || 
-                                                 complaint.customer?.name || 
-                                                 complaint.customerName || 
-                                                 "Unknown Customer"}
-                                            </strong>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles["complaint-content"]}>
-                                        <p className={styles["complaint-text"]}>
-                                            "{complaint.complaintText || 
-                                              complaint.message || 
-                                              complaint.description || 
-                                              "No complaint text available"}"
-                                        </p>
-                                        <div className={styles["complaint-meta"]}>
-                                            <span className={styles["complaint-date"]}>
-                                                📅 {complaint.createdAt || complaint.date
-                                                    ? new Date(complaint.createdAt || complaint.date).toLocaleDateString('en-IN', {
-                                                        day: '2-digit',
-                                                        month: 'short',
-                                                        year: 'numeric'
-                                                    })
-                                                    : "N/A"}
-                                            </span>
-                                            {complaint.service && (
-                                                <span className={styles["complaint-service"]}>
-                                                    🔧 Service: {complaint.service}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className={styles["complaint-actions"]}>
-                                    {complaint.status?.toLowerCase() !== "resolved" &&
-                                     complaint.status?.toLowerCase() !== "completed" ? (
-                                        <>
-                                            <span className={styles["status-pending-badge"]}>
-                                                ⏳ Pending
-                                            </span>
-                                            <button
-                                                className={styles["btn-resolve"]}
-                                                onClick={() => handleResolve(complaint._id || complaint.id)}
-                                            >
-                                                ✓ Resolve
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className={styles["status-resolved-badge"]}>
-                                                ✅ Resolved
-                                            </span>
-                                            <button className={styles["btn-view"]}>
-                                                👁️ View Details
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-
-                    {/* Pagination */}
+        <>
+            <h1 style={{marginTop:"10px",marginBottom:"20px",marginLeft:"10px",fontSize:"28px",color:"#10b981"}}>Worker Complaints</h1>
+            <div className={styles["worker-complaints-container"]}>
+                <div className={styles["worker-complaints-header-container"]}>
+                    <h1 className={styles["worker-complaints-title"]}>
+                        👷 Worker Complaints
+                    </h1>
                     {totalPages > 1 && (
-                        <div className={styles.pagination}>
-                            <button 
-                                onClick={() => goToPage(currentPage - 1)} 
-                                disabled={currentPage === 1}
-                                className={styles["pagination-btn"]}
-                            >
-                                ← Previous
-                            </button>
-
-                            <div className={styles["page-numbers"]}>
-                                {getPageNumbers().map((page, index) => (
-                                    page === "..." ? (
-                                        <button
-                                            key={index}
-                                            className={styles.ellipsis}
-                                            onClick={() => setShowJumpInput(true)}
-                                        >
-                                            ...
-                                        </button>
-                                    ) : (
-                                        <button
-                                            key={index}
-                                            onClick={() => goToPage(page)}
-                                            className={`${styles["page-btn"]} ${currentPage === page ? styles["active-page"] : ""}`}
-                                        >
-                                            {page}
-                                        </button>
-                                    )
-                                ))}
-                            </div>
-
-                            <button 
-                                onClick={() => goToPage(currentPage + 1)} 
-                                disabled={currentPage === totalPages}
-                                className={styles["pagination-btn"]}
-                            >
-                                Next →
-                            </button>
-
-                            {showJumpInput && (
-                                <div className={styles.jumpInputContainer}>
-                                    <input
-                                        type="number"
-                                        value={jumpPage}
-                                        onChange={(e) => setJumpPage(e.target.value)}
-                                        placeholder="Page no."
-                                        min="1"
-                                        max={totalPages}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleJumpToPage()}
-                                    />
-                                    <button onClick={handleJumpToPage}>Go</button>
-                                    <button onClick={() => setShowJumpInput(false)}>Cancel</button>
-                                </div>
-                            )}
+                        <div className={styles["page-info"]}>
+                            Page <strong>{currentPage}</strong> of {totalPages}
                         </div>
                     )}
-                </>
-            )}
-        </div>
+                </div>
+
+                <hr className={styles["horizantal-line"]} />
+
+                {complaints.length === 0 ? (
+                    <div className={styles["no-complaints"]}>
+                        <p>✨ No worker complaints found</p>
+                        <button onClick={fetchWorkerComplaints} className={styles["refresh-btn"]}>
+                            🔄 Refresh
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <ul className={styles["complaints-list"]}>
+                            {currentComplaints.map((complaint) => (
+                                <li key={complaint._id || complaint.id} className={styles["complaint-card"]}>
+                                    <div className={styles["complaint-main"]}>
+                                        <div className={styles["complaint-info"]}>
+                                            <div className={styles["worker-name"]}>
+                                                <span className={styles["worker-icon"]}>👨‍🔧</span>
+                                                {complaint.worker?.fullName || 
+                                                complaint.worker?.name || 
+                                                complaint.workerName || 
+                                                "Unknown Worker"}
+                                            </div>
+                                            <div className={styles["against"]}>
+                                                Against Customer: <strong>
+                                                    {complaint.customer?.fullName || 
+                                                    complaint.customer?.name || 
+                                                    complaint.customerName || 
+                                                    "Unknown Customer"}
+                                                </strong>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles["complaint-content"]}>
+                                            <p className={styles["complaint-text"]}>
+                                                "{complaint.complaintText || 
+                                                complaint.message || 
+                                                complaint.description || 
+                                                "No complaint text available"}"
+                                            </p>
+                                            <div className={styles["complaint-meta"]}>
+                                                <span className={styles["complaint-date"]}>
+                                                    📅 {complaint.createdAt || complaint.date
+                                                        ? new Date(complaint.createdAt || complaint.date).toLocaleDateString('en-IN', {
+                                                            day: '2-digit',
+                                                            month: 'short',
+                                                            year: 'numeric'
+                                                        })
+                                                        : "N/A"}
+                                                </span>
+                                                {complaint.service && (
+                                                    <span className={styles["complaint-service"]}>
+                                                        🔧 Service: {complaint.service}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles["complaint-actions"]}>
+                                        {complaint.status?.toLowerCase() !== "resolved" &&
+                                        complaint.status?.toLowerCase() !== "completed" ? (
+                                            <>
+                                                <span className={styles["status-pending-badge"]}>
+                                                    ⏳ Pending
+                                                </span>
+                                                <button
+                                                    className={styles["btn-resolve"]}
+                                                    onClick={() => handleResolve(complaint._id || complaint.id)}
+                                                >
+                                                    ✓ Resolve
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className={styles["status-resolved-badge"]}>
+                                                    ✅ Resolved
+                                                </span>
+                                                <button className={styles["btn-view"]}>
+                                                    👁️ View Details
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+
+                        
+                        {totalPages > 1 && (
+                            <div className={styles.pagination}>
+                                <button 
+                                    onClick={() => goToPage(currentPage - 1)} 
+                                    disabled={currentPage === 1}
+                                    className={styles["pagination-btn"]}
+                                >
+                                    ← Previous
+                                </button>
+
+                                <div className={styles["page-numbers"]}>
+                                    {getPageNumbers().map((page, index) => (
+                                        page === "..." ? (
+                                            <button
+                                                key={index}
+                                                className={styles.ellipsis}
+                                                onClick={() => setShowJumpInput(true)}
+                                            >
+                                                ...
+                                            </button>
+                                        ) : (
+                                            <button
+                                                key={index}
+                                                onClick={() => goToPage(page)}
+                                                className={`${styles["page-btn"]} ${currentPage === page ? styles["active-page"] : ""}`}
+                                            >
+                                                {page}
+                                            </button>
+                                        )
+                                    ))}
+                                </div>
+
+                                <button 
+                                    onClick={() => goToPage(currentPage + 1)} 
+                                    disabled={currentPage === totalPages}
+                                    className={styles["pagination-btn"]}
+                                >
+                                    Next →
+                                </button>
+
+                                {showJumpInput && (
+                                    <div className={styles.jumpInputContainer}>
+                                        <input
+                                            type="number"
+                                            value={jumpPage}
+                                            onChange={(e) => setJumpPage(e.target.value)}
+                                            placeholder="Page no."
+                                            min="1"
+                                            max={totalPages}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleJumpToPage()}
+                                        />
+                                        <button onClick={handleJumpToPage}>Go</button>
+                                        <button onClick={() => setShowJumpInput(false)}>Cancel</button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

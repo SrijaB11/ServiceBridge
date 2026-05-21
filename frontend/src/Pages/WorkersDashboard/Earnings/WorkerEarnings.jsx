@@ -14,6 +14,7 @@ import {
   CurrencyRupee,
   AccountBalanceWallet,
   Paid,
+  TrendingUp,
 } from "@mui/icons-material";
 
 import styles from "./WorkerEarnings.module.css";
@@ -25,9 +26,6 @@ const WorkerEarnings = () => {
 
   const [loading, setLoading] =
     useState(true);
-
-  const [filter, setFilter] =
-    useState("all");
 
   const [stats, setStats] =
     useState({
@@ -110,26 +108,6 @@ const WorkerEarnings = () => {
   useEffect(() => {
     fetchEarnings();
   }, []);
-
-  /* =========================
-     FILTER
-  ========================= */
-
-  const filteredEarnings =
-    earnings.filter((job) => {
-
-      if (filter === "paid") {
-        return job.workerPaid;
-      }
-
-      if (
-        filter === "pending"
-      ) {
-        return !job.workerPaid;
-      }
-
-      return true;
-    });
 
   /* =========================
      LOADING
@@ -285,62 +263,45 @@ const WorkerEarnings = () => {
 
         </Card>
 
-      </div>
+        {/* GROWTH */}
 
-      {/* FILTERS */}
-
-      <div
-        className={
-          styles.filterSection
-        }
-      >
-
-        <button
+        <Card
           className={
-            filter === "all"
-              ? styles.activeFilter
-              : styles.filterBtn
-          }
-          onClick={() =>
-            setFilter("all")
+            styles.statCard
           }
         >
-          All
-        </button>
 
-        <button
-          className={
-            filter === "paid"
-              ? styles.activeFilter
-              : styles.filterBtn
-          }
-          onClick={() =>
-            setFilter("paid")
-          }
-        >
-          Paid
-        </button>
+          <div
+            className={
+              styles.iconPurple
+            }
+          >
+            <TrendingUp />
+          </div>
 
-        <button
-          className={
-            filter === "pending"
-              ? styles.activeFilter
-              : styles.filterBtn
-          }
-          onClick={() =>
-            setFilter("pending")
-          }
-        >
-          Pending
-        </button>
+          <div>
 
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+            >
+              95%
+            </Typography>
+
+            <Typography>
+              Your Share
+            </Typography>
+
+          </div>
+
+        </Card>
       </div>
 
       {/* LIST */}
 
       <div className={styles.earningsList}>
 
-        {filteredEarnings.length ===
+        {earnings.length ===
         0 ? (
           <div
             className={
@@ -362,7 +323,7 @@ const WorkerEarnings = () => {
 
           </div>
         ) : (
-          filteredEarnings.map(
+          earnings.map(
             (job) => (
               <Card
                 key={job._id}

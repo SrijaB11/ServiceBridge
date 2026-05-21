@@ -84,7 +84,7 @@ export default function RegisterForm({
     phone: "",
     services: [],
   });
-
+  const [passwordFocused, setPasswordFocused] = useState(false);
   // TOAST
   const showToast = (msg, type = "success") => {
     setToast({
@@ -144,10 +144,17 @@ export default function RegisterForm({
       newErrors.email = "Invalid email";
     }
 
+    // if (!formData.password) {
+    //   newErrors.password = "Password is required";
+    // } else if (formData.password.length < 6) {
+    //   newErrors.password = "Password must be at least 6 characters";
+    // }
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (!/(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password = "Include at least 1 uppercase letter and 1 number";
     }
 
     if (!formData.confirmPassword) {
@@ -390,7 +397,7 @@ export default function RegisterForm({
         )}
 
         {/* PASSWORD */}
-        <div className="mb-5">
+        {/* <div className="mb-5">
           <div className="relative">
             <Lock
               className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -421,6 +428,103 @@ export default function RegisterForm({
 
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
+        </div> */}
+        {/* <div className="mb-5">
+          <div className="relative">
+            <Lock
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              size={18}
+            />
+
+            {/* <input
+              type={showPassword ? "text" : "password"}
+              className={`${inputStyle} pl-11 pr-11`}
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password: e.target.value,
+                })
+              }
+            /> */}
+        {/* <input
+              type={showPassword ? "text" : "password"}
+              className={`${inputStyle} pl-11 pr-11`}
+              placeholder="Password"
+              value={formData.password}
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password: e.target.value,
+                })
+              }
+            />
+
+            {passwordFocused && (
+              <p className="text-xs text-gray-500 mt-1">
+                Must be at least 8 characters and include at least 1 uppercase
+                letter and 1 number.
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
+        </div> */}
+        <div className="mb-5">
+          <div className="relative">
+            <Lock
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`${inputStyle} pl-11 pr-11`}
+              placeholder="Password"
+              value={formData.password}
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password: e.target.value,
+                })
+              }
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {/* Outside the relative container */}
+          {passwordFocused && (
+            <p className="mt-1 text-xs text-gray-500">
+              Must be at least 8 characters and include at least 1 uppercase
+              letter and 1 number.
+            </p>
+          )}
+
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-500">{errors.password}</p>
           )}
         </div>
 
