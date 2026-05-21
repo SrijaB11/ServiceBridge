@@ -21,7 +21,7 @@ function WorkerProfile() {
     useState(null);
 
   const [skillDocs, setSkillDocs] =
-    useState([]);
+  useState(null);
 
   const [message, setMessage] =
     useState("");
@@ -135,13 +135,13 @@ function WorkerProfile() {
     }
   };
 
-  const documentsUploaded =
-    workerDetails?.documents
-      ?.profilePhoto ||
-    workerDetails?.documents
-      ?.panCard ||
-    workerDetails?.documents
-      ?.skillDocs?.length > 0;
+      const documentsUploaded =
+      workerDetails?.documents
+        ?.profilePhoto ||
+      workerDetails?.documents
+        ?.panCard ||
+      workerDetails?.documents
+        ?.skillDocs;
 
   const handleUploadDocuments = async (
     e
@@ -150,20 +150,12 @@ function WorkerProfile() {
 
     try {
       if (
-        !profilePhoto ||
-        !panCard ||
-        skillDocs.length === 0
-      ) {
+            !profilePhoto ||
+            !panCard ||
+            !skillDocs
+          ){
         setMessage(
           "Please upload all documents"
-        );
-
-        return;
-      }
-
-      if (skillDocs.length > 5) {
-        setMessage(
-          "Maximum 5 skill documents allowed"
         );
 
         return;
@@ -184,12 +176,10 @@ function WorkerProfile() {
         panCard
       );
 
-      skillDocs.forEach((file) => {
-        formDataObj.append(
-          "skillDocs",
-          file
-        );
-      });
+      formDataObj.append(
+              "skillDocs",
+              skillDocs
+            );
 
       const token =
         localStorage.getItem("token");
@@ -332,11 +322,22 @@ function WorkerProfile() {
             Professional Verification
           </label>
 
-          <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50">
-            {workerDetails?.isProfessional
-              ? "Approved"
-              : workerDetails?.professionalStatus}
-          </div>
+          <div
+                className={`w-full mt-2 border rounded-xl px-4 py-3 font-semibold capitalize
+                ${
+                  workerDetails?.workerVerificationStatus ===
+                  "approved"
+                    ? "bg-green-50 text-green-700 border-green-200"
+                    : workerDetails?.workerVerificationStatus ===
+                      "rejected"
+                    ? "bg-red-50 text-red-700 border-red-200"
+                    : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                }`}
+              >
+                {
+                  workerDetails?.workerVerificationStatus
+                }
+              </div>
         </div>
 
         {/* SERVICES */}
@@ -410,23 +411,16 @@ function WorkerProfile() {
 
           {/* SKILL DOCS */}
           {workerDetails?.documents
-            ?.skillDocs?.map(
-              (doc, index) => (
-                <div
-                  key={index}
-                  className="mb-3"
-                >
+            ?.skillDocs && (
                   <a
-                    href={`http://localhost:5000/${doc}`}
+                    href={`http://localhost:5000/${workerDetails.documents.skillDocs}`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-blue-600 hover:underline"
                   >
-                    View Skill Document{" "}
-                    {index + 1}
+                    View Skill Document
                   </a>
-                </div>
-              )
+              
             )}
 
           <p className="mt-4 text-orange-600 font-semibold">
@@ -464,6 +458,9 @@ function WorkerProfile() {
                 }
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
+                <p className="text-sm text-gray-500 mt-2">
+                       Allowed: JPG, JPEG, PNG • Max size: 2MB  
+                </p>  
             </div>
 
             <div>
@@ -481,38 +478,30 @@ function WorkerProfile() {
                 }
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
+              <p className="text-sm text-gray-500 mt-2">
+                       Allowed: JPG, JPEG, PNG, PDF • Max size: 5MB
+              </p>
             </div>
 
             <div>
               <label className="font-semibold text-gray-700">
-                Skill Documents
-                (Maximum 5)
+                Skill Document
               </label>
 
               <input
-                type="file"
-                multiple
-                accept=".jpg,.jpeg,.png,.pdf"
-                onChange={(e) => {
-                  const files =
-                    Array.from(
-                      e.target.files
-                    );
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={(e) =>
+                      setSkillDocs(
+                        e.target.files[0]
+                      )
+                    }
+                    className="w-full mt-2 border rounded-xl px-4 py-3"
+                  />
 
-                  if (
-                    files.length > 5
-                  ) {
-                    setMessage(
-                      "Maximum 5 skill documents allowed"
-                    );
-
-                    return;
-                  }
-
-                  setSkillDocs(files);
-                }}
-                className="w-full mt-2 border rounded-xl px-4 py-3"
-              />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Allowed: JPG, JPEG, PNG, PDF • Max size: 5MB • Only 1 document allowed
+                  </p>
             </div>
 
             <button
