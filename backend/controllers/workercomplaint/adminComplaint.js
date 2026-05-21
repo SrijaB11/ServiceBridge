@@ -6,7 +6,10 @@ const adminComplaint = async (req, res) => {
       return res.status(403).json({ message: "Only admin allowed" });
     }
 
-    const complaints = await Complaint.find()
+    const complaints = await Complaint.find({
+    complaintBy:
+      "worker",
+  })
       .populate("worker", "fullName phone")
       .populate("customer", "fullName phone")
       .populate("booking", "service date")

@@ -7,7 +7,7 @@ const resolveComplaint = async (req, res) => {
     }
 
     const { complaintId } = req.params;
-    const { adminReply } = req.body;
+    const { adminResponse } = req.body;
 
     const complaint = await Complaint.findById(complaintId);
 
@@ -16,7 +16,7 @@ const resolveComplaint = async (req, res) => {
     }
 
     complaint.status = "resolved";
-    complaint.adminReply = adminReply;
+    complaint.adminResponse = adminResponse;
     complaint.resolvedAt = new Date();
 
     await complaint.save();

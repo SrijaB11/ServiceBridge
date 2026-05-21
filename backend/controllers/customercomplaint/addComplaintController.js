@@ -32,6 +32,7 @@ const addComplaint = async (req, res) => {
       worker: booking.worker,
       booking: booking._id,
       complaintText,
+      complaintBy:"customer",
     });
 
     res.status(201).json({

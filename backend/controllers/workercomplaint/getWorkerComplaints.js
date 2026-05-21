@@ -6,7 +6,7 @@ const getWorkerComplaints = async (req, res) => {
       return res.status(403).json({ message: "Only workers allowed" });
     }
 
-    const complaints = await Complaint.find({ worker: req.user._id })
+    const complaints = await Complaint.find({ worker: req.user._id, complaintBy:"worker", })
       .populate("customer", "fullName phone")
       .populate("booking", "service date")
       .sort({ createdAt: -1 });

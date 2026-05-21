@@ -41,6 +41,8 @@ import WorkerNavBar from "./Pages/WorkersDashboard/Navbar/WorkerNavbar";
 import WorkerProfile from "./Pages/WorkersDashboard/Profile/WorkerProfile";
 import WorkerHeader from "./Pages/WorkersDashboard/Header/WorkerHeader";
 import WorkerHistory from "./Pages/WorkersDashboard/History/WorkerHistory";
+import WorkerComplaintPage from "./Pages/WorkersDashboard/Complaints/WorkerComplaints";
+import WorkerComplaintsPage from "./Pages/WorkersDashboard/Complaints/WorkerComplaintsPage";
 
 /* =======================
    Admin Components
@@ -219,16 +221,16 @@ export default function App() {
 
             <Route path="earnings" element={<WorkerEarnings />} />
 
-            {/* <Route path="complaint/:bookingId" element={ <ProtectedRoute role="worker"> <WorkerComplaintPage /></ProtectedRoute>}/> */}
             <Route
               path="complaint/:bookingId"
               element={<WorkerComplaintPage />}
             />
 
-            {/* <Route path="reviews" element={<div>Reviews Page</div>} /> */}
+            <Route path="complaints" element={<WorkerComplaintsPage />} />
 
             <Route path="profile" element={<WorkerProfile />} />
           </Route>
+
           {/* --- Admin Routes --- */}
           <Route
             path="/admin"

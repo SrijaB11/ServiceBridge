@@ -1,55 +1,82 @@
 const userModel = require("../../models/UserModel");
-const otpModel = require("../../models/OtpModel");
-//const bcrypt = require("bcrypt");
-const bcrypt = require("bcryptjs");
 
-const resetPasswordController = async (req, res) => {
-  try {
-    const { email, otp, newPassword } = req.body;
+const otpModel =require("../../models/OtpModel");
 
-    const record = await otpModel.findOne({ email, purpose: "reset" });
+const bcrypt =require("bcryptjs");
+
+const resetPasswordController =async (req, res) => {
+
+    try {
+
+    const {email,newPassword} = req.body;
+
+    const record =await otpModel.findOne({email, purpose: "reset" });
 
     if (!record) {
-      return res.status(400).json({
-        message: "No OTP found",
-      });
+
+    return res.status(400).json({
+
+    success: false,
+
+    message: "No OTP record found"
+
+    });
+
     }
 
-    // Expiry check
-    if (new Date() > record.expiresAt) {
-      return res.status(400).json({
-        message: "OTP expired",
-      });
+    // Check verification first
+    if (!record.verified) {
+
+    return res.status(400).json({
+
+    success: false,
+
+    message: "Verify OTP first"
+
+    });
+
     }
 
-    // OTP match
-    if (record.otp !== otp) {
-      return res.status(400).json({
-        message: "Invalid OTP",
-      });
+    // Extra expiry check
+    if ( new Date() > record.expiresAt ) {
+
+    return res.status(400).json({
+
+    success: false,
+
+    message:"OTP expired"
+
+    });
+
     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    // Hash password
+    const hashedPassword =await bcrypt.hash(newPassword,10 );
 
     // Update password
-    await userModel.updateOne(
-      { email },
-      { $set: { password: hashedPassword } }
-    );
+    await userModel.updateOne( { email }, { $set: { password: hashedPassword } }  );
 
     // Delete OTP
-    await otpModel.deleteOne({ _id: record._id });
+    await otpModel.deleteOne({ _id: record._id});
 
     return res.status(200).json({
-      message: "Password reset successful",
+        success: true,
+        message: "Password reset successful"
+
     });
 
-  } catch (err) {
+    }
+
+    catch (error) {
+
     return res.status(500).json({
-      message: "Reset failed",
+        success: false,
+        message: "Reset failed"
+
     });
-  }
+
+    }
+
 };
 
 module.exports = resetPasswordController;
