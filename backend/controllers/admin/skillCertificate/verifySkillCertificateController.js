@@ -47,4 +47,5 @@ const verifyWorkerSkillCertificate = async (req, res) => {
   }
 };
 
+
 module.exports = verifyWorkerSkillCertificate;
