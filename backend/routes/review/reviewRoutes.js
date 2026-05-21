@@ -13,7 +13,7 @@ router.post(
     console.log("POST /review/add reached");
     next();
   },
-  authMiddleware,customerMiddleware,
+  authMiddleware,
   createReviewCustomerController,
 );
 // Customer gives review
@@ -23,6 +23,6 @@ router.post(
 router.get("/myReview", authMiddleware, getMyReviewWorkerController);
 
 // Customer views his own given review
-router.get("/mygivenReviews", authMiddleware,customerMiddleware, getMyReviewCustomerController);
+router.get("/mygivenReviews",customerMiddleware, getMyReviewCustomerController);
 
 module.exports = router;

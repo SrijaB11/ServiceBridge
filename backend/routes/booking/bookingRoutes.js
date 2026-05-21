@@ -13,10 +13,10 @@ const getCustomerBookings = require("../../controllers/booking/workerBookinggetC
 const admingetAllBookings = require("../../controllers/booking/adminGetsBookingstatusController");
 
 // Customer books
-router.post("/book", authMiddleware,customerMiddleware, workerBookingController);
+router.post("/book", customerMiddleware, workerBookingController);
 
 // Get available dates
-router.get("/availability/:workerId",authMiddleware,customerMiddleware, workerAvailabilityController);
+router.get("/availability/:workerId", customerMiddleware, workerAvailabilityController);
 
 // Worker sees request
 router.get("/worker", authMiddleware, getWorkerRequest);
@@ -25,7 +25,7 @@ router.get("/worker", authMiddleware, getWorkerRequest);
 router.put("/:id", authMiddleware, updateBookingStatus);
 
 // Customer sees booking status
-router.get("/customerbookingstatus", authMiddleware,customerMiddleware, getCustomerBookings);
+router.get("/customerbookingstatus",customerMiddleware, getCustomerBookings);
 
 // Admin gets Customer sees booking status
 router.get("/customerbookingstatusforadmin", authMiddleware, admingetAllBookings);

@@ -6,6 +6,6 @@ const customerHistoryController = require("../../controllers/customer/historyCus
 const authMiddleware = require("../../middlewares/authMiddleware");
 const customerMiddleware = require("../../middlewares/customerMiddleware");
 
-router.get("/history",authMiddleware,customerMiddleware,customerHistoryController);
+router.get("/history",customerMiddleware,customerHistoryController);
 
 module.exports = router;

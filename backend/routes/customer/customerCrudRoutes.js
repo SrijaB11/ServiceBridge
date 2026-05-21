@@ -14,14 +14,14 @@ const router = express.Router();
 
 
 // Get Profile
-router.get("/profile",authMiddleware, customerMiddleware,getCustomerController);
+router.get("/profile", customerMiddleware,getCustomerController);
 
 
 // Update Profile
-router.put("/update",authMiddleware,customerMiddleware,updateCustomerController);
+router.put("/update",customerMiddleware,updateCustomerController);
 
 
 // Delete Account
-router.delete("/delete",authMiddleware,customerMiddleware,deleteCustomerController);
+router.delete("/delete",customerMiddleware,deleteCustomerController);
 
 module.exports = router;
