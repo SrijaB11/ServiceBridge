@@ -54,16 +54,52 @@ export default function ForgotPassword() {
     }
   };
 
+  // const handleVerifyOtp = async () => {
+  //   if (!otp) {
+  //     setMessage("Please enter OTP");
+  //     return;
+  //   }
+
+  //   setMessage("OTP entered successfully");
+  //   setStep(3);
+  // };
   const handleVerifyOtp = async () => {
-    if (!otp) {
-      setMessage("Please enter OTP");
-      return;
+    try {
+      if (!otp) {
+        setMessage("Please enter OTP");
+        return;
+      }
+
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/verifyresetpassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            otp,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("OTP verified successfully");
+        setStep(3); // Move to reset password page
+      } else {
+        setMessage(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      setMessage("OTP verification failed");
+    } finally {
+      setLoading(false);
     }
-
-    setMessage("OTP entered successfully");
-    setStep(3);
   };
-
   const handleResetPassword = async () => {
     try {
       if (!newPassword || !confirmPassword) {
