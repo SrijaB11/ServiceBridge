@@ -7,4 +7,4 @@ const customerDashboardStatsController = require("../../controllers/customer/cus
 
 router.get("/stats", authMiddleware, customerDashboardStatsController);
 
-module.exports = router;
+module.exports = router;    

@@ -36,6 +36,9 @@ const WorkerDashboard = () => {
   const [loading, setLoading] =
     useState(true);
 
+    const [workerRating, setWorkerRating] =
+  useState(0);
+
   /* =========================
      FETCH DASHBOARD DATA
   ========================= */
@@ -64,6 +67,23 @@ const WorkerDashboard = () => {
         setWorkerData(
           profileResponse.data.data
         );
+
+               /* WORKER RATING*/
+
+              const ratingResponse =
+                await axios.get(
+                  "http://localhost:5000/review/overall-rating",
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+
+              setWorkerRating(
+                ratingResponse.data
+                  .averageRating || 0
+              );
 
         /* REQUESTS */
 
@@ -354,11 +374,11 @@ const totalEarnings =
               variant="h4"
               fontWeight="bold"
             >
-              4.8
+               {workerRating}
             </Typography>
 
             <Typography>
-              App Rating
+               Ratings
             </Typography>
           </div>
         </Card>
