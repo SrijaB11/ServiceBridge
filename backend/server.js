@@ -26,6 +26,9 @@ const adminPaymentRoutes = require("./routes/admin/adminPaymentRoutes");
 const historyRoutes = require("./routes/customer/customerHistoryRoutes");
 const adminskillCertificateRoutes = require("./routes/admin/skillCertificationRoutes");
 const payAdminToWorkerRoutes =require("./routes/payment/payAdminToWorkerRoutes");
+const dashboardRoutes = require("./routes/customer/dashboardRoutes");
+
+const workerRecievesPaymentFromAdminRoutes =require("./routes/payment/workerRecievesPaymentFromAdminRoutes");
 
 
 const app = express();
@@ -59,7 +62,7 @@ app.use( "/admin",adminPaymentRoutes);
 app.use("/customer", historyRoutes);
 app.use( "/admin",adminskillCertificateRoutes);
 app.use("/admin",payAdminToWorkerRoutes);
-
+app.use("/customer", dashboardRoutes);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

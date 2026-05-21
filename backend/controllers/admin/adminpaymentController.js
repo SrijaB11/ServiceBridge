@@ -123,8 +123,79 @@ const getPaymentStats =
     }
   };
 
+
+const getCustomerPayments =
+async (req,res)=>{
+  try{
+
+    const payments =
+    await Booking.find({
+      paymentStatus:"paid"
+    })
+
+    .populate(
+      "customer",
+      "fullName email phone"
+    )
+
+    .populate(
+      "worker",
+      "fullName email"
+    )
+
+    .sort({
+      createdAt:-1
+    });
+
+    const history =
+    payments.map((item)=>({
+
+      bookingId:item._id,
+
+      customer:item.customer,
+
+      worker:item.worker,
+
+      amountPaid:item.amount,
+
+      adminCommission:
+      item.adminCommission,
+
+      workerAmount:
+      item.workerAmount,
+
+      paymentDate:
+      item.updatedAt,
+
+      paymentStatus:
+      item.paymentStatus
+
+    }));
+
+
+    res.status(200).json({
+      success:true,
+      totalPayments:
+      history.length,
+
+      data:history
+    });
+
+  }
+
+  catch(error){
+
+    res.status(500).json({
+      success:false,
+      message:error.message
+    });
+
+  }
+};
+
 module.exports = {
   getWorkerPayments,
   markWorkerPaid,
   getPaymentStats,
+  getCustomerPayments
 };

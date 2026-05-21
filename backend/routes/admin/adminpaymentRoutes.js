@@ -10,6 +10,7 @@ const {
   getWorkerPayments,
   markWorkerPaid,
   getPaymentStats,
+  getCustomerPayments
 } = require(
   "../../controllers/admin/adminPaymentController"
 );
@@ -32,6 +33,11 @@ router.get(
   "/payment-stats",
   authMiddleware,
   getPaymentStats
+);
+
+router.get(
+ "/customer-payments",
+ getCustomerPayments
 );
 
 module.exports = router;

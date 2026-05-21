@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Star } from "lucide-react";
+import { Briefcase, Users, ClipboardList, Star } from "lucide-react";
 
-function DashboardStats() {
+export default function CustomerStats() {
   const [stats, setStats] = useState({
     totalServices: 0,
     totalWorkers: 0,
     totalBookings: 0,
-    avgRating: 4.8,
+    averageRating: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -20,42 +20,22 @@ function DashboardStats() {
     try {
       const token = localStorage.getItem("token");
 
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
+      const res = await axios.get("http://localhost:5000/customer/stats", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      // Individual API calls with fallback
-      const servicesPromise = axios
-        .get("http://localhost:5000/service/totalServices", { headers })
-        .catch(() => ({
-          data: { totalServices: 0 },
-        }));
-
-      const bookingsPromise = axios
-        .get("http://localhost:5000/bookings/totalbookings", { headers })
-        .catch(() => ({
-          data: { totalBookings: 0 },
-        }));
-
-      // const workersPromise = axios
-      //   .get("http://localhost:5000/workers/totalworkers", { headers })
-      //   .catch(() => ({
-      //     data: { totalWorkers: 0 },
-      //   }));
-
-      const [servicesRes, bookingsRes] = await Promise.all([
-        servicesPromise,
-        bookingsPromise,
-      ]);
+      const data = res.data.stats;
 
       setStats({
-        totalServices: servicesRes.data.totalServices || 0,
-        totalBookings: bookingsRes.data.totalBookings || 0,
-        totalWorkers: 22,
-        avgRating: 4.8,
+        totalServices: data.totalServices || 0,
+        totalWorkers: data.totalWorkers || 0,
+        totalBookings: data.totalBookings || 0,
+        avgerageRating: data.averageRating || 0,
       });
-    } catch (error) {
-      console.log("Dashboard stats error:", error);
+    } catch (err) {
+      console.error("Stats error:", err);
     } finally {
       setLoading(false);
     }
@@ -63,41 +43,70 @@ function DashboardStats() {
 
   if (loading) {
     return (
-      <div className="bg-white p-6 rounded-xl shadow-sm">Loading stats...</div>
+      <div className="bg-white p-6 rounded-2xl shadow-sm text-gray-500">
+        Loading dashboard stats...
+      </div>
     );
   }
 
+  const cards = [
+    {
+      title: "Services",
+      value: stats.totalServices,
+      icon: Briefcase,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    {
+      title: "Workers",
+      value: stats.totalWorkers,
+      icon: Users,
+      color: "text-purple-600",
+      bg: "bg-purple-50",
+    },
+    {
+      title: "Bookings",
+      value: stats.totalBookings,
+      icon: ClipboardList,
+      color: "text-green-600",
+      bg: "bg-green-50",
+    },
+    {
+      title: "Avg Rating",
+      value: stats.averageRating,
+      icon: Star,
+      color: "text-yellow-500",
+      bg: "bg-yellow-50",
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-      {/* SERVICES */}
-      <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-        <h2 className="text-xl font-bold">{stats.totalServices}</h2>
-        <p className="text-gray-500 text-sm">Services</p>
-      </div>
+    <div className="w-full">
+      {/* GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {cards.map((item, index) => {
+          const Icon = item.icon;
 
-      {/* WORKERS */}
-      <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-        <h2 className="text-xl font-bold">{stats.totalWorkers}</h2>
-        <p className="text-gray-500 text-sm">Workers</p>
-      </div>
+          return (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-sm border p-5 flex items-center justify-between hover:shadow-md transition"
+            >
+              {/* Left */}
+              <div>
+                <p className="text-gray-500 text-sm">{item.title}</p>
 
-      {/* BOOKINGS */}
-      <div className="bg-white p-4 rounded-xl shadow-sm text-center">
-        <h2 className="text-xl font-bold">{stats.totalBookings}</h2>
-        <p className="text-gray-500 text-sm">Bookings</p>
-      </div>
+                <h2 className="text-2xl font-bold mt-1">{item.value}</h2>
+              </div>
 
-      {/* RATING */}
-      <div className="bg-white p-4 rounded-xl shadow-sm text-center flex flex-col items-center">
-        <div className="flex items-center gap-1">
-          <h2 className="text-xl font-bold">{stats.avgRating}</h2>
-          <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-        </div>
-
-        <p className="text-gray-500 text-sm">Average Rating</p>
+              {/* Icon */}
+              <div className={`p-3 rounded-xl ${item.bg}`}>
+                <Icon className={`w-6 h-6 ${item.color}`} />
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
-
-export default DashboardStats;
