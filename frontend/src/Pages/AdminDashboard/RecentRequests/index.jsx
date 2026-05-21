@@ -166,12 +166,12 @@ const RecentRequests = () => {
               <table className={styles["requests-table"]}>
                 <thead>
                   <tr>
-                    <th>Booking ID</th>
-                    <th>Customer</th>
-                    <th>Worker</th>
-                    <th>Service</th>
-                    <th>Status</th>
-                    <th>Date</th>
+                    <th style={{color:"#ffffff",textAlign:"center"}}>Booking ID</th>
+                    <th style={{color:"#ffffff",textAlign:"center"}}>Customer</th>
+                    <th style={{color:"#ffffff",textAlign:"center"}}>Worker</th>
+                    <th style={{color:"#ffffff",textAlign:"center"}}>Service</th>
+                    <th style={{color:"#ffffff",textAlign:"center"}}>Status</th>
+                    <th style={{color:"#ffffff",textAlign:"center"}}>Date</th>
                   </tr>
                 </thead>
                 <tbody>

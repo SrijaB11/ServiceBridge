@@ -49,7 +49,7 @@ const CustomerPayments = () => {
                                     <th>Payment Date</th>
                                     <th>Payment Status</th>
                                     <th>AdminCommission</th>
-                                    <th>Action</th>
+                                    <th>Worker Payment</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +62,7 @@ const CustomerPayments = () => {
                                         <td>{payment.paymentDate}</td>
                                         <td><span className="status">{payment.paymentStatus}</span></td>
                                         <td className="commission">{payment.adminCommission}</td>
-                                        <td><button className="">Pay Now</button></td>
+                                        <td><button className="">{payment.amountPaid-payment.adminCommission}</button></td>
                                     </tr>
                                 ))}
                             </tbody>
