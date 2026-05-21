@@ -14,8 +14,8 @@ const router = express.Router();
 router.post("/register", regController);
 
 // register with otp
-router.post("/registerotp", regSendOtpController);
-router.post("/verifyotp", regVerifyOtpController);
+ router.post("/registerotp", regSendOtpController);
+ router.post("/verifyotp", regVerifyOtpController);
 
 router.post("/login", loginController);
 
