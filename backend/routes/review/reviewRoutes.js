@@ -4,7 +4,9 @@ const router = express.Router();
 const createReviewCustomerController = require("../../controllers/review/createReviewCustomerController");
 const getMyReviewWorkerController = require("../../controllers/review/getMyReviewWorkerController");
 const getMyReviewCustomerController = require("../../controllers/review/getMyReviewCustomerController");
+const getOverallRatingController = require("../../controllers/revieW/getMyOverallRatingWorkerController");
 
+const customerMiddleware = require("../../middlewares/customerMiddleware");
 const authMiddleware = require("../../middlewares/authMiddleware");
 router.post(
   "/add",
@@ -22,6 +24,11 @@ router.post(
 router.get("/myReview", authMiddleware, getMyReviewWorkerController);
 
 // Customer views his own given review
-router.get("/mygivenReviews", authMiddleware, getMyReviewCustomerController);
+router.get("/mygivenReviews",customerMiddleware, getMyReviewCustomerController);
+
+
+// Worker overall rating
+
+router.get("/overall-rating",authMiddleware, getOverallRatingController);
 
 module.exports = router;

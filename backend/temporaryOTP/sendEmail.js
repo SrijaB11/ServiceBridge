@@ -99,7 +99,7 @@ const sendEmail = async (email, otp) => {
           <p style="
             color:#444;
           ">
-            ⏳ OTP Validity: 
+             OTP Validity: 
             <b>5 Minutes</b>
           </p>
 
@@ -140,7 +140,7 @@ const sendEmail = async (email, otp) => {
 
   } catch (error) {
 
-    console.log(error);
+    //console.log(error);
 
     return false;
 

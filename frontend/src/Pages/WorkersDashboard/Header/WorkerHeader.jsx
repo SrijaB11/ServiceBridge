@@ -7,21 +7,21 @@ import {
   Toolbar,
   Box,
   Typography,
-  IconButton,
-  InputBase,
   Avatar,
-  Badge,
   Menu,
   MenuItem,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
 
 import {
-  Search,
   KeyboardArrowDown,
 } from "@mui/icons-material";
 
-import { BellDot } from "lucide-react";
+import {
+  BellDot,
+  BriefcaseBusiness,
+} from "lucide-react";
 
 import styles from "./WorkerHeader.module.css";
 
@@ -37,7 +37,7 @@ const WorkerHeader = () => {
 
   const open = Boolean(anchorEl);
 
-  // FETCH WORKER DETAILS
+  // FETCH WORKER DATA
 
   const fetchWorkerData = async () => {
     try {
@@ -109,6 +109,7 @@ const WorkerHeader = () => {
       <Toolbar
         className={styles.toolbar}
       >
+
         {/* LEFT SECTION */}
 
         <Box
@@ -116,11 +117,32 @@ const WorkerHeader = () => {
             styles.leftSection
           }
         >
-          <Typography
-            className={styles.logo}
-          >
-            Service Bridge
-          </Typography>
+          {/* LOGO */}
+
+          <Box
+  className={
+    styles.logoContainer
+  }
+>
+              <img
+                src="/images/logo.png"
+                alt="Service Bridge"
+                className={styles.logoImage}
+              />
+
+  <Box>
+    <Typography
+      className={styles.logo}
+    >
+      Service Bridge
+    </Typography>
+
+    <Typography
+      className={styles.logoTag}
+    >
+    </Typography>
+  </Box>
+</Box>
         </Box>
 
         {/* RIGHT SECTION */}
@@ -130,6 +152,7 @@ const WorkerHeader = () => {
             styles.rightSection
           }
         >
+
 
           {/* PROFILE */}
 
@@ -172,7 +195,6 @@ const WorkerHeader = () => {
                   styles.userRole
                 }
               >
-                Worker
               </Typography>
             </Box>
 
@@ -193,20 +215,17 @@ const WorkerHeader = () => {
             }
           >
             <MenuItem
-              onClick={
-                handleMenuClose
-              }
-            >
-              Profile
-            </MenuItem>
+                  onClick={() => {
+                    handleMenuClose();
 
-            <MenuItem
-              onClick={
-                handleMenuClose
-              }
-            >
-              Settings
-            </MenuItem>
+                    window.location.href =
+                      "/worker/profile";
+                  }}
+                >
+                  Profile
+                </MenuItem>
+
+           
 
             <MenuItem
               onClick={() => {

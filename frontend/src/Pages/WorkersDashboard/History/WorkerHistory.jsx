@@ -26,10 +26,10 @@ const WorkerHistory = () => {
 
   const [loading, setLoading] =
     useState(true);
+    const [filter, setFilter] =
+  useState("all");
 
-  /* =========================
-     FETCH COMPLETED JOBS
-  ========================= */
+  
 
   const fetchCompletedJobs =
     async () => {
@@ -50,17 +50,19 @@ const WorkerHistory = () => {
             }
           );
 
-        const completed =
-          response.data.data.filter(
-            (request) =>
-              request.status ===
-              "completed"
-          );
+  const historyRequests = response.data.data.filter(
+                                    (request) =>
+                                      request.status ===
+                                        "completed" ||
+                                      request.status ===
+                                        "rejected" ||
+                                      request.status ===
+                                        "cancelled"
+                                  );
 
-        setCompletedJobs(
-          completed
-        );
-
+                                  setCompletedJobs(
+                                    historyRequests
+                                  );
       } catch (error) {
 
         console.log(error);
@@ -75,9 +77,23 @@ const WorkerHistory = () => {
     fetchCompletedJobs();
   }, []);
 
-  /* =========================
-     LOADING
-  ========================= */
+
+  const filteredJobs =
+  completedJobs.filter(
+    (job) => {
+
+      if (filter === "all") {
+        return true;
+      }
+
+      return (
+        job.status === filter
+      );
+    }
+  );
+
+
+ 
 
   if (loading) {
     return (
@@ -120,9 +136,72 @@ const WorkerHistory = () => {
 
       </div>
 
+      {/* FILTERS */}
+
+<div className={styles.filterSection}>
+
+  <button
+    className={
+      filter === "all"
+        ? styles.activeFilter
+        : styles.filterBtn
+    }
+    onClick={() =>
+      setFilter("all")
+    }
+  >
+    All
+  </button>
+
+  <button
+    className={
+      filter === "completed"
+        ? styles.activeFilter
+        : styles.filterBtn
+    }
+    onClick={() =>
+      setFilter(
+        "completed"
+      )
+    }
+  >
+    Completed
+  </button>
+
+  <button
+    className={
+      filter === "rejected"
+        ? styles.activeFilter
+        : styles.filterBtn
+    }
+    onClick={() =>
+      setFilter(
+        "rejected"
+      )
+    }
+  >
+    Rejected
+  </button>
+
+  <button
+    className={
+      filter === "cancelled"
+        ? styles.activeFilter
+        : styles.filterBtn
+    }
+    onClick={() =>
+      setFilter(
+        "cancelled"
+      )
+    }
+  >
+    Cancelled
+  </button>
+</div>
+
       {/* EMPTY STATE */}
 
-      {completedJobs.length ===
+      {filteredJobs.length ===
       0 ? (
         <div
           className={
@@ -137,18 +216,34 @@ const WorkerHistory = () => {
           />
 
           <Typography
-            variant="h6"
-            mt={2}
-          >
-            No Completed Jobs
-          </Typography>
+                      variant="h6"
+                      mt={2}
+                    >
+                      {filter === "completed"
+                        ? "No Completed Jobs"
+                        : filter ===
+                            "rejected"
+                          ? "No Rejected Jobs"
+                          : filter ===
+                              "cancelled"
+                            ? "No Cancelled Jobs"
+                            : "No History Found"}
+                    </Typography>
+                    
 
-          <Typography
-            color="text.secondary"
-          >
-            Completed services
-            will appear here.
-          </Typography>
+                  <Typography
+                    color="text.secondary"
+                  >
+                    {filter === "completed"
+                      ? "Completed services will appear here."
+                      : filter ===
+                          "rejected"
+                        ? "Rejected requests will appear here."
+                        : filter ===
+                            "cancelled"
+                          ? "Cancelled requests will appear here."
+                          : "History data will appear here."}
+                      </Typography>
 
         </div>
       ) : (
@@ -158,7 +253,7 @@ const WorkerHistory = () => {
           }
         >
 
-          {completedJobs.map(
+          {filteredJobs.map(
             (job) => (
               <Card
                 key={job._id}
@@ -226,9 +321,17 @@ const WorkerHistory = () => {
                   </div>
 
                   <Chip
-                    label="Completed"
-                    color="success"
-                  />
+                        label={job.status}
+                        color={
+                          job.status ===
+                          "completed"
+                            ? "success"
+                            : job.status ===
+                                "rejected"
+                              ? "error"
+                              : "warning"
+                        }
+                      />
 
                 </div>
 
