@@ -24,7 +24,7 @@ router.post(
 router.get("/myReview", authMiddleware, getMyReviewWorkerController);
 
 // Customer views his own given review
-router.get("/mygivenReviews",customerMiddleware, getMyReviewCustomerController);
+router.get("/mygivenReviews",authMiddleware, getMyReviewCustomerController);
 
 
 // Worker overall rating

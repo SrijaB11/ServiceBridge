@@ -15,10 +15,10 @@ const getSingleBookingController = require( "../../controllers/booking/getSingle
 
 
 // Customer books
-router.post("/book", customerMiddleware, workerBookingController);
+router.post("/book", authMiddleware, workerBookingController);
 
 // Get available dates
-router.get("/availability/:workerId", customerMiddleware, workerAvailabilityController);
+router.get("/availability/:workerId",authMiddleware, workerAvailabilityController);
 
 // Worker sees request
 router.get("/worker", authMiddleware, getWorkerRequest);
@@ -27,7 +27,7 @@ router.get("/worker", authMiddleware, getWorkerRequest);
 router.put("/:id", authMiddleware, updateBookingStatus);
 
 // Customer sees booking status
-router.get("/customerbookingstatus",customerMiddleware, getCustomerBookings);
+router.get("/customerbookingstatus",authMiddleware, getCustomerBookings);
 
 
 router.get( "/:id", authMiddleware,getSingleBookingController);
