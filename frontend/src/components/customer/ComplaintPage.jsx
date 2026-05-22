@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function ComplaintPage() {
   const { bookingId } = useParams();
+  // console.log("Booking ID:", bookingId);
 
   const [formData, setFormData] = useState({
     subject: "",

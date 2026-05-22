@@ -49,6 +49,12 @@ function Complaints() {
 
             <div className="mt-5 space-y-2 text-sm text-gray-500">
               <p>
+                Booking ID:
+                <span className="text-gray-700 ml-2 font-medium">
+                  {complaint.booking?._id || complaint.booking}
+                </span>
+              </p>
+              <p>
                 Worker:
                 <span className="text-gray-700 ml-2">
                   {complaint.worker?.fullName}

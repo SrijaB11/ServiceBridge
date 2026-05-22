@@ -24,13 +24,13 @@ const Topbar = () => {
           Service Bridge Admin
         </h1>
 
-        <div className="hidden md:flex items-center bg-white/20 px-3 py-1 rounded-lg w-1/3">
+        {/* <div className="hidden md:flex items-center bg-white/20 px-3 py-1 rounded-lg w-1/3">
           <Search size={18} />
           <input
             placeholder="Search..."
             className="bg-transparent outline-none px-2 text-white w-full placeholder-white/70"
           />
-        </div>
+        </div> */}
 
         <div className="flex items-center gap-4 relative">
           {/* <div className="relative cursor-pointer">
