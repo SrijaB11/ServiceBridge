@@ -7,7 +7,7 @@ const AdminDashboard = () => {
     const [statsDetails, setStatsDetails] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Memoizing mergeStats so it can be used safely in useEffect or passed to child components
+    
     const mergeStats = useCallback((fetchedStats) => {
         const stats = fetchedStats?.stats || {};
 
@@ -73,7 +73,6 @@ const AdminDashboard = () => {
         fetchStats();
     }, [fetchStats]);
 
-    // Handler for the child component callback
     const handleTotalWorkersChange = (newCount) => {
         setStatsDetails(prevStats => 
             prevStats.map(stat => 
