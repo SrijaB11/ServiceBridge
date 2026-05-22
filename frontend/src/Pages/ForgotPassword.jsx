@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, ShieldCheck, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -19,7 +19,13 @@ export default function ForgotPassword() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const handleBack = () => {
+    if (step === 1) {
+      navigate("/login");
+    } else {
+      setStep((prev) => prev - 1);
+    }
+  };
   const inputStyle =
     "w-full h-14 rounded-2xl border border-gray-200 bg-gray-50 pl-12 pr-4 text-sm sm:text-base transition-all duration-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400";
   const handleSendOtp = async () => {
@@ -54,16 +60,52 @@ export default function ForgotPassword() {
     }
   };
 
+  // const handleVerifyOtp = async () => {
+  //   if (!otp) {
+  //     setMessage("Please enter OTP");
+  //     return;
+  //   }
+
+  //   setMessage("OTP entered successfully");
+  //   setStep(3);
+  // };
   const handleVerifyOtp = async () => {
-    if (!otp) {
-      setMessage("Please enter OTP");
-      return;
+    try {
+      if (!otp) {
+        setMessage("Please enter OTP");
+        return;
+      }
+
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/verifyresetpassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            otp,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("OTP verified successfully");
+        setStep(3); // Move to reset password page
+      } else {
+        setMessage(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      setMessage("OTP verification failed");
+    } finally {
+      setLoading(false);
     }
-
-    setMessage("OTP entered successfully");
-    setStep(3);
   };
-
   const handleResetPassword = async () => {
     try {
       if (!newPassword || !confirmPassword) {
@@ -111,6 +153,20 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 flex items-center justify-center px-4 py-6">
       <div className="w-full max-w-md rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-gray-100">
+        <div className="mb-6">
+          <button
+            onClick={handleBack}
+            className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-green-50 border border-gray-200 hover:border-green-300 transition-all duration-300"
+          >
+            <ArrowLeft
+              size={18}
+              className="group-hover:-translate-x-1 transition-transform"
+            />
+            <span className="font-medium text-gray-700 group-hover:text-green-600">
+              {step === 1 ? "Back to Login" : "Back"}
+            </span>
+          </button>
+        </div>
         {/* HEADER */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-900">

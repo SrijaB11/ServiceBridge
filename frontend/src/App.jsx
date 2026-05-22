@@ -55,7 +55,7 @@ import Users from "./Pages/AdminDashboard/Users";
 import RecentRequests from "./Pages/AdminDashboard/RecentRequests";
 import CustomerComplaints from "./Pages/AdminDashboard/CustomerComplaints";
 import WorkerComplaints from "./Pages/AdminDashboard/WorkerComplaints";
-import CustomerPayments from "./Pages/AdminDashboard/CustomerPayments"
+import CustomerPayments from "./Pages/AdminDashboard/CustomerPayments";
 
 import Worker from "./Pages/AdminDashboard/Worker";
 import Certifications from "./Pages/AdminDashboard/Certifications";
@@ -69,6 +69,7 @@ import Profile from "./components/customer/Profile";
 import BookWorkerPage from "./components/customer/BookWorkerPage";
 import PaymentPage from "./Pages/PaymentPage";
 
+import PageNotFound from "./Pages/Customer/PageNotFound";
 
 /* =======================
    Loading Component
@@ -220,15 +221,15 @@ export default function App() {
 
             <Route path="earnings" element={<WorkerEarnings />} />
 
-            <Route path="complaint/:bookingId" element={<WorkerComplaintPage />}/>
+            <Route
+              path="complaint/:bookingId"
+              element={<WorkerComplaintPage />}
+            />
 
             <Route path="complaints" element={<WorkerComplaintsPage />} />
 
-
             <Route path="profile" element={<WorkerProfile />} />
           </Route>
-
-
 
           {/* --- Admin Routes --- */}
           <Route
@@ -256,13 +257,12 @@ export default function App() {
 
             <Route path="workers/verification" element={<Certifications />} />
 
-
-            <Route path="customer-payments" element={<CustomerPayments/>} />
+            <Route path="customer-payments" element={<CustomerPayments />} />
 
             <Route path="logout" element={<div>Logging out...</div>} />
           </Route>
           {/* --- Fallback --- */}
-          <Route path="*" element={<div>404 - Page Not Found</div>} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
