@@ -84,7 +84,7 @@
     font-size: 13px;
     color: #047857;
     margin-bottom: 8px;
-    font-weight: 600;
+    font-weight: 900;
     letter-spacing: 0.3px;
 }
 
@@ -92,7 +92,8 @@
     font-size: 28px;
     color: #064e3b;
     margin-bottom: 8px;
-    font-weight: 700;
+    font-weight: 900;
+
 }
 
 .status {

@@ -7,10 +7,44 @@ const WorkerVerification = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     getWorkerDetails();
   }, []);
+
+  // Helper function to fix Windows backslashes and encode URLs properly
+  const getDocumentUrl = (docPath) => {
+    if (!docPath) return null;
+    
+    // First, replace backslashes with forward slashes
+    let normalized = docPath.replace(/\\/g, '/');
+    
+    // Split the path into parts
+    const parts = normalized.split('/');
+    
+    // Encode each part individually (this handles spaces and special characters)
+    const encodedParts = parts.map(part => encodeURIComponent(part));
+    
+    // Join back with forward slashes
+    const encodedPath = encodedParts.join('/');
+    
+    // Return the full URL
+    return `http://localhost:5000/${encodedPath}`;
+  };
+
+  // Alternative simpler version if the above doesn't work
+  const getDocumentUrlSimple = (docPath) => {
+    if (!docPath) return null;
+    
+    // Replace backslashes with forward slashes
+    let normalized = docPath.replace(/\\/g, '/');
+    
+    // Encode the entire path (spaces become %20, parentheses become %28 and %29)
+    const encodedPath = encodeURI(normalized);
+    
+    return `http://localhost:5000/${encodedPath}`;
+  };
 
   const getWorkerDetails = async () => {
     const jwtToken = localStorage.getItem("token");
@@ -24,36 +58,45 @@ const WorkerVerification = () => {
         method: "GET",
         headers: { Authorization: `Bearer ${jwtToken}` },
       });
+
       const data = await response.json();
+      console.log("API Response:", data);
+
       if (response.ok) {
-        const updatedWorkersList = data.data?.map((worker) => ({
-          workerId: worker._id,
-          workerName: worker.fullName || worker.WorkerName || "Unknown Worker",
-          services: worker.services?.[0] || "N/A",
-          profilePicture: worker.profilePhoto,
-          skillCertificate: worker.documents?.skillDocs,
-          panCard: worker.panCard,
-          aadharCard: worker.aadharCard || worker.documents?.aadharCard,
-          workerVerificationStatus: worker.workerVerificationStatus,
-        })) || [];
-        
+        const updatedWorkersList = (data.data || []).map((worker) => {
+          // Debug log to see original paths
+          console.log("Worker:", worker.fullName);
+          console.log("Profile Photo Path:", worker.documents?.profilePhoto);
+          console.log("Skill Docs Path:", worker.documents?.skillDocs);
+          console.log("Pan Card Path:", worker.documents?.panCard);
+          
+          return {
+            workerId: worker._id,
+            workerName: worker.fullName || worker.WorkerName || "Unknown Worker",
+            services: worker.services?.[0]?.name || worker.services?.[0] || "N/A",
+            profilePicture: worker.documents?.profilePhoto || worker.profilePhoto,
+            skillDocs: worker.documents?.skillDocs,
+            panCard: worker.documents?.panCard || worker.panCard,
+            aadharCard: worker.documents?.aadharCard || worker.aadharCard,
+            workerVerificationStatus: worker.workerVerificationStatus || "pending",
+          };
+        });
+
         setWorkersDetailsList(updatedWorkersList);
       } else {
         toast.error(data.message || "Failed to fetch workers");
       }
     } catch (error) {
+      console.error(error);
       toast.error("Error loading worker data");
     }
   };
 
-  const updateWorkerStatus = async (workerId, status, workerName) => {
+  const updateWorkerStatus = async (workerId, status) => {
     const jwtToken = localStorage.getItem("token");
     if (!jwtToken) return;
 
     setLoading(true);
-    setMessage("");
-    setMessageType("");
-
     try {
       const response = await fetch(
         "http://localhost:5000/admin/verifyworkerskillcertificates",
@@ -69,23 +112,22 @@ const WorkerVerification = () => {
 
       const responseData = await response.json().catch(() => ({}));
 
-      if (response.ok || responseData.success) {  
-        const successMessage =
-        setMessageType("success");
-        setMessage(successMessage);
+      if (response.ok || responseData.success) {
+        const successMessage = status === "approved"
+          ? "Worker approved successfully"
+          : "Worker rejected successfully";
 
         setWorkersDetailsList((prevList) =>
           prevList.map((w) =>
             w.workerId === workerId ? { ...w, workerVerificationStatus: status } : w
           )
         );
-
         toast.success(successMessage);
       } else {
-        const errorMsg = responseData?.message || `Failed to ${status} worker`;
-        toast.error(errorMsg);
+        toast.error(responseData?.message || `Failed to ${status} worker`);
       }
     } catch (error) {
+      console.error(error);
       toast.error("Network error. Check console.");
     } finally {
       setLoading(false);
@@ -96,12 +138,13 @@ const WorkerVerification = () => {
     const worker = workersDetailsList.find((w) => w.workerId === workerId);
     if (!worker) return;
 
-    if (!worker.skillCertificate || !worker.panCard || !worker.aadharCard) {
+    // Check all required documents
+    if (!worker.skillDocs || !worker.panCard || !worker.aadharCard) {
       toast.error("All documents must be uploaded before approval!");
       return;
     }
 
-    updateWorkerStatus(workerId, "approved", worker.workerName);
+    updateWorkerStatus(workerId, "approved");
   };
 
   const handleReject = (workerId) => {
@@ -110,125 +153,245 @@ const WorkerVerification = () => {
       toast.error("Worker not found");
       return;
     }
-
     if (window.confirm(`Reject ${worker.workerName}?`)) {
-      updateWorkerStatus(workerId, "rejected", worker.workerName);
+      updateWorkerStatus(workerId, "rejected");
     }
   };
 
-  return (
-    <>
-      <h1 style={{ marginTop: "10px", marginBottom: "20px", marginLeft: "10px", fontSize: "28px", color: "#10b981" }}>
-        Certificate Verification
-      </h1>
+  const viewDocument = (docPath) => {
+    if (!docPath) {
+      toast.error("Document not available");
+      return;
+    }
+    
+    const fullUrl = getDocumentUrl(docPath);
+    console.log("Opening document URL:", fullUrl);
+    
+    // Test if the URL is valid by trying to fetch it
+    fetch(fullUrl, { method: 'HEAD' })
+      .then(response => {
+        if (response.ok) {
+          window.open(fullUrl, "_blank");
+        } else {
+          toast.error("Document file not found on server");
+        }
+      })
+      .catch(() => {
+        toast.error("Cannot access document. Please check if file exists.");
+      });
+  };
 
-      <div className={styles.container}>
-        {message && (
-          <div
-            style={{
-              padding: "12px 16px",
-              margin: "10px 0",
-              borderRadius: "6px",
-              background: messageType === "success" ? "#d4edda" : "#f8d7da",
-              color: messageType === "success" ? "#155724" : "#721c24",
-              fontWeight: "500",
-            }}
-          >
-            {message}
-          </div>
-        )}
-
-        <ul className={styles["cards-container"]}>
-          {workersDetailsList.map((worker) => {
-            const status = worker.workerVerificationStatus;
-            const isApproved = status === "approved";
-            const isRejected = status === "rejected";
-
-            return (
-              <li key={worker.workerId} className={styles["worker-card"]}>
-                <div className={styles["worker-card-body"]}>
-                  <div className={styles["worker-header"]}>
-                    {worker.profilePicture ? (
-                      <img
-                        src={`http://localhost:5000/${worker.profilePicture.replace(/\\/g, "/")}`}
-                        alt="Profile"
-                        className={styles["worker-avatar"]}
-                        onError={(e) => (e.target.style.display = "none")}
-                      />
-                    ) : (
-                      <div className={styles["worker-avatar"]}>
-                        {worker.workerName?.charAt(0)?.toUpperCase()}
-                      </div>
-                    )}
-
-                    <div className={styles["worker-info"]}>
-                      <h3>{worker.workerName}</h3>
-                      <p>{worker.services}</p>
-                      <p style={{ fontSize: "14px", color: "#666" }}>
-                        Status: <strong>{status || "Pending"}</strong>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles["certificates-section"]}>
-                    <p className={styles["certificates-title"]}>Certificates Uploaded</p>
-                    <div className={styles["certificates-list"]}>
-                      <span className={styles["certificate-badge"]}>Skill Certificate</span>
-                      <span className={styles["certificate-badge"]}>Aadhar Card</span>
-                      <span className={styles["certificate-badge"]}>Pan Card</span>
-                    </div>
-                  </div>
-
-                  <div className={styles["action-buttons"]}>
-                    {isApproved ? (
-                      <p style={{ color: "green", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
-                        <CheckIcon /> Verified Successfully
-                      </p>
-                    ) : isRejected ? (
-                      <p style={{ color: "red", fontWeight: "bold", display: "flex", alignItems: "center", gap: "5px" }}>
-                        <XIcon /> Worker Rejected
-                      </p>
-                    ) : (
-                      <>
-                        <button
-                          className={`${styles.btn} ${styles["approve-btn"]}`}
-                          onClick={() => handleApprove(worker.workerId)}
-                          disabled={loading}
-                        >
-                          <CheckIcon /> Approve
-                        </button>
-                        <button
-                          className={`${styles.btn} ${styles["reject-btn"]}`}
-                          onClick={() => handleReject(worker.workerId)}
-                          disabled={loading}
-                        >
-                          <XIcon /> Reject
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+  // Helper to render document link with better debugging
+  const renderDocumentLink = (docPath, label, emoji) => {
+    const hasDoc = !!docPath;
+    const url = hasDoc ? getDocumentUrl(docPath) : null;
+    
+    return (
+      <div
+        onClick={() => hasDoc && viewDocument(docPath)}
+        style={{
+          color: hasDoc ? "#007bff" : "#999",
+          cursor: hasDoc ? "pointer" : "default",
+          textDecoration: "underline",
+          marginBottom: "6px",
+          fontSize: "13px"
+        }}
+        title={hasDoc ? url : "No document available"}
+      >
+        {emoji} {label}
+        {hasDoc && " 🔗"}
       </div>
-    </>
+    );
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Certificate Verification</h2>
+
+      <input
+        type="text"
+        placeholder="Search by worker name or service..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{
+          padding: "8px 12px",
+          width: "300px",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+          fontSize: "14px",
+          marginBottom: "15px",
+        }}
+      />
+
+      {workersDetailsList.length === 0 ? (
+        <p>No workers available.</p>
+      ) : (
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>Name</th>
+              <th>Service</th>
+              <th>Certificates Uploaded</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {workersDetailsList
+              .filter((worker) => {
+                const lowerSearch = searchTerm.toLowerCase();
+                return (
+                  worker.workerName.toLowerCase().includes(lowerSearch) ||
+                  worker.services.toLowerCase().includes(lowerSearch)
+                );
+              })
+              .map((worker) => {
+                const status = worker.workerVerificationStatus;
+                const isApproved = status === "approved";
+                const isRejected = status === "rejected";
+                
+                // Get profile image URL
+                const profileImageUrl = worker.profilePicture 
+                  ? getDocumentUrl(worker.profilePicture)
+                  : null;
+
+                return (
+                  <tr key={worker.workerId}>
+                    <td>
+                      {profileImageUrl ? (
+                        <img
+                          src={profileImageUrl}
+                          alt={worker.workerName}
+                          onError={(e) => {
+                            console.error(`Failed to load image: ${profileImageUrl}`);
+                            e.target.style.display = "none";
+                            const parent = e.target.parentElement;
+                            if (parent && !parent.querySelector('.fallback-avatar')) {
+                              const fallback = document.createElement('div');
+                              fallback.className = 'fallback-avatar';
+                              fallback.style.width = "50px";
+                              fallback.style.height = "50px";
+                              fallback.style.borderRadius = "50%";
+                              fallback.style.backgroundColor = "#007bff";
+                              fallback.style.color = "white";
+                              fallback.style.display = "flex";
+                              fallback.style.alignItems = "center";
+                              fallback.style.justifyContent = "center";
+                              fallback.style.fontSize = "20px";
+                              fallback.style.fontWeight = "bold";
+                              fallback.textContent = worker.workerName?.charAt(0)?.toUpperCase() || "?";
+                              parent.appendChild(fallback);
+                            }
+                          }}
+                          style={{ 
+                            width: "50px", 
+                            height: "50px", 
+                            borderRadius: "50%", 
+                            objectFit: "cover" 
+                          }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: "50px",
+                          height: "50px",
+                          borderRadius: "50%",
+                          backgroundColor: "#007bff",
+                          color: "white",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "20px",
+                          fontWeight: "bold"
+                        }}>
+                          {worker.workerName?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      <strong>{worker.workerName}</strong>
+                      <br />
+                      <small style={{ fontSize: "11px", color: "#666" }}>{worker.workerId}</small>
+                    </td>
+                    <td>{worker.services}</td>
+
+                    {/* Clickable Documents */}
+                    <td>
+                      {renderDocumentLink(worker.skillDocs, "Skill Certificate", "📄")}
+                      {renderDocumentLink(worker.aadharCard, "Aadhar Card", "🆔")}
+                      {renderDocumentLink(worker.panCard, "Pan Card", "📇")}
+                    </td>
+
+                    <td>
+                      <span
+                        style={{
+                          padding: "4px 8px",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                          backgroundColor: 
+                            status === "approved" ? "#d4edda" :
+                            status === "rejected" ? "#f8d7da" :
+                            "#fff3cd",
+                          color:
+                            status === "approved" ? "#155724" :
+                            status === "rejected" ? "#721c24" :
+                            "#856404",
+                        }}
+                      >
+                        {status ? status.charAt(0).toUpperCase() + status.slice(1) : "Pending"}
+                      </span>
+                    </td>
+
+                    <td>
+                      {isApproved ? (
+                        <span style={{ color: "green", fontWeight: "bold" }}>✓ Verified</span>
+                      ) : isRejected ? (
+                        <span style={{ color: "red", fontWeight: "bold" }}>✕ Rejected</span>
+                      ) : (
+                        <div>
+                          <button
+                            onClick={() => handleApprove(worker.workerId)}
+                            disabled={loading}
+                            style={{
+                              background: "#28a745",
+                              color: "white",
+                              border: "none",
+                              marginRight: "8px",
+                              padding: "6px 12px",
+                              borderRadius: "4px",
+                              cursor: loading ? "not-allowed" : "pointer",
+                              opacity: loading ? 0.6 : 1
+                            }}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleReject(worker.workerId)}
+                            disabled={loading}
+                            style={{
+                              background: "#dc3545",
+                              color: "white",
+                              border: "none",
+                              padding: "6px 12px",
+                              borderRadius: "4px",
+                              cursor: loading ? "not-allowed" : "pointer",
+                              opacity: loading ? 0.6 : 1
+                            }}
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      )}
+    </div>
   );
 };
-
-// Icons
-const CheckIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
-
-const XIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
 
 export default WorkerVerification;
