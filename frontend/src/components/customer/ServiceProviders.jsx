@@ -19,9 +19,17 @@ function ServiceProviders() {
     try {
       setLoading(true);
 
+       const token = localStorage.getItem("token");
+
       const res = await axios.get(
         `http://localhost:5000/customer/workerslist/${id}`,
-      );
+      
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
       setProviders(res.data);
     } catch (error) {

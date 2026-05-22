@@ -7,7 +7,7 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 const customerMiddleware = require("../../middlewares/customerMiddleware");
 
 // GET/workers/byService
-router.get("/workerslist/:service",customerMiddleware, getWorkersByService);
+router.get("/workerslist/:service",authMiddleware,customerMiddleware, getWorkersByService);
 
 module.exports = router;
 
