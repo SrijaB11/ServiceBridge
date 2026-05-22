@@ -573,3 +573,10 @@
 
   opacity: 0.95;
 }
+
+
+.priceText {
+  color: #16a34a;
+
+  font-weight: 700;
+}
