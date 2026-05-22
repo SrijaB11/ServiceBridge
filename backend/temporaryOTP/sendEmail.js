@@ -1,17 +1,17 @@
 const nodemailer = require("nodemailer");
 
+// Create transporter only once
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
 const sendEmail = async (email, otp) => {
   try {
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-
-    }); 
 
     await transporter.sendMail({
 
@@ -99,7 +99,7 @@ const sendEmail = async (email, otp) => {
           <p style="
             color:#444;
           ">
-             OTP Validity: 
+            OTP Validity:
             <b>5 Minutes</b>
           </p>
 
@@ -136,13 +136,11 @@ const sendEmail = async (email, otp) => {
       `,
     });
 
-    return true;
+    // console.log("OTP sent:", email);
 
   } catch (error) {
 
-    //console.log(error);
-
-    return false;
+    console.log("Email error:", error);
 
   }
 };

@@ -4,6 +4,7 @@ const otpSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    index: true,
   },
 
   otp: {
@@ -11,7 +12,7 @@ const otpSchema = new mongoose.Schema({
     required: true,
   },
 
-   purpose: {
+  purpose: {
     type: String,
     enum: ["register", "reset"],
     required: true,
@@ -28,7 +29,12 @@ const otpSchema = new mongoose.Schema({
   },
 });
 
-// Auto delete after expiry
-otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+otpSchema.index(
+  { expiresAt: 1 },
+  { expireAfterSeconds: 0 }
+);
 
-module.exports = mongoose.model("otps", otpSchema);
+module.exports = mongoose.model(
+  "otps",
+  otpSchema
+);
