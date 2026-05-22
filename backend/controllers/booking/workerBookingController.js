@@ -34,7 +34,9 @@ const createBookingWorker = async (req, res) => {
       customer: req.user._id,
       worker: workerId,
       date: bookingDate,
-      amount: 499,
+      baseAmount: 199,
+    additionalCharges: 0,
+      amount: 199,
       status: "pending",
     });
 
@@ -42,7 +44,6 @@ const createBookingWorker = async (req, res) => {
       message: "Request sent to worker",
       booking,
     });
-
   } catch (error) {
     res.status(500).json({
       message: error.message,

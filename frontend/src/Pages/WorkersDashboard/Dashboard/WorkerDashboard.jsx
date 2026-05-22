@@ -520,7 +520,7 @@ const totalEarnings =
             Your documents were
             uploaded successfully.
             Please wait until admin
-            approves your verification.
+            approves your verification request.
           </Typography>
         </>
       )}
@@ -887,9 +887,13 @@ const totalEarnings =
                        {service}
                     </Typography>
 
-                    <Typography>
-                      ₹499
-                    </Typography>
+                    <Typography
+                              className={
+                                styles.priceText
+                              }
+                            >
+                              Starts from ₹199
+                            </Typography>
                   </div>
                 )
               )}

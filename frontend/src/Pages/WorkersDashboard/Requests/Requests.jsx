@@ -28,6 +28,10 @@ const Requests = () => {
   const [loading, setLoading] =
     useState(true);
 
+  const [additionalAmount,setAdditionalAmount,] = useState({});
+
+  const [additionalReason, setAdditionalReason,] = useState({});
+
 
 
   const fetchRequests = async () => {
@@ -134,6 +138,62 @@ setRequests(
       alert(
         error.response?.data?.message ||
           "Failed to reject request"
+      );
+    }
+  };
+
+ 
+  const handleAdditionalCharges =
+  async (requestId) => {
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      const extraAmount =
+        Number(
+          additionalAmount[
+            requestId
+          ] || 0
+        );
+
+      const reason =
+        additionalReason[
+          requestId
+        ] || "";
+
+      await axios.put(
+        `http://localhost:5000/worker/request/additional-charge/${requestId}`,
+        {
+          additionalCharges:
+            extraAmount,
+
+          additionalChargesReason:
+            reason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(
+        "Additional charges updated"
+      );
+
+      fetchRequests();
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        error.response?.data
+          ?.message ||
+          "Failed to update charges"
       );
     }
   };
@@ -311,13 +371,54 @@ setRequests(
 
               {/* PAYMENT */}
 
-              <Typography
-                fontWeight="bold"
-                mb={2}
-              >
-                Amount: ₹
-                {request.amount}
-              </Typography>
+             <div
+                    className={
+                      styles.priceSection
+                    }
+                  >
+
+                    <Typography
+                      className={
+                        styles.baseAmount
+                      }
+                    >
+                      Base Amount :
+                      ₹
+                      {
+                        request.baseAmount ||
+                        199
+                      }
+                    </Typography>
+
+                <Typography
+                  className={
+                    styles.additionalAmount
+                  }
+                >
+                  Additional Charges :
+                  ₹
+                  {
+                    request.additionalCharges ||
+                    0
+                  }
+                </Typography>
+
+                <Typography
+                  className={
+                    styles.totalAmount
+                  }
+                >
+                  Total Amount :
+                  ₹
+                  {
+                    (request.baseAmount ||
+                      199) +
+                    (request.additionalCharges ||
+                      0)
+                  }
+                  </Typography>
+
+              </div>
 
               {/* STATUS */}
 
@@ -393,44 +494,122 @@ setRequests(
                 </div>
               )}
 
+             
+
               {/* ACCEPTED BUTTONS */}
 
               {request.status ===
-                "accepted" && (
-                <div
-                  className={
-                    styles.buttonGroup
-                  }
-                >
-                  {/* COMPLETE */}
+  "accepted" && (
 
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() =>
-                      handleComplete(
-                        request._id
-                      )
-                    }
-                  >
-                    Completed
-                  </Button>
+  <>
+  
+    {/* ADDITIONAL CHARGES */}
 
-                  {/* COMPLAINT */}
+    <div
+      className={
+        styles.additionalChargeBox
+      }
+    >
 
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() =>
-                      navigate(
-                        `/worker/complaint/${request._id}`
-                      )
-                    }
-                  >
-                    Raise Complaint
-                  </Button>
-                </div>
-              )}
+      <input
+        type="number"
+        placeholder="Additional Amount"
+
+        className={
+          styles.chargeInput
+        }
+
+        value={
+          additionalAmount[
+            request._id
+          ] || ""
+        }
+
+        onChange={(e) =>
+          setAdditionalAmount({
+            ...additionalAmount,
+
+            [request._id]:
+              e.target.value,
+          })
+        }
+      />
+
+      <textarea
+        placeholder="Additional Charges Reason"
+
+        className={
+          styles.reasonInput
+        }
+
+        value={
+          additionalReason[
+            request._id
+          ] || ""
+        }
+
+        onChange={(e) =>
+          setAdditionalReason({
+            ...additionalReason,
+
+            [request._id]:
+              e.target.value,
+          })
+        }
+      />
+
+      <Button
+        variant="outlined"
+
+        color="success"
+
+        onClick={() =>
+          handleAdditionalCharges(
+            request._id
+          )
+        }
+      >
+        Add Charges
+      </Button>
+
+    </div>
+
+    {/* BUTTONS */}
+
+    <div
+      className={
+        styles.buttonGroup
+      }
+    >
+
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() =>
+          handleComplete(
+            request._id
+          )
+        }
+      >
+        Completed
+      </Button>
+
+      <Button
+        variant="contained"
+        color="error"
+        onClick={() =>
+          navigate(
+            `/worker/complaint/${request._id}`
+          )
+        }
+      >
+        Raise Complaint
+      </Button>
+
+    </div>
+
+  </>
+)}
 
               {/* COMPLETED MESSAGE */}
 

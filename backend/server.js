@@ -29,7 +29,7 @@ const payAdminToWorkerRoutes =require("./routes/payment/payAdminToWorkerRoutes")
 const dashboardRoutes = require("./routes/customer/dashboardRoutes");
 const admindashboardRoutes = require("./routes/admin/admindashboardRoutes");
 const workerRecievesPaymentFromAdminRoutes =require("./routes/payment/workerRecievesPaymentFromAdminRoutes");
-
+const appRatingRoutes = require("./routes/apprating/appRating");
 
 const app = express();
 
@@ -50,7 +50,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/complaint",customercomplaintRoutes);
 app.use("/service", serviceRoutes);
 app.use("/customer", customerRoutes);
-app.use("/complaint", workercomplaintRoutes);
+app.use("/worker/complaint", workercomplaintRoutes);
 app.use("/bookings", totalBookingRoutes);
 app.use("/workers", totalWorkerRoutes);
 app.use("/booking", cancelcustomerBookingRoutes);
@@ -64,6 +64,7 @@ app.use( "/admin",adminskillCertificateRoutes);
 app.use("/admin",payAdminToWorkerRoutes);
 app.use("/customer", dashboardRoutes);
 app.use("/admin", admindashboardRoutes);
+app.use("/apprating", appRatingRoutes);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

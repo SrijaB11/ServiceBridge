@@ -1,96 +1,3 @@
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-
-// export default function History() {
-//   const [history, setHistory] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchHistory = async () => {
-//       try {
-//         const token = localStorage.getItem("token");
-
-//         const res = await axios.get("http://localhost:5000/customer/history", {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         });
-
-//         setHistory(res.data.history);
-//       } catch (err) {
-//         console.error("Error fetching history:", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchHistory();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="p-6 text-center text-gray-500">Loading history...</div>
-//     );
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
-//       <h1 className="text-2xl font-bold mb-6">My Booking History</h1>
-
-//       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-//         {history.map((item) => (
-//           <div
-//             key={item.bookingId}
-//             className="bg-white rounded-2xl shadow-md p-5"
-//           >
-//             {/* Service */}
-//             <h2 className="font-bold text-lg">{item.worker?.services?.[0]}</h2>
-
-//             <p className="text-xs text-gray-500">#{item.bookingId.slice(-6)}</p>
-
-//             {/* Worker */}
-//             <div className="mt-3 text-sm text-gray-600">
-//               <p className="font-semibold text-gray-800">{item.worker?.name}</p>
-//               <p>📞 {item.worker?.phone}</p>
-//               <p>📍 {item.worker?.location}</p>
-//             </div>
-
-//             {/* Date */}
-//             <div className="mt-2 text-sm">
-//               Date: {new Date(item.bookingDate).toLocaleDateString()}
-//             </div>
-
-//             {/* Payment */}
-//             <div className="mt-3 border-t pt-3 text-sm space-y-1">
-//               <div className="flex justify-between">
-//                 <span>Total Paid</span>
-//                 <span className="font-bold">₹{item.payment.amount}</span>
-//               </div>
-
-//               <div className="flex justify-between">
-//                 <span>Status</span>
-//                 <span className="text-green-600">
-//                   {item.payment.paymentStatus}
-//                 </span>
-//               </div>
-//             </div>
-
-//             {/* Buttons */}
-//             <div className="flex gap-2 mt-4">
-//               <button className="bg-green-600 text-white px-4 py-2 rounded-xl w-full">
-//                 Review
-//               </button>
-
-//               <button className="border px-4 py-2 rounded-xl w-full">
-//                 Receipt
-//               </button>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -117,7 +24,25 @@ export default function History() {
           },
         });
 
-        setHistory(res.data.history);
+        //setHistory(res.data.history);
+        // // setHistory(
+        // //   res.data.history.filter((item) => item.bookingStatus === "Completed"),
+        // // );
+        // const completedHistory = res.data.history.filter(
+        //   (item) => item.bookingStatus === "Completed",
+        // );
+        // setHistory(
+        //   res.data.history.filter(
+        //     (item) => item.payment?.paymentStatus === "Paid",
+        //   ),
+        // );
+
+        // setHistory(completedHistory);
+        setHistory(
+          res.data.history.filter(
+            (item) => item.payment?.paymentStatus?.toLowerCase() === "paid",
+          ),
+        );
       } catch (err) {
         console.error("Error fetching history:", err);
       } finally {
