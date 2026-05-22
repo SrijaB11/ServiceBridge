@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Box, Container, Typography, Card, CardContent } from "@mui/material";
 
 // Swiper
@@ -203,3 +204,156 @@ const Testimonials = () => {
 };
 
 export default Testimonials;
+// const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+// const Testimonials = () => {
+//   const [reviews, setReviews] = useState([]);
+
+//   useEffect(() => {
+//     fetchReviews();
+//   }, []);
+
+//   const fetchReviews = async () => {
+//     try {
+//       const res = await axios.get(`${API_BASE}/apprating`);
+
+//       if (res.data.success) {
+//         setReviews(res.data.data);
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   return (
+//     <Box
+//       sx={{
+//         py: { xs: 6, md: 10 },
+//         bgcolor: "#F9FAFB",
+//       }}
+//     >
+//       <Container maxWidth="lg">
+//         <Box textAlign="center" mb={6}>
+//           <Typography
+//             variant="subtitle2"
+//             sx={{
+//               color: "green",
+//               fontWeight: "bold",
+//               letterSpacing: 1.5,
+//             }}
+//           >
+//             TESTIMONIALS
+//           </Typography>
+
+//           <Typography variant="h4" fontWeight="bold">
+//             What Our Customers Say
+//           </Typography>
+//         </Box>
+
+//         <Swiper
+//           modules={[Navigation, Pagination]}
+//           navigation
+//           pagination={{ clickable: true }}
+//           spaceBetween={25}
+//           slidesPerView={1}
+//           breakpoints={{
+//             768: {
+//               slidesPerView: 2,
+//             },
+//             1200: {
+//               slidesPerView: 3,
+//             },
+//           }}
+//         >
+//           {reviews.map((item) => (
+//             <SwiperSlide key={item._id}>
+//               <Card
+//                 sx={{
+//                   borderRadius: "24px",
+//                   minHeight: 320,
+//                   boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
+//                   transition: "0.3s",
+
+//                   "&:hover": {
+//                     transform: "translateY(-6px)",
+//                     boxShadow: "0 14px 40px rgba(0,0,0,0.12)",
+//                   },
+//                 }}
+//               >
+//                 <CardContent
+//                   sx={{
+//                     p: 4,
+//                     display: "flex",
+//                     flexDirection: "column",
+//                     height: "100%",
+//                   }}
+//                 >
+//                   {/* Rating Stars */}
+//                   <Box
+//                     sx={{
+//                       display: "flex",
+//                       gap: 0.5,
+//                       mb: 3,
+//                     }}
+//                   >
+//                     {[...Array(5)].map((_, index) => (
+//                       <Star
+//                         key={index}
+//                         size={18}
+//                         fill={
+//                           index < Math.round(item.rating) ? "#facc15" : "none"
+//                         }
+//                         color="#facc15"
+//                       />
+//                     ))}
+//                   </Box>
+
+//                   {/* Review */}
+//                   <Typography
+//                     sx={{
+//                       color: "#4B5563",
+//                       lineHeight: 1.8,
+//                       mb: 4,
+//                       flexGrow: 1,
+//                     }}
+//                   >
+//                     "{item.review || "Excellent service experience."}"
+//                   </Typography>
+
+//                   {/* Customer */}
+//                   <Box
+//                     sx={{
+//                       display: "flex",
+//                       alignItems: "center",
+//                       gap: 2,
+//                     }}
+//                   >
+//                     <Avatar
+//                       src={item.customerId?.profileImage}
+//                       sx={{
+//                         width: 55,
+//                         height: 55,
+//                       }}
+//                     />
+
+//                     <Box>
+//                       <Typography fontWeight="bold">
+//                         {item.customerId?.fullName}
+//                       </Typography>
+
+//                       <Typography variant="body2" color="text.secondary">
+//                         {item.customerId?.location || "India"}
+//                       </Typography>
+//                     </Box>
+//                   </Box>
+//                 </CardContent>
+//               </Card>
+//             </SwiperSlide>
+//           ))}
+//         </Swiper>
+//       </Container>
+//     </Box>
+//   );
+// };
+
+// export default Testimonials;
