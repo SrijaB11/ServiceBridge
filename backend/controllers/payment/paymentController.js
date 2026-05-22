@@ -57,8 +57,7 @@ const verifyPayment = async (
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      totalAmount,
-      bookingId,
+       bookingId,
     } = req.body;
 
     /* DEBUG */
@@ -105,21 +104,7 @@ const verifyPayment = async (
       });
     }
 
-    /* COMMISSION */
-
-    const adminCommission =
-      totalAmount * 0.05;
-
-    const workerAmount =
-      totalAmount -
-      adminCommission;
-
-    /* FIND BOOKING */
-
-    const booking =
-      await Booking.findById(
-        bookingId
-      );
+    const booking = await Booking.findById(bookingId);
 
     if (!booking) {
 
@@ -129,6 +114,16 @@ const verifyPayment = async (
           "Booking not found",
       });
     }
+
+    /* FINAL TOTAL */
+
+        const totalAmount = booking.baseAmount + booking.additionalCharges;
+
+/* COMMISSION */
+
+        const adminCommission = totalAmount * 0.05;
+
+        const workerAmount = totalAmount - adminCommission;
 
     /* UPDATE BOOKING */
 
@@ -151,6 +146,8 @@ const verifyPayment = async (
     booking.workerAmount =
       workerAmount;
        console.log("BOOKING BEFORE SAVE:", booking);
+
+       booking.amount = totalAmount;
 
     await booking.save();
 

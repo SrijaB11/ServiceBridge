@@ -25,6 +25,31 @@ const bookingSchema = new mongoose.Schema({
     enum: ["pending", "paid", "failed"],
     default: "pending"
   },
+
+   baseAmount: {
+        type: Number,
+
+        default: 199,
+      },
+
+      additionalCharges: {
+        type: Number,
+
+        default: 0,
+      },
+
+      additionalChargesReason: {
+        type: String,
+
+        default: "",
+      },
+
+      amount: {
+        type: Number,
+
+        default: 199,
+      },
+
   adminCommission: {
   type: Number,
   default: 0,
@@ -48,7 +73,6 @@ workerPaid: {
     },
   orderId: String,
   paymentId: String,
-  amount: Number,
 }, { timestamps: true });
 
 module.exports = mongoose.model("Booking", bookingSchema);  

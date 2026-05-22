@@ -166,6 +166,74 @@
   background-color: #dc2626 !important;
 }
 
+
+.priceSection {
+  background: #f8fafc;
+
+  padding: 14px;
+
+  border-radius: 16px;
+
+  margin-bottom: 18px;
+
+  border: 1px solid #e5e7eb;
+}
+
+.baseAmount {
+  color: #374151 !important;
+
+  font-weight: 600 !important;
+
+  margin-bottom: 6px !important;
+}
+
+.additionalAmount {
+  color: #ea580c !important;
+
+  font-weight: 600 !important;
+
+  margin-bottom: 6px !important;
+}
+
+.totalAmount {
+  color: #16a34a !important;
+
+  font-size: 18px !important;
+
+  font-weight: 800 !important;
+}
+
+.additionalChargeBox {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.chargeInput,
+.reasonInput {
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  border: 1px solid #d1d5db;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+.reasonInput {
+  min-height: 80px;
+
+  resize: none;
+}
+
 /* Empty State */
 
 .emptyState {
