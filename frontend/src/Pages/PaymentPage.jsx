@@ -132,15 +132,52 @@
 // export default PaymentPage;
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState,} from "react";
 
 function PaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [booking, setBooking] = useState(null);
 
-  const { worker, date, service, amount, requestId } = location.state || {};
+  const { worker, date, service,  requestId } = location.state || {};
 
   console.log("PaymentPage State:", location.state);
   console.log("Request ID:", requestId);
+
+  useEffect(() => {
+
+  fetchBooking();
+
+}, []);
+
+const fetchBooking =
+  async () => {
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      const response =
+        await axios.get(
+          `http://localhost:5000/booking/${requestId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      setBooking(
+        response.data.booking
+      );
+
+    } catch (error) {
+
+      console.log(error);
+    }
+  };
 
   // Safety check
   if (!location.state) {
@@ -162,7 +199,7 @@ function PaymentPage() {
     );
   }
 
-  const totalAmount = amount || 499;
+  const totalAmount = booking?.amount || 199;
 
   const handlePayment = async () => {
     try {
@@ -190,7 +227,6 @@ function PaymentPage() {
           try {
             const verifyData = {
               ...response,
-              totalAmount,
               bookingId: requestId,
             };
 
@@ -263,11 +299,57 @@ function PaymentPage() {
         </div>
 
         {/* AMOUNT */}
-        <div className="mb-5">
-          <p className="text-gray-600">Total Amount</p>
+        <div className="mb-5 space-y-3">
 
-          <p className="text-3xl font-bold text-green-600">₹{totalAmount}</p>
-        </div>
+                <div className="flex justify-between">
+                  <p className="text-gray-600">
+                    Base Charge
+                  </p>
+
+                  <p className="font-semibold">
+                    ₹{booking?.baseAmount || 199}
+                  </p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="text-gray-600">
+                    Additional Charges
+                  </p>
+
+                  <p className="font-semibold">
+                    ₹{booking?.additionalCharges || 0}
+                  </p>
+                </div>
+
+                {booking?.additionalChargesReason && (
+
+                  <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-600">
+
+                    <span className="font-semibold">
+                      Reason :
+                    </span>
+
+                    {" "}
+                    {
+                      booking?.additionalChargesReason
+                    }
+
+                  </div>
+                )}
+
+                <div className="border-t pt-3 flex justify-between items-center">
+
+                  <p className="text-lg font-semibold">
+                    Total Amount
+                  </p>
+
+                  <p className="text-3xl font-bold text-green-600">
+                    ₹{totalAmount}
+                  </p>
+
+                </div>
+
+              </div>
 
         <button
           onClick={handlePayment}

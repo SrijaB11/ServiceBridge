@@ -24,6 +24,11 @@ const {
 
 const getWorkerVerificationStatusRoute = require("../../controllers/worker/getworkerVerificationStatus");
 
+const addAdditionalChargesController = require( "../../controllers/worker/addAdditionalChargesController");
+
+
+
+
 router.get(
   "/profile",
   authMiddleware,
@@ -82,6 +87,15 @@ router.put(
   "/request/complete/:requestId",
   authMiddleware,
   completeRequest
+);
+
+
+router.put(
+  "/request/additional-charge/:requestId",
+
+  authMiddleware,
+
+  addAdditionalChargesController
 );
 
 
