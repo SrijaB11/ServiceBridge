@@ -42,7 +42,6 @@ const createBookingWorker = async (req, res) => {
       message: "Request sent to worker",
       booking,
     });
-
   } catch (error) {
     res.status(500).json({
       message: error.message,
