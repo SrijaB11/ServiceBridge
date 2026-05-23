@@ -32,7 +32,7 @@ const WorkerComplaints = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:5000/complaint/admin", {
+      const response = await fetch("http://localhost:5000/worker/complaint/complaints/admin", {
         method: "GET",
         headers: { Authorization: `Bearer ${JwtToken}` },
       });
