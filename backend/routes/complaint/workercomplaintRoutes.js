@@ -12,7 +12,7 @@ const getWorkerComplaints = require("../../controllers/workercomplaint/getWorker
 router.post("/addworker", authMiddleware, addWorkerComplaint);
 
 // admin views complaint
-router.get("/admin", authMiddleware, adminComplaint);
+router.get("/complaints/admin", authMiddleware, adminComplaint);
 
 // admin resolve complaint 
 router.put("/admin/:id", authMiddleware, resolveWorkerComplaints);
