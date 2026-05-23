@@ -1,48 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import styles from "./index.module.css";
 
 const WorkerVerification = () => {
   const [workersDetailsList, setWorkersDetailsList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  
+  const [showModal, setShowModal] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState("");
 
   useEffect(() => {
     getWorkerDetails();
   }, []);
 
-  // Helper function to fix Windows backslashes and encode URLs properly
+  
   const getDocumentUrl = (docPath) => {
     if (!docPath) return null;
-    
-    // First, replace backslashes with forward slashes
-    let normalized = docPath.replace(/\\/g, '/');
-    
-    // Split the path into parts
-    const parts = normalized.split('/');
-    
-    // Encode each part individually (this handles spaces and special characters)
-    const encodedParts = parts.map(part => encodeURIComponent(part));
-    
-    // Join back with forward slashes
-    const encodedPath = encodedParts.join('/');
-    
-    // Return the full URL
+
+    let normalized = docPath.replace(/\\/g, "/");
+    const parts = normalized.split("/");
+    const encodedParts = parts.map((part) => encodeURIComponent(part));
+    const encodedPath = encodedParts.join("/");
     return `http://localhost:5000/${encodedPath}`;
   };
 
-  // Alternative simpler version if the above doesn't work
+  
   const getDocumentUrlSimple = (docPath) => {
     if (!docPath) return null;
-    
-    // Replace backslashes with forward slashes
-    let normalized = docPath.replace(/\\/g, '/');
-    
-    // Encode the entire path (spaces become %20, parentheses become %28 and %29)
+    let normalized = docPath.replace(/\\/g, "/");
     const encodedPath = encodeURI(normalized);
-    
     return `http://localhost:5000/${encodedPath}`;
   };
 
@@ -60,25 +47,23 @@ const WorkerVerification = () => {
       });
 
       const data = await response.json();
-      console.log("API Response:", data);
 
       if (response.ok) {
         const updatedWorkersList = (data.data || []).map((worker) => {
-          // Debug log to see original paths
-          console.log("Worker:", worker.fullName);
-          console.log("Profile Photo Path:", worker.documents?.profilePhoto);
-          console.log("Skill Docs Path:", worker.documents?.skillDocs);
-          console.log("Pan Card Path:", worker.documents?.panCard);
-          
+
           return {
             workerId: worker._id,
             workerName: worker.fullName || worker.WorkerName || "Unknown Worker",
-            services: worker.services?.[0]?.name || worker.services?.[0] || "N/A",
-            profilePicture: worker.documents?.profilePhoto || worker.profilePhoto,
+            services:
+              worker.services?.[0]?.name ||
+              worker.services?.[0] ||
+              "N/A",
+            profilePicture:
+              worker.documents?.profilePhoto || worker.profilePhoto,
             skillDocs: worker.documents?.skillDocs,
             panCard: worker.documents?.panCard || worker.panCard,
-            aadharCard: worker.documents?.aadharCard || worker.aadharCard,
-            workerVerificationStatus: worker.workerVerificationStatus || "pending",
+            workerVerificationStatus:
+              worker.workerVerificationStatus || "pending",
           };
         });
 
@@ -113,13 +98,16 @@ const WorkerVerification = () => {
       const responseData = await response.json().catch(() => ({}));
 
       if (response.ok || responseData.success) {
-        const successMessage = status === "approved"
-          ? "Worker approved successfully"
-          : "Worker rejected successfully";
+        const successMessage =
+          status === "approved"
+            ? "Worker approved successfully"
+            : "Worker rejected successfully";
 
         setWorkersDetailsList((prevList) =>
           prevList.map((w) =>
-            w.workerId === workerId ? { ...w, workerVerificationStatus: status } : w
+            w.workerId === workerId
+              ? { ...w, workerVerificationStatus: status }
+              : w
           )
         );
         toast.success(successMessage);
@@ -138,8 +126,7 @@ const WorkerVerification = () => {
     const worker = workersDetailsList.find((w) => w.workerId === workerId);
     if (!worker) return;
 
-    // Check all required documents
-    if (!worker.skillDocs || !worker.panCard || !worker.aadharCard) {
+    if (!worker.skillDocs || !worker.panCard) {
       toast.error("All documents must be uploaded before approval!");
       return;
     }
@@ -158,20 +145,20 @@ const WorkerVerification = () => {
     }
   };
 
-  const viewDocument = (docPath) => {
+  const openModalImage = (docPath) => {
     if (!docPath) {
       toast.error("Document not available");
       return;
     }
-    
+
     const fullUrl = getDocumentUrl(docPath);
-    console.log("Opening document URL:", fullUrl);
     
-    // Test if the URL is valid by trying to fetch it
-    fetch(fullUrl, { method: 'HEAD' })
-      .then(response => {
+
+    fetch(fullUrl, { method: "HEAD" })
+      .then((response) => {
         if (response.ok) {
-          window.open(fullUrl, "_blank");
+          setModalImageSrc(fullUrl);
+          setShowModal(true);
         } else {
           toast.error("Document file not found on server");
         }
@@ -181,215 +168,230 @@ const WorkerVerification = () => {
       });
   };
 
-  // Helper to render document link with better debugging
-  const renderDocumentLink = (docPath, label, emoji) => {
-    const hasDoc = !!docPath;
-    const url = hasDoc ? getDocumentUrl(docPath) : null;
-    
-    return (
-      <div
-        onClick={() => hasDoc && viewDocument(docPath)}
-        style={{
-          color: hasDoc ? "#007bff" : "#999",
-          cursor: hasDoc ? "pointer" : "default",
-          textDecoration: "underline",
-          marginBottom: "6px",
-          fontSize: "13px"
-        }}
-        title={hasDoc ? url : "No document available"}
-      >
-        {emoji} {label}
-        {hasDoc && " 🔗"}
-      </div>
-    );
+  const closeModal = () => {
+    setShowModal(false);
+    setModalImageSrc("");
   };
 
+  const renderDocumentLink = (docPath, label, emoji) => {
+  const hasDoc = !!docPath;
+  const url = hasDoc ? getDocumentUrl(docPath) : null;
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Certificate Verification</h2>
+    <div
+      onClick={() => hasDoc && openModalImage(docPath)}
+      className={`cursor-${hasDoc ? "pointer" : "default"} text-sm ${
+        hasDoc ? "text-green-600 hover:text-green-700" : "text-gray-400"
+      }`}
+      title={hasDoc ? url : "No document available"}
+    >
+      {label}
+      {hasDoc}
+    </div>
+  );
+};
 
-      <input
-        type="text"
-        placeholder="Search by worker name or service..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          padding: "8px 12px",
-          width: "300px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-          fontSize: "14px",
-          marginBottom: "15px",
-        }}
-      />
+  return (
+    <div
+      className="min-h-screen bg-white px-4 py-8 font-Poppins"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">Certificate Verification</h2>
 
-      {workersDetailsList.length === 0 ? (
-        <p>No workers available.</p>
-      ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th>Profile</th>
-              <th>Name</th>
-              <th>Service</th>
-              <th>Certificates Uploaded</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workersDetailsList
-              .filter((worker) => {
-                const lowerSearch = searchTerm.toLowerCase();
-                return (
-                  worker.workerName.toLowerCase().includes(lowerSearch) ||
-                  worker.services.toLowerCase().includes(lowerSearch)
-                );
-              })
-              .map((worker) => {
-                const status = worker.workerVerificationStatus;
-                const isApproved = status === "approved";
-                const isRejected = status === "rejected";
-                
-                // Get profile image URL
-                const profileImageUrl = worker.profilePicture 
-                  ? getDocumentUrl(worker.profilePicture)
-                  : null;
+          
+          <div className="w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Search worker by name or service..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-4 py-2 w-full sm:w-96 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700"
+            />
+          </div>
+        </div>
 
-                return (
-                  <tr key={worker.workerId}>
-                    <td>
-                      {profileImageUrl ? (
-                        <img
-                          src={profileImageUrl}
-                          alt={worker.workerName}
-                          onError={(e) => {
-                            console.error(`Failed to load image: ${profileImageUrl}`);
-                            e.target.style.display = "none";
-                            const parent = e.target.parentElement;
-                            if (parent && !parent.querySelector('.fallback-avatar')) {
-                              const fallback = document.createElement('div');
-                              fallback.className = 'fallback-avatar';
-                              fallback.style.width = "50px";
-                              fallback.style.height = "50px";
-                              fallback.style.borderRadius = "50%";
-                              fallback.style.backgroundColor = "#007bff";
-                              fallback.style.color = "white";
-                              fallback.style.display = "flex";
-                              fallback.style.alignItems = "center";
-                              fallback.style.justifyContent = "center";
-                              fallback.style.fontSize = "20px";
-                              fallback.style.fontWeight = "bold";
-                              fallback.textContent = worker.workerName?.charAt(0)?.toUpperCase() || "?";
-                              parent.appendChild(fallback);
-                            }
-                          }}
-                          style={{ 
-                            width: "50px", 
-                            height: "50px", 
-                            borderRadius: "50%", 
-                            objectFit: "cover" 
-                          }}
-                        />
-                      ) : (
-                        <div style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                          backgroundColor: "#007bff",
-                          color: "white",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "20px",
-                          fontWeight: "bold"
-                        }}>
-                          {worker.workerName?.charAt(0)?.toUpperCase() || "?"}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <strong>{worker.workerName}</strong>
-                      <br />
-                      <small style={{ fontSize: "11px", color: "#666" }}>{worker.workerId}</small>
-                    </td>
-                    <td>{worker.services}</td>
+        {workersDetailsList.length === 0 ? (
+          <p className="text-gray-500 text-center py-12">No workers available.</p>
+        ) : (
+          <div className="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+            <table className="w-full table-auto border-collapse">
+              <thead className="bg-green-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Profile
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Service
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Certificates
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-100">
+                {workersDetailsList
+                  .filter((worker) => {
+                    const lowerSearch = searchTerm.toLowerCase();
+                    return (
+                      worker.workerName.toLowerCase().includes(lowerSearch) ||
+                      worker.services.toLowerCase().includes(lowerSearch)
+                    );
+                  })
+                  .map((worker) => {
+                    const status = worker.workerVerificationStatus;
+                    const isApproved = status === "approved";
+                    const isRejected = status === "rejected";
 
-                    {/* Clickable Documents */}
-                    <td>
-                      {renderDocumentLink(worker.skillDocs, "Skill Certificate", "📄")}
-                      {renderDocumentLink(worker.aadharCard, "Aadhar Card", "🆔")}
-                      {renderDocumentLink(worker.panCard, "Pan Card", "📇")}
-                    </td>
+                    const profileImageUrl = worker.profilePicture
+                      ? getDocumentUrl(worker.profilePicture)
+                      : null;
 
-                    <td>
-                      <span
-                        style={{
-                          padding: "4px 8px",
-                          borderRadius: "4px",
-                          fontSize: "12px",
-                          fontWeight: "bold",
-                          backgroundColor: 
-                            status === "approved" ? "#d4edda" :
-                            status === "rejected" ? "#f8d7da" :
-                            "#fff3cd",
-                          color:
-                            status === "approved" ? "#155724" :
-                            status === "rejected" ? "#721c24" :
-                            "#856404",
-                        }}
+                    const statusBg =
+                      status === "approved"
+                        ? "bg-green-100 text-green-800"
+                      : status === "rejected"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-yellow-100 text-yellow-800";
+
+                    return (
+                      <tr
+                        key={worker.workerId}
+                        className="hover:bg-green-50 transition-colors duration-150"
                       >
-                        {status ? status.charAt(0).toUpperCase() + status.slice(1) : "Pending"}
-                      </span>
-                    </td>
+                        <td className="px-4 py-4">
+                          <div className="relative">
+                            {profileImageUrl ? (
+                              <img
+                                src={profileImageUrl}
+                                alt={worker.workerName}
+                                onClick={() => openModalImage(worker.profilePicture)}
+                                className="w-10 h-10 rounded-full object-cover border-2 border-green-200 cursor-pointer hover:opacity-90"
+                              />
+                            ) : (
+                              <div
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                                style={{ backgroundColor: "#10B981" }}
+                              >
+                                {worker.workerName?.charAt(0)?.toUpperCase() || "?"}
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="font-semibold text-gray-800">
+                            {worker.workerName}
+                          </div>
+                          <div className="text-xs text-gray-500">{worker.workerId}</div>
+                        </td>
+                        <td className="px-4 py-4 text-gray-700">{worker.services}</td>
 
-                    <td>
-                      {isApproved ? (
-                        <span style={{ color: "green", fontWeight: "bold" }}>✓ Verified</span>
-                      ) : isRejected ? (
-                        <span style={{ color: "red", fontWeight: "bold" }}>✕ Rejected</span>
-                      ) : (
-                        <div>
-                          <button
-                            onClick={() => handleApprove(worker.workerId)}
-                            disabled={loading}
-                            style={{
-                              background: "#28a745",
-                              color: "white",
-                              border: "none",
-                              marginRight: "8px",
-                              padding: "6px 12px",
-                              borderRadius: "4px",
-                              cursor: loading ? "not-allowed" : "pointer",
-                              opacity: loading ? 0.6 : 1
-                            }}
+                        
+                        <td className="px-4 py-4 text-sm">
+                          {renderDocumentLink(
+                            worker.skillDocs,
+                            "Skill Certificate",
+                            
+                          )}
+                          {renderDocumentLink(
+                            worker.panCard,
+                            "Pan Card",
+                            
+                          )}
+                        </td>
+
+                        <td className="px-4 py-4">
+                          <span
+                            className={`inline-flex px-2 py-1 rounded-md text-xs font-semibold ${statusBg}`}
                           >
-                            Approve
-                          </button>
-                          <button
-                            onClick={() => handleReject(worker.workerId)}
-                            disabled={loading}
-                            style={{
-                              background: "#dc3545",
-                              color: "white",
-                              border: "none",
-                              padding: "6px 12px",
-                              borderRadius: "4px",
-                              cursor: loading ? "not-allowed" : "pointer",
-                              opacity: loading ? 0.6 : 1
-                            }}
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      )}
+                            {status
+                              ? status.charAt(0).toUpperCase() + status.slice(1)
+                              : "Pending"}
+                          </span>
+                        </td>
+
+                        <td className="px-4 py-4">
+                          {isApproved ? (
+                            <span className="inline-flex items-center text-sm font-semibold text-green-700">
+                              <span className="text-green-600 mr-1">✓</span>
+                              Verified
+                            </span>
+                          ) : isRejected ? (
+                            <span className="inline-flex items-center text-sm font-semibold text-red-700">
+                              <span className="text-red-600 mr-1">×</span>
+                              Rejected
+                            </span>
+                          ) : (
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleApprove(worker.workerId)}
+                                disabled={loading}
+                                className={`px-3 py-1.5 text-sm font-semibold text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-green-500 transition-opacity ${
+                                  loading
+                                    ? "bg-green-300 opacity-70 cursor-not-allowed"
+                                    : "bg-green-600 hover:bg-green-700"
+                                }`}
+                              >
+                                Approve
+                              </button>
+                              <button
+                                onClick={() => handleReject(worker.workerId)}
+                                disabled={loading}
+                                className={`px-3 py-1.5 text-sm font-semibold text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500 transition-opacity ${
+                                  loading
+                                    ? "bg-red-300 opacity-70 cursor-not-allowed"
+                                    : "bg-red-600 hover:bg-red-700"
+                                }`}
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        
+        {showModal && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+            onClick={closeModal}
+          >
+            <div
+              className="relative max-w-3xl max-h-[90vh] overflow-auto rounded-lg bg-white shadow-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={closeModal}
+                className="absolute top-2 right-2 z-10 h-8 w-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-xl font-bold hover:bg-gray-900"
+                style={{ lineHeight: 1 }}
+              >
+                ×
+              </button>
+              <img
+                src={modalImageSrc}
+                alt="Document"
+                className="max-w-full max-h-[calc(90vh-2rem)] object-contain p-4 rounded-lg"
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
