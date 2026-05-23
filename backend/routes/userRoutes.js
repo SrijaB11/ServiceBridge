@@ -4,6 +4,7 @@ const loginController = require("../controllers/login/loginController");
 
 const regSendOtpController = require("../controllers/regOTP/regSendOtpController");
 const regVerifyOtpController = require("../controllers/regOTP/regVerifyOtpController");
+const checkVerificationAfterRefreshController = require("../controllers/regOTP/checkVerificationAfterRefresh");
 
 const forgotPasswordController = require("../controllers/forgetPassword/forgetPasswordController");
 const verifyResetOtpController = require("../controllers/forgetPassword/verifyResetOtpController");
@@ -17,6 +18,7 @@ router.post("/register", regController);
 // register with otp
  router.post("/registerotp", regSendOtpController);
  router.post("/verifyotp", regVerifyOtpController);
+ router.post("/checkverification",checkVerificationAfterRefreshController);
 
 router.post("/login", loginController);
 
