@@ -30,11 +30,9 @@ router.put("/:id", authMiddleware, updateBookingStatus);
 router.get("/customerbookingstatus",authMiddleware, getCustomerBookings);
 
 
-router.get( "/:id", authMiddleware,getSingleBookingController);
-
-
-
 // Admin gets Customer sees booking status
-router.get("/customerbookingstatusforadmin", authMiddleware, admingetAllBookings);
+router.get("/customerbookingstatusforadmin",authMiddleware, admingetAllBookings);
+
+router.get( "/:id", authMiddleware,getSingleBookingController);
 
 module.exports = router;
