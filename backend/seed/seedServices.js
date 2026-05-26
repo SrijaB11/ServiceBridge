@@ -1,32 +1,40 @@
 const mongoose = require("mongoose");
 
-const dotenv = require("dotenv");
+const dotenv =require("dotenv");
 
-const Service = require("../models/ServiceModel");
+const Service =require("../models/ServiceModel");
 
-const services = require("./servicesData");
+const services =require("./servicesData");
+
+const redisClient =require("../config/redis");
 
 dotenv.config();
 
-const seedServices = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URL);
+const seedServices =async () => {
 
-    // remove old services
-    await Service.deleteMany();
+    try {
+        await mongoose.connect(process.env.MONGO_URL);
 
-    // insert new services
-    await Service.insertMany(services);
+        // delete old
+        await Service.deleteMany();
 
-    //console.log("Services Seeded Successfully");
+        // insert new
+        await Service.insertMany(services);
 
-    process.exit();
+        // clear redis cache
+        await redisClient.del("all_services");
 
-  } catch (error) {
-    //console.log(error);
+        console.log("Seed completed");
 
-    process.exit(1);
-  }
+        process.exit();
+
+    }
+
+    catch(error){
+        console.log(error);
+        process.exit(1);
+    }
+
 };
 
 seedServices();
