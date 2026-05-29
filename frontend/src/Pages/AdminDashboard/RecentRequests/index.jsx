@@ -73,12 +73,12 @@ const RecentRequests = () => {
 
   const getStatusIcon = (status) => {
     switch(status) {
-      case "Completed": return "✅";
-      case "Cancelled": return "❌";
-      case "Accepted": return "✓";
-      case "Pending": return "⏳";
-      case "In Progress": return "🔄";
-      default: return "📋";
+      case "Completed": return <img src="/images/ok.png" alt="Success" style={{height:"15px",width:"15px"}}/>
+      case "Cancelled": return <img src="/images/failure.png" alt="Failure" style={{height:"15px",width:"15px"}}/>
+      case "Accepted": return <img src="/images/accepted.png" alt="Accepted" style={{height:"15px",width:"15px"}}/>
+      case "Pending": return <img src="/images/pending.png" alt="pending" style={{height:"15px",width:"15px"}}/>
+      case "In Progress": return <img src="/images/in-progress.gif" alt="In Progress" style={{height:"15px",width:"15px"}}/>;
+      default: return <img src="/images/warning.png" alt="Warning" style={{height:"15px",width:"15px"}}/>;
     }
   };
 

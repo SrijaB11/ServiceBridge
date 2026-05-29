@@ -32,7 +32,7 @@ const CustomerPayments = () => {
     getCustomerPaymentDetails();
   }, []);
 
-  // Search filter logic
+  
   const lowerSearch = searchTerm.toLowerCase();
   const filteredPayments = customerPaymentDetails.filter((p) =>
     [

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
-const WorkerVerification = () => {
+const WorkerVerification = ({ onProfileMap }) => {
   const [workersDetailsList, setWorkersDetailsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  
   const [showModal, setShowModal] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
 
@@ -14,7 +13,6 @@ const WorkerVerification = () => {
     getWorkerDetails();
   }, []);
 
-  
   const getDocumentUrl = (docPath) => {
     if (!docPath) return null;
 
@@ -22,14 +20,6 @@ const WorkerVerification = () => {
     const parts = normalized.split("/");
     const encodedParts = parts.map((part) => encodeURIComponent(part));
     const encodedPath = encodedParts.join("/");
-    return `http://localhost:5000/${encodedPath}`;
-  };
-
-  
-  const getDocumentUrlSimple = (docPath) => {
-    if (!docPath) return null;
-    let normalized = docPath.replace(/\\/g, "/");
-    const encodedPath = encodeURI(normalized);
     return `http://localhost:5000/${encodedPath}`;
   };
 
@@ -41,6 +31,7 @@ const WorkerVerification = () => {
     }
 
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:5000/admin/workers", {
         method: "GET",
         headers: { Authorization: `Bearer ${jwtToken}` },
@@ -50,7 +41,6 @@ const WorkerVerification = () => {
 
       if (response.ok) {
         const updatedWorkersList = (data.data || []).map((worker) => {
-
           return {
             workerId: worker._id,
             workerName: worker.fullName || worker.WorkerName || "Unknown Worker",
@@ -68,12 +58,25 @@ const WorkerVerification = () => {
         });
 
         setWorkersDetailsList(updatedWorkersList);
+
+        const profileMap = {};
+        updatedWorkersList.forEach((w) => {
+          if (w.profilePicture) {
+            profileMap[w.workerId] = getDocumentUrl(w.profilePicture);
+          }
+        });
+
+        if (typeof onProfileMap === "function") {
+          onProfileMap(profileMap);
+        }
       } else {
         toast.error(data.message || "Failed to fetch workers");
       }
     } catch (error) {
       console.error(error);
       toast.error("Error loading worker data");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,7 +155,6 @@ const WorkerVerification = () => {
     }
 
     const fullUrl = getDocumentUrl(docPath);
-    
 
     fetch(fullUrl, { method: "HEAD" })
       .then((response) => {
@@ -173,23 +175,22 @@ const WorkerVerification = () => {
     setModalImageSrc("");
   };
 
-  const renderDocumentLink = (docPath, label, emoji) => {
-  const hasDoc = !!docPath;
-  const url = hasDoc ? getDocumentUrl(docPath) : null;
+  const renderDocumentLink = (docPath, label) => {
+    const hasDoc = !!docPath;
+    const url = hasDoc ? getDocumentUrl(docPath) : null;
 
-  return (
-    <div
-      onClick={() => hasDoc && openModalImage(docPath)}
-      className={`cursor-${hasDoc ? "pointer" : "default"} text-sm ${
-        hasDoc ? "text-green-600 hover:text-green-700" : "text-gray-400"
-      }`}
-      title={hasDoc ? url : "No document available"}
-    >
-      {label}
-      {hasDoc}
-    </div>
-  );
-};
+    return (
+      <div
+        onClick={() => hasDoc && openModalImage(docPath)}
+        className={`cursor-${hasDoc ? "pointer" : "default"} text-sm ${
+          hasDoc ? "text-green-600 hover:text-green-700" : "text-gray-400"
+        }`}
+        title={hasDoc ? url : "No document available"}
+      >
+        {label}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -200,7 +201,6 @@ const WorkerVerification = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Certificate Verification</h2>
 
-          
           <div className="w-full sm:w-auto">
             <input
               type="text"
@@ -239,6 +239,7 @@ const WorkerVerification = () => {
                   </th>
                 </tr>
               </thead>
+
               <tbody className="bg-white divide-y divide-gray-100">
                 {workersDetailsList
                   .filter((worker) => {
@@ -260,9 +261,9 @@ const WorkerVerification = () => {
                     const statusBg =
                       status === "approved"
                         ? "bg-green-100 text-green-800"
-                      : status === "rejected"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800";
+                        : status === "rejected"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-yellow-100 text-yellow-800";
 
                     return (
                       <tr
@@ -288,26 +289,19 @@ const WorkerVerification = () => {
                             )}
                           </div>
                         </td>
+
                         <td className="px-4 py-4">
                           <div className="font-semibold text-gray-800">
                             {worker.workerName}
                           </div>
                           <div className="text-xs text-gray-500">{worker.workerId}</div>
                         </td>
+
                         <td className="px-4 py-4 text-gray-700">{worker.services}</td>
 
-                        
                         <td className="px-4 py-4 text-sm">
-                          {renderDocumentLink(
-                            worker.skillDocs,
-                            "Skill Certificate",
-                            
-                          )}
-                          {renderDocumentLink(
-                            worker.panCard,
-                            "Pan Card",
-                            
-                          )}
+                          {renderDocumentLink(worker.skillDocs, "Skill Certificate")}
+                          {renderDocumentLink(worker.panCard, "Pan Card")}
                         </td>
 
                         <td className="px-4 py-4">
@@ -366,7 +360,6 @@ const WorkerVerification = () => {
           </div>
         )}
 
-        
         {showModal && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"

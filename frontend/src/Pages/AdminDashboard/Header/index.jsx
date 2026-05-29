@@ -46,12 +46,12 @@ const Topbar = () => {
             className="flex items-center gap-2 cursor-pointer bg-white/10 px-3 py-1 rounded-lg"
           >
             <User size={18} />
-            <span className="hidden md:block">{username}</span>
+            <span className="hidden md:block">Admin</span>
           </div>
 
           {openMenu && (
             <div className="absolute right-0 top-12 bg-white text-black shadow-lg rounded-lg w-40 overflow-hidden">
-              <button
+              {/* <button
                 onClick={() => navigate("/admin/profile")}
                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
               >
@@ -63,7 +63,7 @@ const Topbar = () => {
                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
               >
                 Settings
-              </button>
+              </button> */}
 
               <button
                 onClick={handleLogout}

@@ -129,7 +129,7 @@ const CustomerComplaints = () => {
 
   const handleSubmitResolve = async (complaintId) => {
     if (!adminResponse.trim()) {
-      alert("⚠️ Please write a response before marking as resolved.");
+      alert("Please write a response before marking as resolved.");
       return;
     }
 
@@ -170,9 +170,9 @@ const CustomerComplaints = () => {
 
       setEditingComplaintId(null);
       setAdminResponse("");
-      alert("✅ Complaint resolved successfully!");
+      alert("Complaint resolved successfully!");
     } catch (err) {
-      alert(`❌ ${err.message}`);
+      alert(`${err.message}`);
     } finally {
       setSubmittingId(null);
     }
