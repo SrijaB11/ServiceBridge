@@ -5,22 +5,28 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       required: true,
+      trim: true,
     },
 
     email: {
       type: String,
       required: true,
       unique: true,
+      index: true,
+      lowercase: true,
+      trim: true,
     },
 
     password: {
       type: String,
       required: true,
+      select: false,
     },
 
     location: {
       type: String,
       required: true,
+      trim: true,
     },
 
     phone: {
@@ -28,9 +34,10 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-    role:{
+    role: {
       type: String,
       required: true,
+      index: true,
     },
 
     isVerified: {
@@ -40,8 +47,15 @@ const userSchema = new mongoose.Schema(
 
     workerVerificationStatus: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
+
+      enum: [
+        "pending",
+        "approved",
+        "rejected",
+      ],
+
       default: "pending",
+      index: true,
     },
 
     services: {
@@ -49,26 +63,27 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
-     // documents field
-  documents: {
-    profilePhoto: {
-      type: String,
-      default: "",
+    documents: {
+      profilePhoto: {
+        type: String,
+        default: "",
+      },
+
+      panCard: {
+        type: String,
+        default: "",
+      },
+
+      skillDocs: {
+        type: String,
+        default: "",
+      },
     },
-    panCard: {
-      type: String,
-      default: "",
-    },
-    skillDocs: {
-      type: String,
-      default: "",
-    },
-  },
   },
 
-    {
+  {
     timestamps: true,
-    }
+  }
 );
 
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model( "users", userSchema);
