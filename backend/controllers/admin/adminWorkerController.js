@@ -1,21 +1,50 @@
 const User = require("../../models/UserModel"); 
+const redisClient = require("../../config/redis");
 
-
-//get
+// get
 const getAllWorkers = async (req, res) => {
   try {
-    const workers = await User.find({ role: "worker" });
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const cacheKey = "admin:workers:list";
+
+    // 1️⃣ Check Redis cache
+    const cachedWorkers = await redisClient.get(cacheKey);
+    if (cachedWorkers) {
+      const workers = JSON.parse(cachedWorkers);
+
+      return res.status(200).json({
+        success: true,
+        source: "redis",
+        count: workers.length,
+        workers,
+      });
+    }
+
+    // 2️⃣ Fetch from DB
+    const workers = await User.find({ role: "worker" }).lean();
+
+    if (!workers.length) {
+      return res.status(404).json({ message: "No workers found" });
+    }
+
+    // 3️⃣ Save to Redis (5 minutes) ✅ FIXED
+    await redisClient.set(
+      cacheKey,
+      JSON.stringify(workers),
+      { ex: 300 }
+    );
 
     res.status(200).json({
       success: true,
-      data: workers,
+      source: "database",
+      count: workers.length,
+      workers,
     });
-  } 
-  catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
