@@ -8,10 +8,10 @@ const getWorkerRequest = async (
 ) => {
   try {
 
-    console.log(
-      "Logged Worker:",
-      req.user
-    );
+    // console.log(
+    //   "Logged Worker:",
+    //   req.user
+    // );
 
     const bookings =
       await Booking.find({
@@ -20,7 +20,7 @@ const getWorkerRequest = async (
         "customer"
       );
 
-    console.log(bookings);
+    //console.log(bookings);
 
     res.status(200).json({
       success: true,

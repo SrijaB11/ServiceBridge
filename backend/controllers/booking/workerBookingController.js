@@ -2,13 +2,26 @@ const Booking = require("../../models/BookingModel");
 
 const createBookingWorker = async (req, res) => {
   try {
-    const { workerId, date } = req.body;
+    const { workerId, date, address } = req.body;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const bookingDate = new Date(date);
     bookingDate.setHours(0, 0, 0, 0);
+
+    if (
+        !address ||
+        !address.houseNo ||
+        !address.street ||
+        !address.city ||
+        !address.pincode ||
+        !address.phone
+      ) {
+        return res.status(400).json({
+          message: "Address is required",
+        });
+      }
 
     // Prevent past booking
     if (bookingDate < today) {
@@ -31,14 +44,22 @@ const createBookingWorker = async (req, res) => {
     }
 
     const booking = await Booking.create({
-      customer: req.user._id,
-      worker: workerId,
-      date: bookingDate,
-      baseAmount: 199,
-    additionalCharges: 0,
-      amount: 199,
-      status: "pending",
-    });
+        customer: req.user._id,
+
+        worker: workerId,
+
+        date: bookingDate,
+
+        address,
+
+        baseAmount: 199,
+
+        additionalCharges: 0,
+
+        amount: 199,
+
+        status: "pending",
+      });
 
     res.status(201).json({
       message: "Request sent to worker",
