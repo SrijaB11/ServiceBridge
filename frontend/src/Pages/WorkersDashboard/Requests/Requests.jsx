@@ -1,4 +1,10 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  memo,
+} from "react";
 
 import axios from "axios";
 
@@ -7,6 +13,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Pagination,
 } from "@mui/material";
 
 import {
@@ -19,8 +26,404 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./Requests.module.css";
 
+const BASE_URL =
+  "http://localhost:5000";
+
+
+
+const api = axios.create({
+  baseURL: BASE_URL,
+});
+
+
+
+api.interceptors.request.use(
+  (config) => {
+
+    const token =
+      localStorage.getItem(
+        "token"
+      );
+
+    if (token) {
+      config.headers.Authorization =
+        `Bearer ${token}`;
+    }
+
+    return config;
+  },
+
+  (error) =>
+    Promise.reject(error)
+);
+
+
+
+const RequestCard = memo(
+  ({
+    request,
+    additionalData,
+    onInputChange,
+    onAccept,
+    onReject,
+    onComplete,
+    onAdditionalCharges,
+    navigate,
+  }) => {
+
+    const {
+      _id,
+      status,
+      customer,
+      date,
+      baseAmount = 199,
+      additionalCharges = 0,
+    } = request;
+
+   
+
+    const totalAmount =
+      useMemo(() => {
+
+        return (
+          baseAmount +
+          additionalCharges
+        );
+
+      }, [
+        baseAmount,
+        additionalCharges,
+      ]);
+
+    // ==========================
+    // STATUS COLOR
+    // ==========================
+
+    const statusColor =
+      useMemo(() => {
+
+        const map = {
+          pending: "warning",
+          accepted: "success",
+          completed: "primary",
+          rejected: "error",
+        };
+
+        return (
+          map[status] ||
+          "default"
+        );
+
+      }, [status]);
+
+    return (
+      <div
+        className={
+          styles.requestCard
+        }
+      >
+
+        {/* CUSTOMER */}
+
+        <div
+          className={
+            styles.customerSection
+          }
+        >
+
+          <img
+            src={
+              customer?.documents
+                ?.profilePhoto
+                ? `${BASE_URL}/${customer.documents.profilePhoto}`
+                : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            }
+
+            alt="customer"
+
+            loading="lazy"
+
+            className={
+              styles.customerAvatar
+            }
+          />
+
+          <div>
+
+            <h2
+              className={
+                styles.customerName
+              }
+            >
+              {
+                customer?.fullName
+              }
+            </h2>
+
+            <p
+              className={
+                styles.customerEmail
+              }
+            >
+              {
+                customer?.email
+              }
+            </p>
+
+          </div>
+        </div>
+
+        {/* SERVICE */}
+
+        <h3
+          className={
+            styles.serviceTitle
+          }
+        >
+          Service Booking
+        </h3>
+
+        {/* DESCRIPTION */}
+
+        <p
+          className={
+            styles.description
+          }
+        >
+          Customer booked a
+          service on{" "}
+          {new Date(
+            date
+          ).toLocaleDateString()}
+        </p>
+
+        {/* LOCATION */}
+
+        <div
+          className={
+            styles.location
+          }
+        >
+
+          <LocationOn
+            color="success"
+          />
+
+          <span>
+            {
+              customer?.location
+            }
+          </span>
+
+        </div>
+
+        {/* PAYMENT */}
+
+        <div
+          className={
+            styles.priceSection
+          }
+        >
+
+          <Typography>
+            Base Amount :
+            ₹{baseAmount}
+          </Typography>
+
+          <Typography>
+            Additional Charges :
+            ₹
+            {
+              additionalCharges
+            }
+          </Typography>
+
+          <Typography>
+            Total Amount :
+            ₹{totalAmount}
+          </Typography>
+
+        </div>
+
+        {/* STATUS */}
+
+        <div
+          className={
+            styles.statusContainer
+          }
+        >
+
+          <Chip
+            label={status}
+            color={statusColor}
+          />
+
+        </div>
+
+        {/* PENDING ACTIONS */}
+
+        {status ===
+          "pending" && (
+
+          <div
+            className={
+              styles.buttonGroup
+            }
+          >
+
+            <Button
+              variant="contained"
+              startIcon={
+                <CheckCircle />
+              }
+              className={
+                styles.acceptButton
+              }
+              onClick={() =>
+                onAccept(_id)
+              }
+            >
+              Accept
+            </Button>
+
+            <Button
+              variant="contained"
+              startIcon={
+                <Cancel />
+              }
+              className={
+                styles.rejectButton
+              }
+              onClick={() =>
+                onReject(_id)
+              }
+            >
+              Reject
+            </Button>
+
+          </div>
+        )}
+
+        {/* ACCEPTED ACTIONS */}
+
+        {status ===
+          "accepted" && (
+
+          <>
+            {/* ADDITIONAL CHARGES */}
+
+            <div
+              className={
+                styles.additionalChargeBox
+              }
+            >
+
+              <input
+                type="number"
+
+                placeholder="Additional Amount"
+
+                className={
+                  styles.chargeInput
+                }
+
+                value={
+                  additionalData[
+                    _id
+                  ]?.amount || ""
+                }
+
+                onChange={(e) =>
+                  onInputChange(
+                    _id,
+                    "amount",
+                    e.target.value
+                  )
+                }
+              />
+
+              <textarea
+                placeholder="Additional Charges Reason"
+
+                className={
+                  styles.reasonInput
+                }
+
+                value={
+                  additionalData[
+                    _id
+                  ]?.reason || ""
+                }
+
+                onChange={(e) =>
+                  onInputChange(
+                    _id,
+                    "reason",
+                    e.target.value
+                  )
+                }
+              />
+
+              <Button
+                variant="outlined"
+                color="success"
+                onClick={() =>
+                  onAdditionalCharges(
+                    _id
+                  )
+                }
+              >
+                Add Charges
+              </Button>
+
+            </div>
+
+            {/* BUTTONS */}
+
+            <div
+              className={
+                styles.buttonGroup
+              }
+            >
+
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() =>
+                  onComplete(_id)
+                }
+              >
+                Completed
+              </Button>
+
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() =>
+                  navigate(
+                    `/worker/complaint/${_id}`
+                  )
+                }
+              >
+                Raise Complaint
+              </Button>
+
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
+);
+
+
+
 const Requests = () => {
-  const navigate = useNavigate();
+
+  const navigate =
+    useNavigate();
+
+  
 
   const [requests, setRequests] =
     useState([]);
@@ -28,217 +431,318 @@ const Requests = () => {
   const [loading, setLoading] =
     useState(true);
 
-  const [additionalAmount,setAdditionalAmount,] = useState({});
+  const [actionLoading,
+    setActionLoading] =
+    useState(false);
 
-  const [additionalReason, setAdditionalReason,] = useState({});
+  const [additionalData,
+    setAdditionalData] =
+    useState({});
 
+  // PAGINATION STATES
 
+  const [page, setPage] =
+    useState(1);
 
-  const fetchRequests = async () => {
-    try {
-      const token =
-        localStorage.getItem("token");
+  const [totalPages,
+    setTotalPages] =
+    useState(1);
 
-      const response = await axios.get(
-        "http://localhost:5000/worker/requests",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  const limit = 6;
 
-     const activeRequests =
-  response.data.data.filter(
-    (request) =>
-      request.status ===
-        "pending" ||
-      request.status ===
-        "accepted"
-  );
+  
 
-setRequests(
-  activeRequests
-);
+  const fetchRequests =
+    useCallback(async () => {
 
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+
+        setLoading(true);
+
+        const response =
+          await api.get(
+            `/worker/requests?page=${page}&limit=${limit}`
+          );
+
+        const {
+          data,
+          pagination,
+        } = response.data;
+
+        const activeRequests =
+          data.filter(
+            ({ status }) =>
+              [
+                "pending",
+                "accepted",
+              ].includes(
+                status
+              )
+          );
+
+        setRequests(
+          activeRequests
+        );
+
+        setTotalPages(
+          pagination.totalPages
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    }, [page]);
+
+  
 
   useEffect(() => {
+
     fetchRequests();
-  }, []);
+
+  }, [
+    fetchRequests,
+    page,
+  ]);
 
   
 
-  const handleAccept = async (
-    requestId
-  ) => {
-    try {
-      const token =
-        localStorage.getItem("token");
+  const handleAction =
+    useCallback(
+      async (
+        endpoint,
+        requestId,
+        payload = {},
+        successMessage
+      ) => {
 
-      await axios.put(
-        `http://localhost:5000/worker/request/accept/${requestId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        try {
+
+          setActionLoading(
+            true
+          );
+
+          await api.put(
+            `/worker/request/${endpoint}/${requestId}`,
+            payload
+          );
+
+          alert(
+            successMessage
+          );
+
+          fetchRequests();
+
+        } catch (error) {
+
+          console.log(
+            error
+          );
+
+          alert(
+            error.response
+              ?.data
+              ?.message ||
+              "Something went wrong"
+          );
+
+        } finally {
+
+          setActionLoading(
+            false
+          );
         }
-      );
-
-      alert(
-        "Request Accepted Successfully"
-      );
-
-      fetchRequests();
-
-    } catch (error) {
-      console.log(error);
-
-      alert(
-        error.response?.data?.message ||
-          "Failed to accept request"
-      );
-    }
-  };
-
-  
-
-  const handleReject = async (
-    requestId
-  ) => {
-    try {
-      const token =
-        localStorage.getItem("token");
-
-      await axios.put(
-        `http://localhost:5000/worker/request/reject/${requestId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      alert(
-        "Request Rejected Successfully"
-      );
-
-      fetchRequests();
-
-    } catch (error) {
-      console.log(error);
-
-      alert(
-        error.response?.data?.message ||
-          "Failed to reject request"
-      );
-    }
-  };
-
- 
-  const handleAdditionalCharges =
-  async (requestId) => {
-    try {
-
-      const token =
-        localStorage.getItem(
-          "token"
-        );
-
-      const extraAmount =
-        Number(
-          additionalAmount[
-            requestId
-          ] || 0
-        );
-
-      const reason =
-        additionalReason[
-          requestId
-        ] || "";
-
-      await axios.put(
-        `http://localhost:5000/worker/request/additional-charge/${requestId}`,
-        {
-          additionalCharges:
-            extraAmount,
-
-          additionalChargesReason:
-            reason,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      alert(
-        "Additional charges updated"
-      );
-
-      fetchRequests();
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert(
-        error.response?.data
-          ?.message ||
-          "Failed to update charges"
-      );
-    }
-  };
-
- 
-
- const handleComplete = async (
-  requestId
-) => {
-  try {
-    const token =
-      localStorage.getItem("token");
-
-    await axios.put(
-      `http://localhost:5000/worker/request/complete/${requestId}`,
-      {
-        status: "completed",
-        paymentEnabled: true,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      [fetchRequests]
     );
 
-    alert(
-      "Service marked as completed"
+  
+
+  const handleAccept =
+    useCallback(
+      (requestId) => {
+
+        handleAction(
+          "accept",
+          requestId,
+          {},
+          "Request Accepted Successfully"
+        );
+
+      },
+      [handleAction]
     );
 
-    fetchRequests();
+  const handleReject =
+    useCallback(
+      (requestId) => {
 
-  } catch (error) {
-    console.log(error);
+        handleAction(
+          "reject",
+          requestId,
+          {},
+          "Request Rejected Successfully"
+        );
 
-    alert(
-      error.response?.data?.message ||
-        "Failed to complete service"
+      },
+      [handleAction]
     );
-  }
-};
+
+  const handleComplete =
+    useCallback(
+      (requestId) => {
+
+        handleAction(
+          "complete",
+          requestId,
+          {
+            status:
+              "completed",
+
+            paymentEnabled:
+              true,
+          },
+          "Service marked as completed"
+        );
+
+      },
+      [handleAction]
+    );
+
+ 
+
+  const onInputChange =
+    useCallback(
+      (
+        requestId,
+        field,
+        value
+      ) => {
+
+        setAdditionalData(
+          (prev) => ({
+            ...prev,
+
+            [requestId]:
+              {
+                ...prev[
+                  requestId
+                ],
+
+                [field]:
+                  value,
+              },
+          })
+        );
+
+      },
+      []
+    );
+
+ 
+
+  const handleAdditionalCharges =
+    useCallback(
+      async (
+        requestId
+      ) => {
+
+        const data =
+          additionalData[
+            requestId
+          ] || {};
+
+        await handleAction(
+          "additional-charge",
+          requestId,
+          {
+            additionalCharges:
+              Number(
+                data.amount ||
+                  0
+              ),
+
+            additionalChargesReason:
+              data.reason ||
+              "",
+          },
+          "Additional charges updated"
+        );
+
+      },
+      [
+        additionalData,
+        handleAction,
+      ]
+    );
+
+  
+
+  const renderedRequests =
+    useMemo(() => {
+
+      return requests.map(
+        (request) => (
+
+          <RequestCard
+            key={
+              request._id
+            }
+
+            request={
+              request
+            }
+
+            additionalData={
+              additionalData
+            }
+
+            onInputChange={
+              onInputChange
+            }
+
+            onAccept={
+              handleAccept
+            }
+
+            onReject={
+              handleReject
+            }
+
+            onComplete={
+              handleComplete
+            }
+
+            onAdditionalCharges={
+              handleAdditionalCharges
+            }
+
+            navigate={
+              navigate
+            }
+          />
+        )
+      );
+    }, [
+      requests,
+      additionalData,
+      onInputChange,
+      handleAccept,
+      handleReject,
+      handleComplete,
+      handleAdditionalCharges,
+      navigate,
+    ]);
 
   
 
   if (loading) {
+
     return (
       <div
         className={
@@ -250,17 +754,36 @@ setRequests(
     );
   }
 
+  
+
   return (
     <div
       className={
         styles.requestsContainer
       }
     >
-      <h1 className={styles.heading}>
+
+      <h1
+        className={
+          styles.heading
+        }
+      >
         Service Requests
       </h1>
 
-      {requests.length === 0 ? (
+      {actionLoading && (
+        <div
+          className={
+            styles.actionLoader
+          }
+        >
+          Processing...
+        </div>
+      )}
+
+      {requests.length ===
+      0 ? (
+
         <div
           className={
             styles.emptyState
@@ -268,367 +791,60 @@ setRequests(
         >
           No requests available
         </div>
+
       ) : (
-        <div
-          className={
-            styles.requestsGrid
-          }
-        >
-          {requests.map((request) => (
-            <div
-              key={request._id}
-              className={
-                styles.requestCard
+
+        <>
+          {/* REQUESTS GRID */}
+
+          <div
+            className={
+              styles.requestsGrid
+            }
+          >
+            {
+              renderedRequests
+            }
+          </div>
+
+          {/* PAGINATION */}
+
+          <div
+            className={
+              styles.paginationContainer
+            }
+          >
+
+            <Pagination
+              count={
+                totalPages
               }
-            >
-              {/* CUSTOMER INFO */}
 
-              <div
-                className={
-                  styles.customerSection
-                }
-              >
-                <img
-                  src={
-                    request.customer
-                      ?.documents
-                      ?.profilePhoto
-                      ? `http://localhost:5000/${request.customer.documents.profilePhoto}`
-                      : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  }
-                  alt="customer"
-                  className={
-                    styles.customerAvatar
-                  }
-                />
+              page={page}
 
-                <div>
-                  <h2
-                    className={
-                      styles.customerName
-                    }
-                  >
-                    {
-                      request.customer
-                        ?.fullName
-                    }
-                  </h2>
+              color="primary"
 
-                  <p
-                    className={
-                      styles.customerEmail
-                    }
-                  >
-                    {
-                      request.customer
-                        ?.email
-                    }
-                  </p>
-                </div>
-              </div>
+              shape="rounded"
 
-              {/* SERVICE */}
+              onChange={(
+                event,
+                value
+              ) => {
 
-              <h3
-                className={
-                  styles.serviceTitle
-                }
-              >
-                Service Booking
-              </h3>
+                setPage(
+                  value
+                );
 
-              {/* DESCRIPTION */}
+                window.scrollTo({
+                  top: 0,
+                  behavior:
+                    "smooth",
+                });
+              }}
+            />
 
-              <p
-                className={
-                  styles.description
-                }
-              >
-                Customer booked a service on{" "}
-                {new Date(
-                  request.date
-                ).toLocaleDateString()}
-              </p>
-
-              {/* LOCATION */}
-
-              <div
-                className={
-                  styles.location
-                }
-              >
-                <LocationOn
-                  color="success"
-                />
-
-                <span>
-                  {
-                    request.customer
-                      ?.location
-                  }
-                </span>
-              </div>
-
-              {/* PAYMENT */}
-
-             <div
-                    className={
-                      styles.priceSection
-                    }
-                  >
-
-                    <Typography
-                      className={
-                        styles.baseAmount
-                      }
-                    >
-                      Base Amount :
-                      ₹
-                      {
-                        request.baseAmount ||
-                        199
-                      }
-                    </Typography>
-
-                <Typography
-                  className={
-                    styles.additionalAmount
-                  }
-                >
-                  Additional Charges :
-                  ₹
-                  {
-                    request.additionalCharges ||
-                    0
-                  }
-                </Typography>
-
-                <Typography
-                  className={
-                    styles.totalAmount
-                  }
-                >
-                  Total Amount :
-                  ₹
-                  {
-                    (request.baseAmount ||
-                      199) +
-                    (request.additionalCharges ||
-                      0)
-                  }
-                  </Typography>
-
-              </div>
-
-              {/* STATUS */}
-
-              <div
-                className={
-                  styles.statusContainer
-                }
-              >
-                <Chip
-                  label={
-                    request.status
-                  }
-                  color={
-                    request.status ===
-                    "pending"
-                      ? "warning"
-                      : request.status ===
-                          "accepted"
-                        ? "success"
-                        : request.status ===
-                            "completed"
-                          ? "primary"
-                          : request.status ===
-                              "rejected"
-                            ? "error"
-                            : "default"
-                  }
-                />
-              </div>
-
-              {/* PENDING BUTTONS */}
-
-              {request.status ===
-                "pending" && (
-                <div
-                  className={
-                    styles.buttonGroup
-                  }
-                >
-                  <Button
-                    variant="contained"
-                    startIcon={
-                      <CheckCircle />
-                    }
-                    className={
-                      styles.acceptButton
-                    }
-                    onClick={() =>
-                      handleAccept(
-                        request._id
-                      )
-                    }
-                  >
-                    Accept
-                  </Button>
-
-                  <Button
-                    variant="contained"
-                    startIcon={
-                      <Cancel />
-                    }
-                    className={
-                      styles.rejectButton
-                    }
-                    onClick={() =>
-                      handleReject(
-                        request._id
-                      )
-                    }
-                  >
-                    Reject
-                  </Button>
-                </div>
-              )}
-
-             
-
-              {/* ACCEPTED BUTTONS */}
-
-              {request.status ===
-  "accepted" && (
-
-  <>
-  
-    {/* ADDITIONAL CHARGES */}
-
-    <div
-      className={
-        styles.additionalChargeBox
-      }
-    >
-
-      <input
-        type="number"
-        placeholder="Additional Amount"
-
-        className={
-          styles.chargeInput
-        }
-
-        value={
-          additionalAmount[
-            request._id
-          ] || ""
-        }
-
-        onChange={(e) =>
-          setAdditionalAmount({
-            ...additionalAmount,
-
-            [request._id]:
-              e.target.value,
-          })
-        }
-      />
-
-      <textarea
-        placeholder="Additional Charges Reason"
-
-        className={
-          styles.reasonInput
-        }
-
-        value={
-          additionalReason[
-            request._id
-          ] || ""
-        }
-
-        onChange={(e) =>
-          setAdditionalReason({
-            ...additionalReason,
-
-            [request._id]:
-              e.target.value,
-          })
-        }
-      />
-
-      <Button
-        variant="outlined"
-
-        color="success"
-
-        onClick={() =>
-          handleAdditionalCharges(
-            request._id
-          )
-        }
-      >
-        Add Charges
-      </Button>
-
-    </div>
-
-    {/* BUTTONS */}
-
-    <div
-      className={
-        styles.buttonGroup
-      }
-    >
-
-      <Button
-        variant="contained"
-        color="success"
-        onClick={() =>
-          handleComplete(
-            request._id
-          )
-        }
-      >
-        Completed
-      </Button>
-
-      <Button
-        variant="contained"
-        color="error"
-        onClick={() =>
-          navigate(
-            `/worker/complaint/${request._id}`
-          )
-        }
-      >
-        Raise Complaint
-      </Button>
-
-    </div>
-
-  </>
-)}
-
-              {/* COMPLETED MESSAGE */}
-
-              {request.status ===
-                "completed" && (
-                <div
-                  className={
-                    styles.completedBox
-                  }
-                >
-                  <p>
-                    Service completed
-                    successfully
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );
