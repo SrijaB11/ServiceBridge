@@ -1,5 +1,3 @@
-// routes/cancelbooking/adminCancelledBookingRoutes.js
-
 const express = require("express");
 const router = express.Router();
 
