@@ -11,7 +11,7 @@ function WorkerProfile() {
   const [formData, setFormData] =
     useState({
       phone: "",
-      services: "",
+      location: "",
     });
 
   const [profilePhoto, setProfilePhoto] =
@@ -57,10 +57,8 @@ function WorkerProfile() {
       setFormData({
         phone:
           response.data.data.phone || "",
-        services:
-          response.data.data.services?.join(
-            ", "
-          ) || "",
+        location:
+    response.data.data.location || "",
       });
     } catch (error) {
       console.log(error);
@@ -103,13 +101,9 @@ function WorkerProfile() {
       await axios.put(
         "http://localhost:5000/worker/update-profile",
         {
-          phone: formData.phone,
-          services: formData.services
-            .split(",")
-            .map((service) =>
-              service.trim()
-            ),
-        },
+           phone: formData.phone,
+           location: formData.location,
+},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -296,14 +290,24 @@ function WorkerProfile() {
 
         {/* LOCATION */}
         <div>
-          <label className="font-semibold text-gray-600">
-            Location
-          </label>
+  <label className="font-semibold text-gray-600">
+    Location
+  </label>
 
-          <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50">
-            {workerDetails?.location}
-          </div>
-        </div>
+  {isEditing ? (
+    <input
+      type="text"
+      name="location"
+      value={formData.location}
+      onChange={handleChange}
+      className="w-full mt-2 border rounded-xl px-4 py-3"
+    />
+  ) : (
+    <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50">
+      {workerDetails?.location}
+    </div>
+  )}
+</div>
 
         {/* ROLE */}
         <div>
@@ -342,28 +346,16 @@ function WorkerProfile() {
 
         {/* SERVICES */}
         <div>
-          <label className="font-semibold text-gray-600">
-            Services
-          </label>
+  <label className="font-semibold text-gray-600">
+    Services
+  </label>
 
-          {isEditing ? (
-            <input
-              type="text"
-              name="services"
-              value={formData.services}
-              onChange={handleChange}
-              placeholder="Electrician, Plumbing"
-              className="w-full mt-2 border rounded-xl px-4 py-3"
-            />
-          ) : (
-            <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50">
-              {workerDetails?.services?.join(
-                ", "
-              )}
-            </div>
-          )}
-        </div>
-      </div>
+  <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50">
+    {workerDetails?.services?.join(", ")}
+  </div>
+
+</div>
+</div>
 
       {/* EDIT BUTTON */}
       <div className="flex gap-4 mt-8">

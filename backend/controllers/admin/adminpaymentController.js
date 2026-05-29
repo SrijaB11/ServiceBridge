@@ -164,6 +164,8 @@ async (req,res)=>{
       workerAmount:
       item.workerAmount,
 
+      workerPaid:item.workerPaid,
+
       paymentDate:
       item.updatedAt,
 

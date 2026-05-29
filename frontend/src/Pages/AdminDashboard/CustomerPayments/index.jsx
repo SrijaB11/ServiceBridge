@@ -23,14 +23,180 @@ const CustomerPayments = () => {
         paymentStatus: payment.paymentStatus,
         adminCommission: payment.adminCommission,
         workerPayment: payment.amountPaid - payment.adminCommission,
+        workerPaid: payment.workerPaid || false,
       }));
       setCustomerPaymentDetails(updatedPaymentDetails);
+      console.log(fetchedData.data);
     }
   };
 
   useEffect(() => {
     getCustomerPaymentDetails();
   }, []);
+
+
+
+  const loadRazorpay = () => {
+  return new Promise((resolve) => {
+    const existingScript = document.querySelector(
+      'script[src="https://checkout.razorpay.com/v1/checkout.js"]'
+    );
+
+    if (existingScript) {
+      resolve(true);
+      return;
+    }
+
+    const script =
+      document.createElement("script");
+
+    script.src =
+      "https://checkout.razorpay.com/v1/checkout.js";
+
+    script.onload = () =>
+      resolve(true);
+
+    script.onerror = () =>
+      resolve(false);
+
+    document.body.appendChild(
+      script
+    );
+  });
+};
+
+const payWorker = async (payment) => {
+  try {
+    const jwtToken =
+      localStorage.getItem("token");
+
+    // Create Razorpay Order
+    const response = await fetch(
+      "http://localhost:5000/admin/create-worker-payment-order",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify({
+          amount:
+            payment.workerPayment,
+          bookingId:
+            payment.bookingId,
+        }),
+      }
+    );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      alert(data.message);
+
+      return;
+    }
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+
+      amount:
+        data.order.amount,
+
+      currency: "INR",
+
+      name: "Service Bridge",
+
+      description:
+        "Worker Payment",
+
+      order_id:
+        data.order.id,
+
+      handler: async function (
+        response
+      ) {
+        const verifyResponse =
+          await fetch(
+            "http://localhost:5000/admin/verify-worker-payment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                Authorization: `Bearer ${jwtToken}`,
+              },
+
+              body: JSON.stringify({
+                razorpay_order_id:
+                  response.razorpay_order_id,
+
+                razorpay_payment_id:
+                  response.razorpay_payment_id,
+
+                razorpay_signature:
+                  response.razorpay_signature,
+
+                bookingId:
+                  payment.bookingId,
+              }),
+            }
+          );
+
+        const verifyData =
+          await verifyResponse.json();
+
+        if (
+          verifyResponse.ok
+        ) {
+          alert(
+            "Worker Payment Successful"
+          );
+
+          getCustomerPaymentDetails();
+        } else {
+          alert(
+            verifyData.message
+          );
+        }
+      },
+
+      theme: {
+        color: "#22c55e",
+      },
+    };
+
+
+    const razorpayLoaded =
+  await loadRazorpay();
+
+if (!razorpayLoaded) {
+  alert(
+    "Razorpay SDK failed to load"
+  );
+  return;
+}
+
+console.log(
+  "Razorpay:",
+  window.Razorpay
+);
+
+    const razor =
+      new window.Razorpay(
+        options
+      );
+
+    razor.open();
+  } catch (error) {
+    console.log(error);
+
+    alert("Payment Failed");
+  }
+};
+
 
   // Search filter logic
   const lowerSearch = searchTerm.toLowerCase();
@@ -163,9 +329,37 @@ const CustomerPayments = () => {
                       <td className="px-4 py-4 text-sm text-gray-600">
                         ₹{p.adminCommission.toFixed(2)}
                       </td>
-                      <td className="px-4 py-4 text-sm text-gray-800 font-medium">
-                        ₹{p.workerPayment.toFixed(2)}
-                      </td>
+                            <td className="px-4 py-4">
+                          <div className="flex flex-col gap-2">
+
+                            <p className="text-sm font-semibold text-gray-800">
+                              ₹{p.workerPayment.toFixed(2)}
+                            </p>
+
+                            <span
+                              className={`w-fit rounded-full px-2 py-1 text-xs font-semibold ${
+                                p.workerPaid
+                                  ? "bg-green-100 text-green-800 border border-green-300"
+                                  : "bg-yellow-100 text-yellow-800 border border-yellow-300"
+                                              }`}
+                    >
+                      {p.workerPaid ? "Paid" : "Pending"}
+                    </span>
+
+                    <button
+                      disabled={p.workerPaid}
+                      onClick={() => payWorker(p)}
+                      className={`text-white text-sm px-3 py-1 rounded-lg transition w-fit ${
+                        p.workerPaid
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-green-500 hover:bg-green-600"
+                      }`}
+                    >
+                  {p.workerPaid ? "Paid" : "Pay Now"}
+                </button>
+
+              </div>
+            </td>
                     </tr>
                   );
                 })
