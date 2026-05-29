@@ -1,24 +1,31 @@
 const User = require("../../models/UserModel"); 
-
+const redisClient = require("../../config/redisClient");
+const asyncHandler = require("../../utils/asyncHandler");
 
 //get
-const getAllWorkers = async (req, res) => {
-  try {
-    const workers = await User.find({ role: "worker" });
+const getAllWorkers = asyncHandler(async (req, res) => {
+const cacheKey = "workers:all";
 
-    res.status(200).json({
+const cachedWorkers = await redisClient.get(cacheKey);
+
+if (cachedWorkers) {
+  return res.status(200).json({
       success: true,
-      data: workers,
-    });
-  } 
-  catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+      source: "redis",
+      data: JSON.parse(cachedWorkers),
     });
   }
-};
 
+  const workers = await User.find({ role: "worker" }).lean();
+
+  await redisClient.setEx(cacheKey, 300, JSON.stringify(workers));
+
+  res.status(200).json({
+    success: true,
+    source: "database",
+    data: workers,
+  });
+});
 
 // Update
 const updateWorker = async (req, res) => {
