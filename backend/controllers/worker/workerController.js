@@ -281,7 +281,7 @@ const updateWorkerProfile = async (
   try {
     const workerId = req.user._id;
 
-    const { phone, services } = req.body;
+    const { phone, location } = req.body;
 
     const worker = await User.findById(
       workerId
@@ -296,13 +296,9 @@ const updateWorkerProfile = async (
      if (phone) {
       worker.phone = phone;
     }
-
-    if (
-      services &&
-      Array.isArray(services)
-    ) {
-      worker.services = services;
-    }
+if (location) {
+  worker.location = location;
+}
 
     await worker.save();
 
