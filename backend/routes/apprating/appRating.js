@@ -10,12 +10,12 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 const customerMiddleware = require("../../middlewares/customerMiddleware");
 
 // Rate app by customer
-router.post("/rate",authMiddleware,customerRatingController);
+router.post("/rate",customerRatingController);
 
 // Get overall app rating
-router.get("/overall",authMiddleware,getOverallRatingController);
+router.get("/overall",getOverallRatingController);
 
 //Customer sees his own review
-router.get("/customerappreview",authMiddleware,getCustomerAppReviewController);
+router.get("/customerappreview",getCustomerAppReviewController);
 
 module.exports = router;

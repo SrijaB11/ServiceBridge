@@ -6,7 +6,7 @@ const getWorkersByService = async (req, res) => {
     const { service } = req.params;
 
     const workers = await userModel.find({ role: "worker", services: service,workerVerificationStatus: "approved",}).select("-password");
-    console.log(workers);
+    //console.log(workers);
     res.json(workers);
   } 
   catch (error) {
