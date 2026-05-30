@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { Search, Wrench } from "lucide-react";
+
+import api from "../../api/axios";
 
 function CustomerServices({ searchService = "" }) {
   const [services, setServices] = useState([]);
@@ -9,18 +11,12 @@ function CustomerServices({ searchService = "" }) {
 
   const navigate = useNavigate();
 
-  // FETCH SERVICES FROM BACKEND
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  const fetchServices = async () => {
+  // FETCH SERVICES
+  const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
 
-      const res = await axios.get("http://localhost:5000/service/allServices");
-
-      console.log(res.data);
+      const res = await api.get("/service/allServices");
 
       setServices(res.data.services || []);
     } catch (error) {
@@ -28,18 +24,26 @@ function CustomerServices({ searchService = "" }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
 
   // FILTER SERVICES
-  const filteredServices = services.filter((service) => {
-    const serviceName = service?.name || "";
-    const serviceDescription = service?.description || "";
+  const filteredServices = useMemo(() => {
+    const search = searchService.toLowerCase();
 
-    return (
-      serviceName.toLowerCase().includes(searchService.toLowerCase()) ||
-      serviceDescription.toLowerCase().includes(searchService.toLowerCase())
-    );
-  });
+    return services.filter((service) => {
+      const serviceName = service?.name || "";
+      const serviceDescription = service?.description || "";
+
+      return (
+        serviceName.toLowerCase().includes(search) ||
+        serviceDescription.toLowerCase().includes(search)
+      );
+    });
+  }, [services, searchService]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
@@ -89,14 +93,15 @@ function CustomerServices({ searchService = "" }) {
       {/* SERVICES GRID */}
       {!loading && filteredServices.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredServices.map((service, index) => (
+          {filteredServices.map((service) => (
             <div
-              key={index}
+              key={service._id || service.name}
               className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition duration-300 group"
             >
               {/* IMAGE */}
               <div className="overflow-hidden">
                 <img
+                  loading="lazy"
                   src={service.image}
                   alt={service.name}
                   className="w-full h-52 object-cover group-hover:scale-105 transition duration-300"
@@ -113,7 +118,6 @@ function CustomerServices({ searchService = "" }) {
                   {service.description}
                 </p>
 
-                {/* BUTTON */}
                 <button
                   onClick={() => navigate(`/service/${service.name}`)}
                   className="mt-5 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition"
@@ -129,4 +133,4 @@ function CustomerServices({ searchService = "" }) {
   );
 }
 
-export default CustomerServices;
+export default memo(CustomerServices);

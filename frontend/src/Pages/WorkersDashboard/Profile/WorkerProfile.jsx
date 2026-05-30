@@ -12,6 +12,8 @@ function WorkerProfile() {
     useState({
       phone: "",
       location: "",
+      accountNumber: "",
+      ifscCode: "",
     });
 
   const [profilePhoto, setProfilePhoto] =
@@ -55,10 +57,10 @@ function WorkerProfile() {
       );
 
       setFormData({
-        phone:
-          response.data.data.phone || "",
-        location:
-    response.data.data.location || "",
+        phone: response.data.data.phone || "",
+        location: response.data.data.location || "",
+       accountNumber: response.data.data.accountNumber || "",
+        ifscCode: response.data.data.ifscCode || "",
       });
     } catch (error) {
       console.log(error);
@@ -103,6 +105,8 @@ function WorkerProfile() {
         {
            phone: formData.phone,
            location: formData.location,
+           accountNumber: formData.accountNumber,
+           ifscCode: formData.ifscCode,
 },
         {
           headers: {
@@ -354,6 +358,54 @@ function WorkerProfile() {
     {workerDetails?.services?.join(", ")}
   </div>
 
+</div>
+</div>
+
+
+
+     {/* BANK DETAILS */}
+<div className="mt-6">
+  <h3 className="text-lg font-bold text-gray-800 mb-4">
+    Bank Details
+  </h3>
+
+     <div>
+  <label className="font-semibold text-gray-600">
+    Account Number
+  </label>
+
+  {isEditing ? (
+    <input
+      type="text"
+      name="accountNumber"
+      value={formData.accountNumber}
+      onChange={handleChange}
+      className="w-full mt-2 border rounded-xl px-4 py-3"
+    />
+  ) : (
+    <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50">
+      {workerDetails?.accountNumber ||"Enter Account Number"}
+    </div>
+  )}
+</div>
+
+    <div>
+      <label className="font-semibold text-gray-600">
+        IFSC Code
+      </label>
+           {isEditing ? (
+    <input
+      type="text"
+      name="ifscCode"
+      value={formData.ifscCode}
+      onChange={handleChange}
+      className="w-full mt-2 border rounded-xl px-4 py-3 uppercase"
+    />
+  ) : (
+    <div className="w-full mt-2 border rounded-xl px-4 py-3 bg-gray-50 uppercase">
+      {workerDetails?.ifscCode || "Enter IFSC Code"}
+    </div>
+  )}
 </div>
 </div>
 

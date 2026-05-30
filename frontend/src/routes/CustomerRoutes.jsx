@@ -1,5 +1,7 @@
 import { Route } from "react-router-dom";
+
 import ProtectedRoute from "../components/ProtectedRoute";
+
 import CustomerDashboard from "../Pages/Customer/CustomerDashboard";
 
 import DashboardHome from "../components/customer/DashboardHome";
@@ -9,14 +11,17 @@ import History from "../components/customer/History";
 import Profile from "../components/customer/Profile";
 
 import Complaint from "../Pages/Customer/Complaint";
-import ComplaintPage from "../components/customer/ComplaintPage";
+import Review from "../pages/Customer/Review";
+
 import ServiceProviders from "../components/customer/ServiceProviders";
+import ComplaintPage from "../components/customer/ComplaintPage";
 import BookWorkerPage from "../components/customer/BookWorkerPage";
+
+import PaymentPage from "../Pages/PaymentPage";
 
 export default function CustomerRoutes() {
   return (
     <>
-      {/* Main dashboard layout routes */}
       <Route
         path="/customer"
         element={
@@ -26,14 +31,22 @@ export default function CustomerRoutes() {
         }
       >
         <Route index element={<DashboardHome />} />
+
         <Route path="services" element={<CustomerServices />} />
+
         <Route path="bookings" element={<Bookings />} />
+
+        <Route path="payment" element={<PaymentPage />} />
+
         <Route path="history" element={<History />} />
+
         <Route path="complaints" element={<Complaint />} />
+
         <Route path="profile" element={<Profile />} />
+
+        <Route path="review" element={<Review />} />
       </Route>
 
-      {/* standalone customer routes */}
       <Route
         path="/service/:id"
         element={
@@ -53,7 +66,7 @@ export default function CustomerRoutes() {
       />
 
       <Route
-        path="/complaints"
+        path="/customer-complaints"
         element={
           <ProtectedRoute role="customer">
             <Complaint />

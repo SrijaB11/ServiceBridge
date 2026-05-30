@@ -199,22 +199,28 @@ const RequestCard = memo(
 
         {/* LOCATION */}
 
-        <div
-          className={
-            styles.location
-          }
-        >
+        <div className={styles.location}>
+            <LocationOn color="success" />
 
-          <LocationOn
-            color="success"
-          />
+          <div>
+            <p>
+              {request.address?.houseNo},
+              {" "}
+              {request.address?.street}
+            </p>
 
-          <span>
-            {
-              customer?.location
-            }
-          </span>
+            <p>
+              {request.address?.city}
+              {" - "}
+              {request.address?.pincode}
+            </p>
 
+            <p>
+              Phone:
+              {" "}
+              {request.address?.phone}
+            </p>
+          </div>
         </div>
 
         {/* PAYMENT */}
@@ -376,6 +382,34 @@ const RequestCard = memo(
                 Add Charges
               </Button>
 
+
+
+              <Button
+                      variant="contained"
+                      color="info"
+                      onClick={() => {
+                        const lat =
+                          request.address?.latitude;
+
+                        const lng =
+                          request.address?.longitude;
+
+                        if (!lat || !lng) {
+                          alert(
+                            "Location coordinates not available"
+                          );
+                          return;
+                        }
+
+                        window.open(
+                          `https://www.google.com/maps?q=${lat},${lng}`,
+                          "_blank"
+                        );
+                      }}
+                    >
+                      Navigate
+                    </Button>
+
             </div>
 
             {/* BUTTONS */}
@@ -485,7 +519,7 @@ const Requests = () => {
         );
 
         setTotalPages(
-          pagination.totalPages
+           pagination?.totalPages || 1
         );
 
       } catch (error) {

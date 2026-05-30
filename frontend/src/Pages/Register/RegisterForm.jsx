@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import axios from "axios";
+import { useEffect } from "react";
 import {
   Mail,
   Lock,
@@ -188,7 +189,10 @@ export default function RegisterForm({
       showToast("Enter email first", "error");
       return;
     }
-
+    if (emailVerified || localStorage.getItem("verifiedEmail")) {
+      showToast("Email already verified", "error");
+      return;
+    }
     try {
       setLoading(true);
 
@@ -228,6 +232,8 @@ export default function RegisterForm({
       setEmailVerified(true);
 
       setShowOtpField(false);
+      // ✅ ADD THIS
+      localStorage.setItem("verifiedEmail", formData.email);
     } catch (err) {
       showToast(err?.response?.data?.message || "Invalid OTP", "error");
     } finally {
@@ -238,11 +244,17 @@ export default function RegisterForm({
   // REGISTER
   const handleRegister = async () => {
     if (!validateForm()) return;
+    const isEmailVerified =
+      emailVerified || localStorage.getItem("verifiedEmail") === formData.email;
 
-    if (!emailVerified) {
+    if (!isEmailVerified) {
       showToast("Verify email first", "error");
       return;
     }
+    // if (!emailVerified) {
+    //   showToast("Verify email first", "error");
+    //   return;
+    // }
 
     try {
       setLoading(true);
@@ -255,6 +267,7 @@ export default function RegisterForm({
       });
 
       showToast("Account created successfully");
+      localStorage.removeItem("verifiedEmail");
 
       navigate("/login");
     } catch (err) {
@@ -263,6 +276,18 @@ export default function RegisterForm({
       setLoading(false);
     }
   };
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("verifiedEmail");
+
+    if (savedEmail) {
+      setFormData((prev) => ({
+        ...prev,
+        email: savedEmail,
+      }));
+
+      setEmailVerified(true);
+    }
+  }, []);
 
   const inputStyle =
     "w-full h-12 border border-gray-200 rounded-xl bg-gray-50 px-4 text-sm transition-all duration-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent";
@@ -363,38 +388,40 @@ export default function RegisterForm({
         </div>
 
         {/* OTP */}
-        {showOtpField && !emailVerified && (
-          <div className="mb-5">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                className={inputStyle}
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-              />
+        {showOtpField &&
+          !emailVerified &&
+          !localStorage.getItem("verifiedEmail") && (
+            <div className="mb-5">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  className={inputStyle}
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
 
-              <button
-                onClick={handleVerifyOtp}
-                disabled={loading}
-                className="h-12 px-5 rounded-xl bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all duration-200"
-              >
-                Verify
-              </button>
-            </div>
+                <button
+                  onClick={handleVerifyOtp}
+                  disabled={loading}
+                  className="h-12 px-5 rounded-xl bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all duration-200"
+                >
+                  Verify
+                </button>
+              </div>
 
-            {/* RESEND OTP */}
-            <div className="mt-3 flex justify-end">
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                disabled={loading}
-                className="text-sm font-medium text-green-600 hover:text-green-700 hover:underline transition"
-              >
-                Resend OTP
-              </button>
+              {/* RESEND OTP */}
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={loading}
+                  className="text-sm font-medium text-green-600 hover:text-green-700 hover:underline transition"
+                >
+                  Resend OTP
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* PASSWORD */}
         {/* <div className="mb-5">

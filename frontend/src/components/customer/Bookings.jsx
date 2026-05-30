@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from "../../api/axios";
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
@@ -18,16 +19,7 @@ function Bookings() {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("token");
-
-      const res = await axios.get(
-        "http://localhost:5000/booking/customerbookingstatus",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const res = await api.get("/booking/customerbookingstatus");
 
       setBookings(res.data);
     } catch (error) {
@@ -38,18 +30,7 @@ function Bookings() {
   };
   const cancelBooking = async (bookingId) => {
     try {
-      const token = localStorage.getItem("token");
-
-      const res = await axios.put(
-        `http://localhost:5000/booking/cancel/${bookingId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
+      const res = await api.put(`/booking/cancel/${bookingId}`);
       console.log(res.data);
 
       // UPDATE UI INSTANTLY
@@ -175,7 +156,6 @@ function Bookings() {
               </div>
               <div className="flex gap-3 flex-wrap">
                 {/* PAY NOW BUTTON */}
-
                 {booking.status === "completed" &&
                   booking.paymentStatus !== "paid" && (
                     <button
@@ -195,9 +175,7 @@ function Bookings() {
                       Pay Now
                     </button>
                   )}
-
                 {/* PAID STATUS */}
-
                 {booking.paymentStatus === "paid" && (
                   <button
                     disabled
@@ -207,22 +185,24 @@ function Bookings() {
                   </button>
                 )}
 
-                {/* RAISE COMPLAINT */}
-
                 <button
-                  disabled={booking.status !== "accepted"}
+                  disabled={
+                    !["accepted", "completed", "in-progress"].includes(
+                      booking.status,
+                    )
+                  }
                   onClick={() => navigate(`/complaint/${booking._id}`)}
                   className={`px-5 py-2 rounded-xl text-white font-medium transition ${
-                    booking.status === "accepted"
+                    ["accepted", "completed", "in-progress"].includes(
+                      booking.status,
+                    )
                       ? "bg-amber-500 hover:bg-amber-600"
                       : "bg-gray-300 cursor-not-allowed"
                   }`}
                 >
                   Raise Complaint
                 </button>
-
                 {/* CANCEL BOOKING */}
-
                 <button
                   disabled={
                     booking.status === "cancelled" ||

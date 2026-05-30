@@ -281,7 +281,7 @@ const updateWorkerProfile = async (
   try {
     const workerId = req.user._id;
 
-    const { phone, location } = req.body;
+    const { phone, location,accountNumber, ifscCode, } = req.body;
 
     const worker = await User.findById(
       workerId
@@ -298,6 +298,16 @@ const updateWorkerProfile = async (
     }
 if (location) {
   worker.location = location;
+}
+
+if (accountNumber) {
+  worker.accountNumber =
+    accountNumber;
+}
+
+if (ifscCode) {
+  worker.ifscCode =
+    ifscCode.toUpperCase();
 }
 
     await worker.save();
