@@ -63,6 +63,16 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
+    accountNumber: {
+       type: String,
+       default: "",
+      },
+
+     ifscCode: {
+     type: String,
+     default: "",
+      },
+
     documents: {
       profilePhoto: {
         type: String,
