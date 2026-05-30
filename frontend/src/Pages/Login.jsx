@@ -36,8 +36,7 @@ function Login() {
 
     if (!password) return "Password is required";
 
-    if (password.length < 6) return "Password must be at least 6 characters";
-
+    if (!password) return "Password is required";
     return null;
   };
 
@@ -263,3 +262,122 @@ function Login() {
 }
 
 export default Login;
+// import { useState, useCallback } from "react";
+// import { useNavigate } from "react-router-dom";
+// import api from "../api/axios"; // ✅ interceptor-based axios
+// import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+
+// function Login() {
+//   const [showPw, setShowPw] = useState(false);
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   const navigate = useNavigate();
+
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+//   const validate = useCallback(() => {
+//     if (!email.trim()) return "Email is required";
+//     if (!emailRegex.test(email)) return "Enter a valid email";
+//     if (!password) return "Password is required";
+
+//     return null;
+//   }, [email, password]);
+
+//   const handleLogin = async () => {
+//     if (loading) return;
+
+//     const validationError = validate();
+//     if (validationError) {
+//       setError(validationError);
+//       return;
+//     }
+
+//     setLoading(true);
+//     setError("");
+
+//     try {
+//       const res = await api.post("/login", {
+//         email,
+//         password,
+//       });
+
+//       const { token, role, name } = res.data;
+
+//       localStorage.setItem("token", token);
+//       localStorage.setItem("role", role);
+//       localStorage.setItem("name", name);
+
+//       if (role === "customer") navigate("/customer");
+//       else if (role === "worker") navigate("/worker");
+//       else if (role === "admin") navigate("/admin");
+//       else navigate("/");
+//     } catch (err) {
+//       setError(err.response?.data?.message || err.message || "Login failed");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+//       <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
+//         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+
+//         {/* EMAIL */}
+//         <div className="relative mb-4">
+//           <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
+//           <input
+//             type="email"
+//             placeholder="Email"
+//             value={email}
+//             onChange={(e) => {
+//               setEmail(e.target.value);
+//               setError("");
+//             }}
+//             className="w-full pl-10 p-2 border rounded"
+//           />
+//         </div>
+
+//         {/* PASSWORD */}
+//         <div className="relative mb-4">
+//           <Lock className="absolute left-3 top-3 text-gray-400" size={18} />
+
+//           <input
+//             type={showPw ? "text" : "password"}
+//             placeholder="Password"
+//             value={password}
+//             onChange={(e) => setPassword(e.target.value)}
+//             onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+//             className="w-full pl-10 pr-10 p-2 border rounded"
+//           />
+
+//           <button
+//             type="button"
+//             onClick={() => setShowPw((p) => !p)}
+//             className="absolute right-3 top-3 text-gray-500"
+//           >
+//             {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+//           </button>
+//         </div>
+
+//         {/* ERROR */}
+//         {error && <div className="mb-3 text-red-600 text-sm">{error}</div>}
+
+//         {/* BUTTON */}
+//         <button
+//           onClick={handleLogin}
+//           disabled={loading}
+//           className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 disabled:opacity-60"
+//         >
+//           {loading ? "Logging in..." : "Login"}
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Login;

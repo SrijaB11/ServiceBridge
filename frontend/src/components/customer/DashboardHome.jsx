@@ -1,12 +1,8 @@
-import Services from "../Services";
-import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { memo } from "react";
 import CustomerServices from "./CustomerServices";
 import DashboardStats from "./DashboardStats";
 
 function DashboardHome() {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* HEADER */}
@@ -15,6 +11,7 @@ function DashboardHome() {
           <h1 className="text-2xl font-bold text-gray-800">
             Welcome to Service Bridge
           </h1>
+
           <p className="text-gray-500 mt-1">
             Book trusted professionals for your daily needs
           </p>
@@ -22,6 +19,7 @@ function DashboardHome() {
 
         {/* QUICK STATS */}
         <DashboardStats />
+
         {/* SERVICES */}
         <h2 className="text-xl font-semibold mt-8 mb-4">Explore Services</h2>
 
@@ -31,4 +29,4 @@ function DashboardHome() {
   );
 }
 
-export default DashboardHome;
+export default memo(DashboardHome);
