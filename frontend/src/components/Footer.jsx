@@ -129,8 +129,8 @@ const Footer = () => {
               <MailIcon fontSize="small" /> support@servicebridge.com
             </Typography>
             <Typography variant="body2">
-              <LocationOnIcon fontSize="small" /> 123, Green Street, New Delhi,
-              India – 110001
+              <LocationOnIcon fontSize="small" /> 123, Green Street, Hyderabad,
+              India – 500085
             </Typography>
           </Box>
         </Box>
