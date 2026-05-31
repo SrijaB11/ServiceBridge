@@ -293,138 +293,139 @@ export default function RegisterForm({
     "w-full h-12 border border-gray-200 rounded-xl bg-gray-50 px-4 text-sm transition-all duration-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent";
 
   return (
-    <div className=" relative flex justify-center px-4 py-8 sm:px-6 lg:px-8">
-      {/* BACK BUTTON */}
-
-      <div className="absolute -top-4 -right-16 ">
-        <button
-          onClick={() => navigate("/")}
-          className="px-4 py-2 rounded-xl bg-green-50 text-green-600 font-medium border border-green-100 hover:bg-green-100 hover:text-green-700 shadow-sm transition-all duration-200"
-        >
-          ← Back to Home
-        </button>
-      </div>
-      <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-gray-100">
-        {/* HEADING */}
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
-
-          <p className="mt-2 text-sm text-gray-500">{subtitle}</p>
+    <>
+      //{" "}
+      <div className=" relative flex justify-center px-4 py-8 sm:px-6 lg:px-8">
+        {/* BACK BUTTON */}
+        <div className="absolute -top-4 -right-16 ">
+          <button
+            onClick={() => navigate("/")}
+            className="px-4 py-2 rounded-xl bg-green-50 text-green-600 font-medium border border-green-100 hover:bg-green-100 hover:text-green-700 shadow-sm transition-all duration-200"
+          >
+            ← Back to Home
+          </button>
         </div>
+        <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-gray-100">
+          {/* HEADING */}
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
 
-        {/* FULL NAME */}
-        <div className="mb-5">
-          <div className="relative">
-            <User
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
-            />
-
-            <input
-              className={`${inputStyle} pl-11`}
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  fullName: e.target.value,
-                })
-              }
-            />
+            <p className="mt-2 text-sm text-gray-500">{subtitle}</p>
           </div>
 
-          {errors.fullName && (
-            <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
-          )}
-        </div>
-
-        {/* EMAIL */}
-        <div className="mb-5">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Mail
+          {/* FULL NAME */}
+          <div className="mb-5">
+            <div className="relative">
+              <User
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
                 size={18}
               />
 
               <input
-                disabled={emailVerified}
-                className={`${inputStyle} pl-11 pr-10`}
-                placeholder="Email Address"
-                value={formData.email}
+                className={`${inputStyle} pl-11`}
+                placeholder="Full Name"
+                value={formData.fullName}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    email: e.target.value,
+                    fullName: e.target.value,
                   })
                 }
               />
-
-              {emailVerified && (
-                <CheckCircle
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500"
-                  size={18}
-                />
-              )}
             </div>
 
-            {!emailVerified && (
-              <button
-                onClick={handleSendOtp}
-                disabled={loading}
-                className="h-12 px-5 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 transition-all duration-200 whitespace-nowrap flex items-center justify-center gap-2 disabled:opacity-60"
-              >
-                {loading && (
-                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                )}
-                {loading ? "Sending..." : "Send OTP"}
-              </button>
+            {errors.fullName && (
+              <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
             )}
           </div>
 
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-          )}
-        </div>
-
-        {/* OTP */}
-        {showOtpField &&
-          !emailVerified &&
-          !localStorage.getItem("verifiedEmail") && (
-            <div className="mb-5">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  className={inputStyle}
-                  placeholder="Enter OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+          {/* EMAIL */}
+          <div className="mb-5">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
                 />
 
-                <button
-                  onClick={handleVerifyOtp}
-                  disabled={loading}
-                  className="h-12 px-5 rounded-xl bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all duration-200"
-                >
-                  Verify
-                </button>
+                <input
+                  disabled={emailVerified}
+                  className={`${inputStyle} pl-11 pr-10`}
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      email: e.target.value,
+                    })
+                  }
+                />
+
+                {emailVerified && (
+                  <CheckCircle
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500"
+                    size={18}
+                  />
+                )}
               </div>
 
-              {/* RESEND OTP */}
-              <div className="mt-3 flex justify-end">
+              {!emailVerified && (
                 <button
-                  type="button"
                   onClick={handleSendOtp}
                   disabled={loading}
-                  className="text-sm font-medium text-green-600 hover:text-green-700 hover:underline transition"
+                  className="h-12 px-5 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 transition-all duration-200 whitespace-nowrap flex items-center justify-center gap-2 disabled:opacity-60"
                 >
-                  Resend OTP
+                  {loading && (
+                    <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                  {loading ? "Sending..." : "Send OTP"}
                 </button>
-              </div>
+              )}
             </div>
-          )}
 
-        {/* PASSWORD */}
-        {/* <div className="mb-5">
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          {/* OTP */}
+          {showOtpField &&
+            !emailVerified &&
+            !localStorage.getItem("verifiedEmail") && (
+              <div className="mb-5">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    className={inputStyle}
+                    placeholder="Enter OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                  />
+
+                  <button
+                    onClick={handleVerifyOtp}
+                    disabled={loading}
+                    className="h-12 px-5 rounded-xl bg-blue-500 text-white font-medium hover:bg-blue-600 transition-all duration-200"
+                  >
+                    Verify
+                  </button>
+                </div>
+
+                {/* RESEND OTP */}
+                <div className="mt-3 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={loading}
+                    className="text-sm font-medium text-green-600 hover:text-green-700 hover:underline transition"
+                  >
+                    Resend OTP
+                  </button>
+                </div>
+              </div>
+            )}
+
+          {/* PASSWORD */}
+          {/* <div className="mb-5">
           <div className="relative">
             <Lock
               className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -457,7 +458,7 @@ export default function RegisterForm({
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div> */}
-        {/* <div className="mb-5">
+          {/* <div className="mb-5">
           <div className="relative">
             <Lock
               className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -476,7 +477,7 @@ export default function RegisterForm({
                 })
               }
             /> */}
-        {/* <input
+          {/* <input
               type={showPassword ? "text" : "password"}
               className={`${inputStyle} pl-11 pr-11`}
               placeholder="Password"
@@ -511,162 +512,109 @@ export default function RegisterForm({
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div> */}
-        <div className="mb-5">
-          <div className="relative">
-            <Lock
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-            />
-
-            <input
-              type={showPassword ? "text" : "password"}
-              className={`${inputStyle} pl-11 pr-11`}
-              placeholder="Password"
-              value={formData.password}
-              onFocus={() => setPasswordFocused(true)}
-              onBlur={() => setPasswordFocused(false)}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  password: e.target.value,
-                })
-              }
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
-
-          {/* Outside the relative container */}
-          {passwordFocused && (
-            <p className="mt-1 text-xs text-gray-500">
-              Must be at least 8 characters and include at least 1 uppercase
-              letter and 1 number.
-            </p>
-          )}
-
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-          )}
-        </div>
-
-        {/* CONFIRM PASSWORD */}
-        <div className="mb-5">
-          <div className="relative">
-            <Lock
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
-            />
-
-            <input
-              type={showConfirm ? "text" : "password"}
-              className={`${inputStyle} pl-11 pr-11`}
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  confirmPassword: e.target.value,
-                })
-              }
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
-
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword}
-            </p>
-          )}
-        </div>
-        {/* LOCATION */}
-        <div className="mb-5 relative">
-          <MapPin
-            className="absolute left-4 top-4 text-gray-400 z-10"
-            size={18}
-          />
-
-          <Autocomplete
-            options={cityNames}
-            value={formData.location}
-            onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
-                location: newValue || "",
-              });
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Select Location"
-                fullWidth
-                error={!!errors.location}
-                helperText={errors.location}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "12px",
-                    backgroundColor: "#f9fafb",
-                    paddingLeft: "34px",
-
-                    "& fieldset": {
-                      borderColor: "#e5e7eb",
-                    },
-
-                    "&:hover fieldset": {
-                      borderColor: "#22c55e",
-                    },
-
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#22c55e",
-                      borderWidth: "2px",
-                    },
-                  },
-
-                  "& .MuiOutlinedInput-input": {
-                    paddingLeft: "10px",
-                  },
-                }}
+          <div className="mb-5">
+            <div className="relative">
+              <Lock
+                size={18}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
               />
-            )}
-          />
-        </div>
 
-        {/* SERVICES */}
-        {role === "worker" && (
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`${inputStyle} pl-11 pr-11`}
+                placeholder="Password"
+                value={formData.password}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    password: e.target.value,
+                  })
+                }
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+
+            {/* Outside the relative container */}
+            {passwordFocused && (
+              <p className="mt-1 text-xs text-gray-500">
+                Must be at least 8 characters and include at least 1 uppercase
+                letter and 1 number.
+              </p>
+            )}
+
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
+          </div>
+
+          {/* CONFIRM PASSWORD */}
+          <div className="mb-5">
+            <div className="relative">
+              <Lock
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+
+              <input
+                type={showConfirm ? "text" : "password"}
+                className={`${inputStyle} pl-11 pr-11`}
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    confirmPassword: e.target.value,
+                  })
+                }
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+              >
+                {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
+          </div>
+          {/* LOCATION */}
           <div className="mb-5 relative">
-            <Briefcase
+            <MapPin
               className="absolute left-4 top-4 text-gray-400 z-10"
               size={18}
             />
 
             <Autocomplete
-              options={servicesList}
-              value={formData.services}
+              options={cityNames}
+              value={formData.location}
               onChange={(event, newValue) => {
                 setFormData({
                   ...formData,
-                  services: newValue,
+                  location: newValue || "",
                 });
               }}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Select Services"
+                  placeholder="Select Location"
                   fullWidth
-                  error={!!errors.services}
-                  helperText={errors.services}
+                  error={!!errors.location}
+                  helperText={errors.location}
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "12px",
@@ -688,76 +636,131 @@ export default function RegisterForm({
                     },
 
                     "& .MuiOutlinedInput-input": {
-                      paddingLeft: "20px",
+                      paddingLeft: "10px",
                     },
                   }}
                 />
               )}
             />
           </div>
-        )}
 
-        {/* PHONE */}
-        <div className="mb-6">
-          <div className="relative">
-            <Phone
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
-            />
+          {/* SERVICES */}
+          {role === "worker" && (
+            <div className="mb-5 relative">
+              <Briefcase
+                className="absolute left-4 top-4 text-gray-400 z-10"
+                size={18}
+              />
 
-            <input
-              className={`${inputStyle} pl-11`}
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  phone: e.target.value,
-                })
-              }
-            />
+              <Autocomplete
+                options={servicesList}
+                value={formData.services}
+                onChange={(event, newValue) => {
+                  setFormData({
+                    ...formData,
+                    services: newValue,
+                  });
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Select Services"
+                    fullWidth
+                    error={!!errors.services}
+                    helperText={errors.services}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "12px",
+                        backgroundColor: "#f9fafb",
+                        paddingLeft: "34px",
+
+                        "& fieldset": {
+                          borderColor: "#e5e7eb",
+                        },
+
+                        "&:hover fieldset": {
+                          borderColor: "#22c55e",
+                        },
+
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#22c55e",
+                          borderWidth: "2px",
+                        },
+                      },
+
+                      "& .MuiOutlinedInput-input": {
+                        paddingLeft: "20px",
+                      },
+                    }}
+                  />
+                )}
+              />
+            </div>
+          )}
+
+          {/* PHONE */}
+          <div className="mb-6">
+            <div className="relative">
+              <Phone
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+
+              <input
+                className={`${inputStyle} pl-11`}
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    phone: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            {errors.phone && (
+              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+            )}
           </div>
 
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-          )}
-        </div>
-
-        {/* REGISTER BUTTON */}
-        <button
-          onClick={handleRegister}
-          disabled={loading}
-          className="w-full h-12 rounded-xl bg-green-500 text-white font-semibold shadow-md hover:bg-green-600 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-        >
-          {loading
-            ? "Processing..."
-            : role === "worker"
-              ? "Register as Worker"
-              : "Create Account"}
-        </button>
-
-        {/* LOGIN */}
-        <p className="mt-6 text-center text-sm sm:text-base text-gray-500">
-          Already registered?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            className="font-semibold text-green-500 cursor-pointer hover:text-green-600 hover:underline transition"
+          {/* REGISTER BUTTON */}
+          <button
+            onClick={handleRegister}
+            disabled={loading}
+            className="w-full h-12 rounded-xl bg-green-500 text-white font-semibold shadow-md hover:bg-green-600 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
-            Login
-          </span>
-        </p>
-      </div>
+            {loading
+              ? "Processing..."
+              : role === "worker"
+                ? "Register as Worker"
+                : "Create Account"}
+          </button>
 
-      {/* TOAST */}
-      {toast.show && (
-        <div
-          className={`fixed top-5 right-5 z-50 rounded-xl px-5 py-3 shadow-xl text-white transition-all duration-300 ${
-            toast.type === "error" ? "bg-red-500" : "bg-green-500"
-          }`}
-        >
-          {toast.msg}
+          {/* LOGIN */}
+          <p className="mt-6 text-center text-sm sm:text-base text-gray-500">
+            Already registered?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="font-semibold text-green-500 cursor-pointer hover:text-green-600 hover:underline transition"
+            >
+              Login
+            </span>
+          </p>
         </div>
-      )}
-    </div>
+        {/* TOAST */}
+        {toast.show && (
+          <div
+            className={`fixed top-5 right-5 z-50 rounded-xl px-5 py-3 shadow-xl text-white transition-all duration-300 ${
+              toast.type === "error" ? "bg-red-500" : "bg-green-500"
+            }`}
+          >
+            {toast.msg}
+          </div>
+        )}
+        //{" "}
+      </div>
+      x
+    </>
   );
 }
