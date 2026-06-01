@@ -1,364 +1,5 @@
-// import React from "react";
-// import { useState, useEffect } from "react";
-// import { Box, Container, Typography, Card, CardContent } from "@mui/material";
-
-// // Swiper
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
-// import "swiper/css/navigation";
-// import "swiper/css/pagination";
-
-// import { Navigation, Pagination } from "swiper/modules";
-
-// const testimonials = [
-//   {
-//     name: "Ravi Sharma",
-//     location: "New Delhi",
-//     review:
-//       "Service Bridge made it so easy to find a trusted professional. The service was excellent and on time!",
-//     img: "/images/ravi.jpg",
-//   },
-//   {
-//     name: "Priya Mehta",
-//     location: "Gurgaon",
-//     review:
-//       "Very professional and polite experts. Highly recommended for everyone looking for quality service.",
-//     img: "/images/priya.jpg",
-//   },
-//   {
-//     name: "Ankit Verma",
-//     location: "Noida",
-//     review:
-//       "Amazing platform with great support. Will definitely use again for my household needs.",
-//     img: "/images/ankit.jpg",
-//   },
-// ];
-
-// const Testimonials = () => {
-//   return (
-//     <Box
-//       sx={{
-//         py: { xs: 6, md: 10 },
-//         bgcolor: "#F9FAFB",
-//       }}
-//     >
-//       <Container maxWidth="lg">
-//         {/* Heading */}
-//         <Box textAlign="center" mb={{ xs: 5, md: 7 }}>
-//           <Typography
-//             variant="subtitle2"
-//             sx={{
-//               color: "green",
-//               fontWeight: "bold",
-//               letterSpacing: 1.5,
-//               mb: 1,
-//             }}
-//           >
-//             TESTIMONIALS
-//           </Typography>
-
-//           <Typography
-//             variant="h4"
-//             fontWeight="bold"
-//             sx={{
-//               fontSize: {
-//                 xs: "2rem",
-//                 md: "2.8rem",
-//               },
-//               color: "#111827",
-//             }}
-//           >
-//             What Our Customers Say
-//           </Typography>
-//         </Box>
-
-//         {/* CAROUSEL */}
-//         <Swiper
-//           modules={[Navigation, Pagination]}
-//           spaceBetween={25}
-//           slidesPerView={1}
-//           navigation
-//           pagination={{ clickable: true }}
-//           breakpoints={{
-//             640: {
-//               slidesPerView: 1,
-//             },
-//             768: {
-//               slidesPerView: 2,
-//             },
-//             1200: {
-//               slidesPerView: 3,
-//             },
-//           }}
-//           style={{
-//             paddingBottom: "50px",
-//             paddingInline: "5px",
-//           }}
-//         >
-//           {testimonials.map((item, index) => (
-//             <SwiperSlide key={index}>
-//               <Card
-//                 sx={{
-//                   borderRadius: "24px",
-//                   boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
-//                   height: "100%",
-//                   minHeight: 320,
-//                   transition: "0.3s",
-//                   border: "1px solid #f1f5f9",
-//                   bgcolor: "#fff",
-//                   "&:hover": {
-//                     transform: "translateY(-6px)",
-//                     boxShadow: "0 14px 40px rgba(0,0,0,0.12)",
-//                   },
-//                 }}
-//               >
-//                 <CardContent
-//                   sx={{
-//                     p: { xs: 3, md: 4 },
-//                     display: "flex",
-//                     flexDirection: "column",
-//                     justifyContent: "space-between",
-//                     height: "100%",
-//                   }}
-//                 >
-//                   {/* Stars */}
-//                   <Box mb={3}>
-//                     <img
-//                       src="/images/rating.jpg"
-//                       alt="rating"
-//                       width="110"
-//                       loading="lazy"
-//                       style={{
-//                         objectFit: "contain",
-//                       }}
-//                     />
-//                   </Box>
-
-//                   {/* Review */}
-//                   <Typography
-//                     variant="body1"
-//                     sx={{
-//                       color: "#4B5563",
-//                       lineHeight: 1.9,
-//                       mb: 4,
-//                       flexGrow: 1,
-//                       fontSize: "0.96rem",
-//                     }}
-//                   >
-//                     “{item.review}”
-//                   </Typography>
-
-//                   {/* User */}
-//                   <Box
-//                     sx={{
-//                       display: "flex",
-//                       alignItems: "center",
-//                       gap: 2,
-//                       mt: "auto",
-//                     }}
-//                   >
-//                     <Box>
-//                       <img
-//                         src={item.img}
-//                         alt={item.name}
-//                         width="55"
-//                         height="55"
-//                         loading="lazy"
-//                         style={{
-//                           borderRadius: "50%",
-//                           objectFit: "cover",
-//                           border: "3px solid #dcfce7",
-//                         }}
-//                       />
-//                     </Box>
-
-//                     <Box>
-//                       <Typography
-//                         fontWeight="bold"
-//                         sx={{
-//                           color: "#111827",
-//                           fontSize: "1rem",
-//                         }}
-//                       >
-//                         {item.name}
-//                       </Typography>
-
-//                       <Typography
-//                         variant="body2"
-//                         sx={{
-//                           color: "#6B7280",
-//                         }}
-//                       >
-//                         {item.location}
-//                       </Typography>
-//                     </Box>
-//                   </Box>
-//                 </CardContent>
-//               </Card>
-//             </SwiperSlide>
-//           ))}
-//         </Swiper>
-//       </Container>
-//     </Box>
-//   );
-// };
-
-// export default Testimonials;
-// // const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-// // const Testimonials = () => {
-// //   const [reviews, setReviews] = useState([]);
-
-// //   useEffect(() => {
-// //     fetchReviews();
-// //   }, []);
-
-// //   const fetchReviews = async () => {
-// //     try {
-// //       const res = await axios.get(`${API_BASE}/apprating`);
-
-// //       if (res.data.success) {
-// //         setReviews(res.data.data);
-// //       }
-// //     } catch (error) {
-// //       console.log(error);
-// //     }
-// //   };
-
-// //   return (
-// //     <Box
-// //       sx={{
-// //         py: { xs: 6, md: 10 },
-// //         bgcolor: "#F9FAFB",
-// //       }}
-// //     >
-// //       <Container maxWidth="lg">
-// //         <Box textAlign="center" mb={6}>
-// //           <Typography
-// //             variant="subtitle2"
-// //             sx={{
-// //               color: "green",
-// //               fontWeight: "bold",
-// //               letterSpacing: 1.5,
-// //             }}
-// //           >
-// //             TESTIMONIALS
-// //           </Typography>
-
-// //           <Typography variant="h4" fontWeight="bold">
-// //             What Our Customers Say
-// //           </Typography>
-// //         </Box>
-
-// //         <Swiper
-// //           modules={[Navigation, Pagination]}
-// //           navigation
-// //           pagination={{ clickable: true }}
-// //           spaceBetween={25}
-// //           slidesPerView={1}
-// //           breakpoints={{
-// //             768: {
-// //               slidesPerView: 2,
-// //             },
-// //             1200: {
-// //               slidesPerView: 3,
-// //             },
-// //           }}
-// //         >
-// //           {reviews.map((item) => (
-// //             <SwiperSlide key={item._id}>
-// //               <Card
-// //                 sx={{
-// //                   borderRadius: "24px",
-// //                   minHeight: 320,
-// //                   boxShadow: "0 8px 30px rgba(0,0,0,0.06)",
-// //                   transition: "0.3s",
-
-// //                   "&:hover": {
-// //                     transform: "translateY(-6px)",
-// //                     boxShadow: "0 14px 40px rgba(0,0,0,0.12)",
-// //                   },
-// //                 }}
-// //               >
-// //                 <CardContent
-// //                   sx={{
-// //                     p: 4,
-// //                     display: "flex",
-// //                     flexDirection: "column",
-// //                     height: "100%",
-// //                   }}
-// //                 >
-// //                   {/* Rating Stars */}
-// //                   <Box
-// //                     sx={{
-// //                       display: "flex",
-// //                       gap: 0.5,
-// //                       mb: 3,
-// //                     }}
-// //                   >
-// //                     {[...Array(5)].map((_, index) => (
-// //                       <Star
-// //                         key={index}
-// //                         size={18}
-// //                         fill={
-// //                           index < Math.round(item.rating) ? "#facc15" : "none"
-// //                         }
-// //                         color="#facc15"
-// //                       />
-// //                     ))}
-// //                   </Box>
-
-// //                   {/* Review */}
-// //                   <Typography
-// //                     sx={{
-// //                       color: "#4B5563",
-// //                       lineHeight: 1.8,
-// //                       mb: 4,
-// //                       flexGrow: 1,
-// //                     }}
-// //                   >
-// //                     "{item.review || "Excellent service experience."}"
-// //                   </Typography>
-
-// //                   {/* Customer */}
-// //                   <Box
-// //                     sx={{
-// //                       display: "flex",
-// //                       alignItems: "center",
-// //                       gap: 2,
-// //                     }}
-// //                   >
-// //                     <Avatar
-// //                       src={item.customerId?.profileImage}
-// //                       sx={{
-// //                         width: 55,
-// //                         height: 55,
-// //                       }}
-// //                     />
-
-// //                     <Box>
-// //                       <Typography fontWeight="bold">
-// //                         {item.customerId?.fullName}
-// //                       </Typography>
-
-// //                       <Typography variant="body2" color="text.secondary">
-// //                         {item.customerId?.location || "India"}
-// //                       </Typography>
-// //                     </Box>
-// //                   </Box>
-// //                 </CardContent>
-// //               </Card>
-// //             </SwiperSlide>
-// //           ))}
-// //         </Swiper>
-// //       </Container>
-// //     </Box>
-// //   );
-// // };
-
-// // export default Testimonials;
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 import {
   Box,
@@ -379,8 +20,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -391,17 +30,21 @@ const Testimonials = () => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/apprating/customerappreview`, {
+      const res = await api.get("/apprating/customerappreview", {
         params: {
-          rating: 4, // optional filter
+          rating: 5,
         },
       });
 
       if (res.data.success) {
-        setReviews(res.data.data || []);
+        const topReviews = (res.data.data || [])
+          .filter((item) => Number(item.rating) === 5)
+          .slice(0, 5);
+
+        setReviews(topReviews);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Reviews Error:", error);
     } finally {
       setLoading(false);
     }
@@ -445,150 +88,164 @@ const Testimonials = () => {
                 md: "2.8rem",
               },
               fontWeight: 700,
+              color: "#111827",
             }}
           >
             What Our Customers Say
           </Typography>
         </Box>
 
-        {/* Reviews Slider */}
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          spaceBetween={24}
-          slidesPerView={1}
-          breakpoints={{
-            640: {
-              slidesPerView: 1,
-            },
-            768: {
-              slidesPerView: 2,
-            },
-            1200: {
-              slidesPerView: 3,
-            },
-          }}
-          style={{
-            paddingBottom: "50px",
-          }}
-        >
-          {reviews.map((item) => (
-            <SwiperSlide key={item._id}>
-              <Card
-                sx={{
-                  borderRadius: "24px",
-                  minHeight: 320,
-                  height: "100%",
-                  border: "1px solid #e5e7eb",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
-                  transition: "0.3s",
-
-                  "&:hover": {
-                    transform: "translateY(-6px)",
-                    boxShadow: "0 14px 36px rgba(0,0,0,0.12)",
-                  },
-                }}
-              >
-                <CardContent
+        {reviews.length > 0 ? (
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 3500,
+              disableOnInteraction: false,
+            }}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+              },
+              768: {
+                slidesPerView: 2,
+              },
+              1200: {
+                slidesPerView: 3,
+              },
+            }}
+            style={{
+              paddingBottom: "60px",
+            }}
+          >
+            {reviews.map((item) => (
+              <SwiperSlide key={item._id}>
+                <Card
                   sx={{
-                    p: { xs: 3, md: 4 },
-                    display: "flex",
-                    flexDirection: "column",
+                    borderRadius: "24px",
+                    minHeight: {
+                      xs: 280,
+                      sm: 300,
+                      md: 320,
+                    },
                     height: "100%",
+                    border: "1px solid #E5E7EB",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
+                    transition: "all 0.3s ease",
+
+                    "&:hover": {
+                      transform: "translateY(-6px)",
+                      boxShadow: "0 14px 36px rgba(0,0,0,0.12)",
+                    },
                   }}
                 >
-                  {/* Rating */}
-                  <Box
+                  <CardContent
                     sx={{
+                      p: { xs: 3, md: 4 },
                       display: "flex",
-                      gap: 0.5,
-                      mb: 3,
+                      flexDirection: "column",
+                      height: "100%",
                     }}
                   >
-                    {[...Array(5)].map((_, index) => (
-                      <Star
-                        key={index}
-                        size={18}
-                        fill={
-                          index < Number(item.rating)
-                            ? "#facc15"
-                            : "transparent"
-                        }
-                        color="#facc15"
-                      />
-                    ))}
-                  </Box>
-
-                  {/* Review */}
-                  <Typography
-                    sx={{
-                      color: "#4B5563",
-                      lineHeight: 1.8,
-                      flexGrow: 1,
-                      mb: 4,
-                      fontSize: "0.95rem",
-                    }}
-                  >
-                    "
-                    {item.review?.trim()
-                      ? item.review
-                      : "Excellent service experience."}
-                    "
-                  </Typography>
-
-                  {/* Customer */}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                    }}
-                  >
-                    <Avatar
-                      src={item.customerId?.profileImage || ""}
-                      alt={item.customerId?.fullName}
+                    {/* Rating */}
+                    <Box
                       sx={{
-                        width: 55,
-                        height: 55,
+                        display: "flex",
+                        gap: 0.5,
+                        mb: 2,
                       }}
                     >
-                      {item.customerId?.fullName?.charAt(0)}
-                    </Avatar>
-
-                    <Box>
-                      <Typography
-                        sx={{
-                          fontWeight: 700,
-                          color: "#111827",
-                        }}
-                      >
-                        {item.customerId?.fullName || "Customer"}
-                      </Typography>
-
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "#6B7280",
-                        }}
-                      >
-                        {item.customerId?.email}
-                      </Typography>
+                      {[...Array(5)].map((_, index) => (
+                        <Star
+                          key={index}
+                          size={18}
+                          fill="#facc15"
+                          color="#facc15"
+                        />
+                      ))}
                     </Box>
-                  </Box>
-                </CardContent>
-              </Card>
-            </SwiperSlide>
-          ))}
-        </Swiper>
 
-        {reviews.length === 0 && (
+                    {/* Review */}
+                    <Typography
+                      sx={{
+                        color: "#4B5563",
+                        lineHeight: 1.8,
+                        flexGrow: 1,
+                        mb: 3,
+                        fontSize: {
+                          xs: "0.9rem",
+                          md: "0.95rem",
+                        },
+                      }}
+                    >
+                      "
+                      {item.review?.trim()
+                        ? item.review
+                        : "Excellent service experience."}
+                      "
+                    </Typography>
+
+                    {/* Customer */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                      }}
+                    >
+                      <Avatar
+                        src={item.customerId?.profileImage || ""}
+                        alt={item.customerId?.fullName}
+                        sx={{
+                          width: 55,
+                          height: 55,
+                        }}
+                      >
+                        {item.customerId?.fullName?.charAt(0)}
+                      </Avatar>
+
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontWeight: 700,
+                            color: "#111827",
+                          }}
+                        >
+                          {item.customerId?.fullName || "Customer"}
+                        </Typography>
+
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: "#6B7280",
+                            display: "block",
+                            mt: 0.5,
+                          }}
+                        >
+                          {item.createdAt
+                            ? new Date(item.createdAt).toLocaleDateString(
+                                "en-IN",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )
+                            : ""}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
           <Typography textAlign="center" color="text.secondary">
-            No reviews available.
+            No 5-star reviews available.
           </Typography>
         )}
       </Container>

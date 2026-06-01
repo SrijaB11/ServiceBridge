@@ -34,27 +34,6 @@ export default function Hero() {
               work and more.
             </p>
             <SearchServices />
-
-            {/* STATS */}
-            {/* <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-6">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800">500+</h3>
-
-                <p className="text-gray-500 text-sm">Verified Workers</p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800">10K+</h3>
-
-                <p className="text-gray-500 text-sm">Happy Customers</p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800">24/7</h3>
-
-                <p className="text-gray-500 text-sm">Customer Support</p>
-              </div>
-            </div> */}
           </div>
 
           {/* RIGHT IMAGE */}

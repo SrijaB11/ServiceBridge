@@ -9,7 +9,7 @@ function CustomerDashboard() {
 
   const location = useLocation();
 
-  // GET CURRENT PAGE NAME
+  // CURRENT PAGE NAME
   const currentTab = location.pathname.split("/")[2] || "dashboard";
 
   return (
