@@ -1,6 +1,8 @@
 const express = require("express");
 const regController = require("../controllers/registration/customerRegController");
 const loginController = require("../controllers/login/loginController");
+const refreshTokenController = require("../controllers/login/refreshTokenController")
+const logoutController = require("../controllers/login/logoutController")
 
 const loginRateLimiter = require("../middlewares/loginRatelimiterMiddleware");
 
@@ -22,7 +24,10 @@ router.post("/register", regController);
  router.post("/verifyotp", regVerifyOtpController);
  router.post("/checkverification",checkVerificationAfterRefreshController);
 
+ // login
 router.post("/login", loginRateLimiter, loginController);
+router.post( "/refresh-token", refreshTokenController);
+router.post("/logout", logoutController);
 
 // Forgot Password
 router.post("/forgotpassword", forgotPasswordController);
