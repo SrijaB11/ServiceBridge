@@ -10,7 +10,7 @@ const getAllWorkers = async (req, res) => {
 
     const cacheKey = "admin:workers:list";
 
-    // 1️⃣ Check Redis cache
+    // Check Redis cache
     const cachedWorkers = await redisClient.get(cacheKey);
     if (cachedWorkers) {
       const workers = JSON.parse(cachedWorkers);
@@ -23,14 +23,14 @@ const getAllWorkers = async (req, res) => {
       });
     }
 
-    // 2️⃣ Fetch from DB
+    //  Fetch from DB
     const workers = await User.find({ role: "worker" }).lean();
 
     if (!workers.length) {
       return res.status(404).json({ message: "No workers found" });
     }
 
-    // 3️⃣ Save to Redis (5 minutes) ✅ FIXED
+    // Save to Redis (5 minutes) 
     await redisClient.set(
       cacheKey,
       JSON.stringify(workers),
